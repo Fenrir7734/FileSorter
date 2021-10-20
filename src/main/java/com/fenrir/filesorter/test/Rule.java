@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.rules;
+package com.fenrir.filesorter.test.rules;
 
 import java.util.List;
 

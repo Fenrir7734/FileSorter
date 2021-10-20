@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.flags;
+package com.fenrir.filesorter.test.flags;
 
 public class SortFlag implements Flag {
     public static final String FILE_EXTENSION = "EXT";

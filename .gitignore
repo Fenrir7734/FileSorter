@@ -21,8 +21,8 @@ buildNumber.properties
 # Log file
 *.log
 
-# screenshots directory content
-screenshots/*
-
 # Package Files #
 *.jar
+
+# Testing package
+src/main/java/com/fenrir/filesorter/test

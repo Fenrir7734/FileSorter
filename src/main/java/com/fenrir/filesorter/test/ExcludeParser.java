@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.parsers;
+package com.fenrir.filesorter.test.parsers;
 
 public class ExcludeParser {
 

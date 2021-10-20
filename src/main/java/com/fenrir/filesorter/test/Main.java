@@ -1,4 +1,4 @@
-package com.fenrir.filesorter;
+package com.fenrir.filesorter.test;
 
 public class Main {
     public static void main(String[] args) throws Exception {

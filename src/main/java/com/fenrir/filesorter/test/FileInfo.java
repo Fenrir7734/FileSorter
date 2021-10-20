@@ -1,4 +1,4 @@
-package com.fenrir.filesorter;
+package com.fenrir.filesorter.test;
 
 import java.io.IOException;
 import java.nio.file.Files;

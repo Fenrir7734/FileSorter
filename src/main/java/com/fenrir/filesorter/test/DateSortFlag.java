@@ -1,4 +1,6 @@
-package com.fenrir.filesorter.flags;
+package com.fenrir.filesorter.test.flags;
+
+import com.fenrir.filesorter.test.Flag;
 
 public class DateSortFlag implements Flag {
     public static final String YEAR = "YYYY";
