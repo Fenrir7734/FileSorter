@@ -6,10 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class Rule {
-    private String[] rule;
+    private final List<RuleElement> rule;
     private int iterator;
 
     public Rule(String rule) {
+        this.rule = new ArrayList<>();
         this.iterator = 0;
         resolveRule(rule);
     }
@@ -17,15 +18,33 @@ public abstract class Rule {
     private void resolveRule(String rule) {
         Pattern pattern = Pattern.compile("%\\((.*?)\\)");
         Matcher matcher = pattern.matcher(rule);
-        List<String> tmpList = new ArrayList<>();
+        int lastMatchIndex = 0;
 
         while (matcher.find()) {
-            tmpList.add(matcher.group());
+            extractNonFlagElement(rule, lastMatchIndex, matcher.start());
+            extractFlagElement(matcher);
+            lastMatchIndex = matcher.end();
         }
-        this.rule = tmpList.toArray(new String[0]);
+        extractNonFlagElement(rule, lastMatchIndex, rule.length());
     }
 
-    public String next() {
-        return iterator < rule.length ? rule[iterator++] : null;
+    private void extractNonFlagElement(String rule, int lastMatchIndex, int currentMatchIndex) {
+        if (lastMatchIndex != currentMatchIndex) {
+            String s = rule.substring(lastMatchIndex, currentMatchIndex);
+            RuleElement element = new RuleElement(s, false);
+            this.rule.add(element);
+        }
     }
+
+    private void extractFlagElement(Matcher matcher) {
+        String flag = matcher.group(1);
+        RuleElement element = new RuleElement(flag, true);
+        this.rule.add(element);
+    }
+
+    public RuleElement next() {
+        return iterator < rule.size() ? rule.get(iterator++) : null;
+    }
+
+    public record RuleElement(String element, boolean isFlag) { }
 }
