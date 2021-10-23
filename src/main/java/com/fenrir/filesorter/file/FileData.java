@@ -8,14 +8,16 @@ import java.nio.file.attribute.FileTime;
 import java.util.Calendar;
 
 public class FileData {
-    private Path sourcePath;
+    private final Path sourcePath;
     private Path targetPath;
     private long count;
-    private BasicFileAttributes attributes;
+    private final BasicFileAttributes attributes;
+    private final boolean isDirectory;
 
     public FileData(Path path) throws IOException {
+        this.isDirectory = Files.isDirectory(path);
         this.sourcePath = path;
-        this.targetPath = path;
+        this.targetPath = isDirectory ? null : path;
         this.attributes = Files.readAttributes(path, BasicFileAttributes.class);
     }
 
