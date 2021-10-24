@@ -1,4 +1,6 @@
 package com.fenrir.filesorter.tokens;
 
-public class LiteralTypes {
+public enum ElementTypes {
+    LITERAL, TOKEN
 }
+
