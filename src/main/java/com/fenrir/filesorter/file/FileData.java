@@ -17,7 +17,7 @@ public class FileData {
     public FileData(Path path) throws IOException {
         this.isDirectory = Files.isDirectory(path);
         this.sourcePath = path;
-        this.targetPath = isDirectory ? null : path;
+        this.targetPath = null;
         this.attributes = Files.readAttributes(path, BasicFileAttributes.class);
     }
 
@@ -46,6 +46,24 @@ public class FileData {
         return null;
     }
 
+    public Path resolveTargetPath() {
+        if (count <= 0 || isDirectory) {
+            return targetPath;
+        }
+
+        String pathStr = targetPath.getFileName().toString();
+        String toInsert = String.format(" (%d)", count);
+        int extensionIndex = pathStr.indexOf(".");
+
+        if (extensionIndex != -1) {
+            pathStr = new StringBuilder(pathStr).insert(extensionIndex, toInsert)
+                    .toString();
+        } else {
+            pathStr += toInsert;
+        }
+        return targetPath.getParent().resolve(Path.of(pathStr));
+    }
+
     public Path getSourcePath() {
         return sourcePath;
     }
@@ -60,5 +78,10 @@ public class FileData {
 
     public long getCount() {
         return count;
+    }
+
+    public void setTargetPath(Path targetPath, long count) {
+        this.targetPath = targetPath;
+        this.count = count;
     }
 }
