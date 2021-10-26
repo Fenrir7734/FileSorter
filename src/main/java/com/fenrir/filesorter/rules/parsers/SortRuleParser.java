@@ -2,10 +2,12 @@ package com.fenrir.filesorter.rules.parsers;
 
 import com.fenrir.filesorter.file.FileData;
 import com.fenrir.filesorter.rules.Rule;
+import com.fenrir.filesorter.rules.SortRule;
 import com.fenrir.filesorter.tokens.DateTokenType;
 import com.fenrir.filesorter.tokens.SortTokenType;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -13,12 +15,12 @@ public class SortRuleParser {
     private Rule rule;
     private FileData fileData;
 
-    public SortRuleParser(Rule rule, FileData fileData) {
+    public SortRuleParser(SortRule rule, FileData fileData) {
         this.rule = rule;
         this.fileData = fileData;
     }
 
-    public String resolveRule() {
+    public Path resolveRule() {
         StringBuilder resolvedRule = new StringBuilder();
 
         Rule.RuleElement element;
@@ -30,7 +32,7 @@ public class SortRuleParser {
                 resolvedRule.append(element.element());
             }
         }
-        return resolvedRule.toString();
+        return Path.of(resolvedRule.toString());
     }
 
     private String parseToken(String token) throws IllegalArgumentException {
@@ -51,7 +53,6 @@ public class SortRuleParser {
             case FILE_EXTENSION -> getFileExtension();
             case FILE_CATEGORY -> getFileCategory();
             case IMAGE_RESOLUTION -> getImageResolution();
-            case CURRENT_FILE_NAME -> getFileName();
         };
     }
 

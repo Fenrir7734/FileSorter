@@ -35,12 +35,27 @@ public class FileData {
         return calendar;
     }
 
+    public String getFileExtension() {
+        if (!isDirectory) {
+            String fileName = sourcePath.getFileName().toString();
+            int i = fileName.lastIndexOf(".");
+            if (i != -1) {
+                return fileName.substring(i + 1).trim();
+            }
+        }
+        return null;
+    }
+
     public Path getSourcePath() {
         return sourcePath;
     }
 
     public Path getTargetPath() {
         return targetPath;
+    }
+
+    public boolean isDirectory() {
+        return isDirectory;
     }
 
     public long getCount() {

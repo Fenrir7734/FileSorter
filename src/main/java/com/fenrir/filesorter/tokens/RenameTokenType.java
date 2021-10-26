@@ -1,19 +1,17 @@
 package com.fenrir.filesorter.tokens;
 
-public enum SortTokenType {
-    SEPARATOR("/"),
+public enum RenameTokenType {
     FILE_EXTENSION("EXT"),
-    FILE_CATEGORY("CAT"),
-    IMAGE_RESOLUTION("RES");
+    CURRENT_FILE_NAME("CUR");
 
     private final String token;
 
-    SortTokenType(String token) {
+    RenameTokenType(String token) {
         this.token = token;
     }
 
-    public static SortTokenType get(String token) {
-        SortTokenType[] tokenTypes = SortTokenType.values();
+    public static RenameTokenType get(String token) {
+        RenameTokenType[] tokenTypes = RenameTokenType.values();
         for (int i = 0; i < tokenTypes.length; i++) {
             if (tokenTypes[i].token.equals(token)) {
                 return tokenTypes[i];
