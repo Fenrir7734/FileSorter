@@ -43,17 +43,15 @@ public class Sorter {
 
     private long countDuplicate(Path targetPath) {
         return filesToSort.stream()
-                .filter(FileData::isDirectory)
+                .filter(file -> !file.isDirectory())
                 .map(FileData::getTargetPath)
                 .filter(Objects::nonNull)
-                .filter(p -> p.equals(targetPath))
+                .map(Path::toString)
+                .filter(s -> s.equals(targetPath.toString()))
                 .count();
     }
 
     private void copyFromSourceToTarget() {
-        for (FileData file: filesToSort) {
-            //System.out.println(file.getTargetPath());
-            System.out.println(file.resolveTargetPath());
-        }
+
     }
 }
