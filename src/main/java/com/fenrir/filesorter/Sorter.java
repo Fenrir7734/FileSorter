@@ -7,9 +7,13 @@ import com.fenrir.filesorter.rules.parsers.RenameRuleParser;
 import com.fenrir.filesorter.rules.parsers.SortRuleParser;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class Sorter {
     private SortRule sortRule;
@@ -51,7 +55,23 @@ public class Sorter {
                 .count();
     }
 
-    private void copyFromSourceToTarget() {
+    private void copyFromSourceToTarget() throws IOException {
+        for (FileData file: filesToSort) {
+            if (!file.isDirectory()) {
+                copyFile(file);
+            }
+        }
+    }
 
+    private void copyFile(FileData file) throws IOException {
+        Path sourcePath = file.getSourcePath();
+        Path targetPath = file.resolveTargetPath();
+        Path dirPath = targetPath.getParent();
+
+        if (Files.notExists(dirPath)) {
+            Files.createDirectories(dirPath);
+        }
+        
+        Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
     }
 }
