@@ -32,6 +32,8 @@ public class SortRuleParser {
                 resolvedRule.append(element.element());
             }
         }
+
+        this.rule.resetIter();
         return Path.of(resolvedRule.toString());
     }
 
@@ -79,7 +81,7 @@ public class SortRuleParser {
 
     private String getDate(String pattern) {
         Calendar calendar = fileData.creationTime();
-        return new SimpleDateFormat(pattern).format(calendar);
+        return new SimpleDateFormat(pattern).format(calendar.getTime());
     }
 
 }

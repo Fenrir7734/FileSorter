@@ -46,5 +46,9 @@ public abstract class Rule {
         return iterator < rule.size() ? rule.get(iterator++) : null;
     }
 
+    public void resetIter() {
+        this.iterator = 0;
+    }
+
     public record RuleElement(String element, boolean isToken) { }
 }

@@ -30,6 +30,8 @@ public class RenameRuleParser {
                 resolvedRule.append(element.element());
             }
         }
+
+        this.rule.resetIter();
         return resolvedRule.toString();
     }
 
@@ -63,6 +65,6 @@ public class RenameRuleParser {
 
     private String getDate(String pattern) {
         Calendar calendar = fileData.creationTime();
-        return new SimpleDateFormat(pattern).format(calendar);
+        return new SimpleDateFormat(pattern).format(calendar.getTime());
     }
 }
