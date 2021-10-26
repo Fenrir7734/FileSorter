@@ -46,5 +46,5 @@ public abstract class Rule {
         return iterator < rule.size() ? rule.get(iterator++) : null;
     }
 
-    public record RuleElement(String element, boolean isFlag) { }
+    public record RuleElement(String element, boolean isToken) { }
 }

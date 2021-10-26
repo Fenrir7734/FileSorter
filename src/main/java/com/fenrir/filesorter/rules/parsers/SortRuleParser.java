@@ -25,7 +25,7 @@ public class SortRuleParser {
 
         Rule.RuleElement element;
         while ((element = rule.next()) != null) {
-            if (element.isFlag()) {
+            if (element.isToken()) {
                 String resolvedFlag = parseToken(element.element());
                 resolvedRule.append(resolvedFlag);
             } else {

@@ -11,7 +11,7 @@ public class SortRuleTest {
         Rule rule = new SortRule("abcd");
         Rule.RuleElement element = rule.next();
         assertEquals("abcd", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertNull(element);
@@ -23,7 +23,7 @@ public class SortRuleTest {
 
         Rule.RuleElement element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertNull(element);
@@ -35,19 +35,19 @@ public class SortRuleTest {
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("MM", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("/", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("DD", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertNull(element);
@@ -59,27 +59,27 @@ public class SortRuleTest {
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertEquals("MM", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("/", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("DD", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertNull(element);
@@ -91,27 +91,27 @@ public class SortRuleTest {
 
         Rule.RuleElement element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertEquals("YYYY", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertEquals("MM", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("/", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("DD", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertNull(element);
@@ -123,23 +123,23 @@ public class SortRuleTest {
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("-", element.element());
-        assertFalse(element.isFlag());
+        assertFalse(element.isToken());
 
         element = rule.next();
         assertEquals("MM", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("/", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertEquals("DD", element.element());
-        assertTrue(element.isFlag());
+        assertTrue(element.isToken());
 
         element = rule.next();
         assertNull(element);

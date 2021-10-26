@@ -23,14 +23,14 @@ public class RenameRuleParser {
 
         Rule.RuleElement element;
         while ((element = rule.next()) != null) {
-            if (element.isFlag()) {
+            if (element.isToken()) {
                 String resolvedToken = parseToken(element.element());
                 resolvedRule.append(resolvedToken);
             } else {
                 resolvedRule.append(element.element());
             }
         }
-        return null;
+        return resolvedRule.toString();
     }
 
     private String parseToken(String token) throws IllegalArgumentException {
