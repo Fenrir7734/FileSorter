@@ -1,0 +1,316 @@
+{
+  "resolutions": [
+    {
+      "width": "320",
+      "height": "480"
+    },
+    {
+      "width": "320",
+      "height": "568"
+    },
+    {
+      "width": "360",
+      "height": "640"
+    },
+    {
+      "width": "375",
+      "height": "667"
+    },
+    {
+      "width": "480",
+      "height": "800"
+    },
+    {
+      "width": "480",
+      "height": "854"
+    },
+    {
+      "width": "800",
+      "height": "600"
+    },
+    {
+      "width": "540",
+      "height": "960"
+    },
+    {
+      "width": "600",
+      "height": "1024"
+    },
+    {
+      "width": "640",
+      "height": "960"
+    },
+    {
+      "width": "1024",
+      "height": "600"
+    },
+    {
+      "width": "640",
+      "height": "1136"
+    },
+    {
+      "width": "768",
+      "height": "1024"
+    },
+    {
+      "width": "1024",
+      "height": "768"
+    },
+    {
+      "width": "720",
+      "height": "1208"
+    },
+    {
+      "width": "1280",
+      "height": "720"
+    },
+    {
+      "width": "720",
+      "height": "1280"
+    },
+    {
+      "width": "1280",
+      "height": "768"
+    },
+    {
+      "width": "750",
+      "height": "1334"
+    },
+    {
+      "width": "800",
+      "height": "1280"
+    },
+    {
+      "width": "1280",
+      "height": "800"
+    },
+    {
+      "width": "1366",
+      "height": "768"
+    },
+    {
+      "width": "1440",
+      "height": "900"
+    },
+    {
+      "width": "1280",
+      "height": "1024"
+    },
+    {
+      "width": "1600",
+      "height": "900"
+    },
+    {
+      "width": "828",
+      "height": "1792"
+    },
+    {
+      "width": "2048",
+      "height": "768"
+    },
+    {
+      "width": "1680",
+      "height": "1050"
+    },
+    {
+      "width": "1200",
+      "height": "1600"
+    },
+    {
+      "width": "1600",
+      "height": "1200"
+    },
+    {
+      "width": "1080",
+      "height": "1800"
+    },
+    {
+      "width": "1080",
+      "height": "1812"
+    },
+    {
+      "width": "1920",
+      "height": "1080"
+    },
+    {
+      "width": "1080",
+      "height": "1920"
+    },
+    {
+      "width": "1080",
+      "height": "2160"
+    },
+    {
+      "width": "3072",
+      "height": "768"
+    },
+    {
+      "width": "1080",
+      "height": "2340"
+    },
+    {
+      "width": "2880",
+      "height": "900"
+    },
+    {
+      "width": "1125",
+      "height": "2436"
+    },
+    {
+      "width": "1242",
+      "height": "2208"
+    },
+    {
+      "width": "2560",
+      "height": "1080"
+    },
+    {
+      "width": "3200",
+      "height": "900"
+    },
+    {
+      "width": "1170",
+      "height": "2532"
+    },
+    {
+      "width": "1400",
+      "height": "2160"
+    },
+    {
+      "width": "3840",
+      "height": "800"
+    },
+    {
+      "width": "2160",
+      "height": "1440"
+    },
+    {
+      "width": "1536",
+      "height": "2048"
+    },
+    {
+      "width": "2048",
+      "height": "1536"
+    },
+    {
+      "width": "4098",
+      "height": "768"
+    },
+    {
+      "width": "1242",
+      "height": "2588"
+    },
+    {
+      "width": "2160",
+      "height": "1620"
+    },
+    {
+      "width": "1620",
+      "height": "2160"
+    },
+    {
+      "width": "1284",
+      "height": "2778"
+    },
+    {
+      "width": "1440",
+      "height": "2560"
+    },
+    {
+      "width": "2560",
+      "height": "1440"
+    },
+    {
+      "width": "1668",
+      "height": "2224"
+    },
+    {
+      "width": "2224",
+      "height": "1668"
+    },
+    {
+      "width": "2360",
+      "height": "1640"
+    },
+    {
+      "width": "1640",
+      "height": "2360"
+    },
+    {
+      "width": "4320",
+      "height": "900"
+    },
+    {
+      "width": "2388",
+      "height": "1668"
+    },
+    {
+      "width": "1668",
+      "height": "2388"
+    },
+    {
+      "width": "2560",
+      "height": "1600"
+    },
+    {
+      "width": "3840",
+      "height": "1080"
+    },
+    {
+      "width": "2732",
+      "height": "1536"
+    },
+    {
+      "width": "1440",
+      "height": "2960"
+    },
+    {
+      "width": "4800",
+      "height": "900"
+    },
+    {
+      "width": "3440",
+      "height": "1440"
+    },
+    {
+      "width": "2736",
+      "height": "1824"
+    },
+    {
+      "width": "1824",
+      "height": "2736"
+    },
+    {
+      "width": "2880",
+      "height": "1800"
+    },
+    {
+      "width": "2048",
+      "height": "2732"
+    },
+    {
+      "width": "2732",
+      "height": "2048"
+    },
+    {
+      "width": "3200",
+      "height": "1800"
+    },
+    {
+      "width": "5760",
+      "height": "1080"
+    },
+    {
+      "width": "3840",
+      "height": "2160"
+    },
+    {
+      "width": "4096",
+      "height": "2304"
+    },
+    {
+      "width": "5120",
+      "height": "2880"
+    }
+  ]
+}

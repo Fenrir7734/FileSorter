@@ -16,10 +16,10 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class Sorter {
-    private SortRule sortRule;
-    private RenameRule renameRule;
-    private List<FileData> filesToSort;
-    private Path targetDir;
+    private final SortRule sortRule;
+    private final RenameRule renameRule;
+    private final List<FileData> filesToSort;
+    private final Path targetDir;
 
     public Sorter(Path target, List<FileData> filesToSort, SortRule sortRule, RenameRule renameRule) {
         this.targetDir = target;
@@ -71,7 +71,7 @@ public class Sorter {
         if (Files.notExists(dirPath)) {
             Files.createDirectories(dirPath);
         }
-        
+
         Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
     }
 }
