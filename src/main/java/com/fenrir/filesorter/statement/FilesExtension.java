@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 public class FilesExtension {
+    private static FilesExtension instance;
+
     private final String path = "src/main/resources/extensions.json";
     private final Map<FilesCategory, List<String>> extensions = new HashMap<>();
 
-    public FilesExtension() throws IOException {
+    private FilesExtension() throws IOException {
         readExtensionsFromFile();
     }
 
@@ -47,5 +49,12 @@ public class FilesExtension {
             }
         }
         return null;
+    }
+
+    public static FilesExtension getInstance() throws IOException {
+        if (instance == null) {
+            instance = new FilesExtension();
+        }
+        return instance;
     }
 }

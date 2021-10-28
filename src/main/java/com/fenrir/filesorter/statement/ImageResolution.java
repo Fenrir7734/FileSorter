@@ -10,17 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageResolution {
-    public record Resolution(int width, int height) { }
+    private static ImageResolution instance;
 
+    public record Resolution(int width, int height) { }
     private final String path = "src/main/resources/image_resolutions.json";
     private final List<Resolution> resolutions = new ArrayList<>();
 
     public ImageResolution() throws IOException {
-        readResolutionsFile();
+        readResolutionsFromFile();
         System.out.println(resolutions);
     }
 
-    private void readResolutionsFile() throws IOException {
+    private void readResolutionsFromFile() throws IOException {
         String content = new String(Files.readAllBytes(Path.of(path)));
         JSONObject object = new JSONObject(content);
         JSONArray resolutionsJSONArray = object.getJSONArray("resolutions");
@@ -40,5 +41,12 @@ public class ImageResolution {
 
     public boolean contains(Resolution resolution) {
         return resolutions.contains(resolution);
+    }
+
+    public static ImageResolution getInstance() throws IOException {
+        if (instance == null) {
+            instance = new ImageResolution();
+        }
+        return instance;
     }
 }
