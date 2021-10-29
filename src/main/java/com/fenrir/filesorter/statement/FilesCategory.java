@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.statement.data;
+package com.fenrir.filesorter.statement;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
