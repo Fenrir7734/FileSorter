@@ -10,6 +10,7 @@ module com.example.filesortere {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires org.json;
+    requires java.desktop;
 
     opens com.fenrir.filesorter to javafx.fxml;
     exports com.fenrir.filesorter;

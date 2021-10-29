@@ -12,7 +12,6 @@ import java.util.List;
 public class ImageResolution {
     private static ImageResolution instance;
 
-    public record Resolution(int width, int height) { }
     private final String path = "src/main/resources/image_resolutions.json";
     private final List<Resolution> resolutions = new ArrayList<>();
 
