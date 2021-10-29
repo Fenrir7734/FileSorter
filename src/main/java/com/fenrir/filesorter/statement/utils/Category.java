@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.statement;
+package com.fenrir.filesorter.statement.utils;
 
 public enum Category {
     TEXT("text"),

@@ -1,0 +1,72 @@
+package com.fenrir.filesorter.statement.string;
+
+import com.fenrir.filesorter.file.FileData;
+import com.fenrir.filesorter.statement.StatementDescription;
+import com.fenrir.filesorter.statement.utils.ImageResolution;
+import com.fenrir.filesorter.statement.utils.Resolution;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Iterator;
+
+public class ImageResolutionStatement implements StringStatement {
+    private FileData fileData;
+
+    public ImageResolutionStatement(FileData fileData, StatementDescription description) {
+        this.fileData = fileData;
+    }
+
+    @Override
+    public String execute(FileData file) throws IOException {
+        return getImageResolutionAsString();
+    }
+
+    private String getImageResolutionAsString() throws IOException {
+        Resolution resolution = getImageResolution();
+
+        if (resolution == null) {
+            return "NonImage";
+        }
+
+        ImageResolution imageResolution = ImageResolution.getInstance();
+        return imageResolution.contains(resolution) ? resolution.toString() : "Other";
+    }
+
+    private Resolution getImageResolution() throws IOException {
+        InputStream inputStream = getInputStream();
+        try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
+            ImageReader reader = getImageReader(imageInputStream);
+            if (reader != null) {
+                try {
+                    reader.setInput(imageInputStream);
+                    return getImageResolutionFromReader(reader);
+                } finally {
+                    reader.dispose();
+                }
+            }
+        }
+        return null;
+    }
+
+    private InputStream getInputStream() throws IOException {
+        URL url = fileData.getSourcePath().toUri().toURL();
+        return url.openStream();
+    }
+
+    private ImageReader getImageReader(ImageInputStream inputStream) throws IOException {
+        Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
+        return readers.hasNext() ? readers.next() : null;
+    }
+
+    private Resolution getImageResolutionFromReader(ImageReader reader) throws IOException {
+        int width = reader.getWidth(0);
+        int height = reader.getHeight(0);
+        return new Resolution(width, height);
+    }
+
+
+}

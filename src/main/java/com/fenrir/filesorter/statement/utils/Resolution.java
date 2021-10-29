@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.statement;
+package com.fenrir.filesorter.statement.utils;
 
 public record Resolution(int width, int height) {
     @Override
