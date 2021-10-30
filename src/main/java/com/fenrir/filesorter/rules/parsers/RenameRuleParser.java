@@ -3,9 +3,14 @@ package com.fenrir.filesorter.rules.parsers;
 import com.fenrir.filesorter.file.FileData;
 import com.fenrir.filesorter.rules.RenameRule;
 import com.fenrir.filesorter.rules.Rule;
+import com.fenrir.filesorter.statement.StatementDescription;
+import com.fenrir.filesorter.statement.string.DateStatement;
+import com.fenrir.filesorter.statement.string.StringStatement;
+import com.fenrir.filesorter.statement.string.StringStatementFactory;
 import com.fenrir.filesorter.tokens.DateTokenType;
 import com.fenrir.filesorter.tokens.RenameTokenType;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -18,14 +23,14 @@ public class RenameRuleParser {
         this.fileData = fileData;
     }
 
-    public String resolveRule() {
+    public String resolveRule() throws IOException {
         StringBuilder resolvedRule = new StringBuilder();
 
         Rule.RuleElement element;
         while ((element = rule.next()) != null) {
             if (element.isToken()) {
-                String resolvedToken = parseToken(element.element());
-                resolvedRule.append(resolvedToken);
+                StringStatement statement = parseToken(element.element());
+                resolvedRule.append(statement.execute());
             } else {
                 resolvedRule.append(element.element());
             }
@@ -35,11 +40,12 @@ public class RenameRuleParser {
         return resolvedRule.toString();
     }
 
-    private String parseToken(String token) throws IllegalArgumentException {
+    private StringStatement parseToken(String token) throws IllegalArgumentException {
         DateTokenType dateTokenType = DateTokenType.get(token);
 
         if (dateTokenType != null) {
-            return getDate(dateTokenType.getPattern());
+            StatementDescription description = new StatementDescription(dateTokenType.getPattern());
+            return new DateStatement(fileData, description);
         }
 
         RenameTokenType renameTokenType = RenameTokenType.get(token);
@@ -48,23 +54,6 @@ public class RenameRuleParser {
             throw new IllegalArgumentException();
         }
 
-        return switch (renameTokenType) {
-            case CURRENT_FILE_NAME -> getFileName();
-            case FILE_EXTENSION -> getFileExtension();
-        };
-    }
-
-    private String getFileExtension() {
-        String extension = fileData.getFileExtension();
-        return extension != null && !extension.equals("") ? extension : "Other";
-    }
-
-    private String getFileName() {
-        return null;
-    }
-
-    private String getDate(String pattern) {
-        Calendar calendar = fileData.creationTime();
-        return new SimpleDateFormat(pattern).format(calendar.getTime());
+        return StringStatementFactory.get(fileData, null, renameTokenType);
     }
 }
