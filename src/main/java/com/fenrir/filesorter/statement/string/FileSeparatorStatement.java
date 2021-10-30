@@ -11,7 +11,7 @@ public class FileSeparatorStatement implements StringStatement {
     public FileSeparatorStatement(FileData data, StatementDescription description) { }
 
     @Override
-    public String execute(FileData file) throws IOException {
+    public String execute() throws IOException {
         return File.separator;
     }
 }

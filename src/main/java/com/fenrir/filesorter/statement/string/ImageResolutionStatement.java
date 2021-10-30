@@ -21,7 +21,7 @@ public class ImageResolutionStatement implements StringStatement {
     }
 
     @Override
-    public String execute(FileData file) throws IOException {
+    public String execute() throws IOException {
         return getImageResolutionAsString();
     }
 

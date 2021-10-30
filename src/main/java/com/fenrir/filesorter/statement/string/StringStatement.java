@@ -6,5 +6,5 @@ import com.fenrir.filesorter.statement.StatementDescription;
 import java.io.IOException;
 
 public interface StringStatement {
-    String execute(FileData file) throws IOException;
+    String execute() throws IOException;
 }
