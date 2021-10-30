@@ -12,7 +12,7 @@ public enum Category {
     EXECUTABLE("executable"),
     SHEET("sheet"),
     SLIDE("slide"),
-    OTHERS("Others");
+    OTHERS("others");
 
     private String name;
 
