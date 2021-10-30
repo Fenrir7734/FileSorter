@@ -2,8 +2,8 @@ package com.fenrir.filesorter.statement.string;
 
 import com.fenrir.filesorter.file.FileData;
 import com.fenrir.filesorter.statement.StatementDescription;
-import com.fenrir.filesorter.statement.utils.ImageResolution;
-import com.fenrir.filesorter.statement.utils.Resolution;
+import com.fenrir.filesorter.statement.string.utils.ImageResolution;
+import com.fenrir.filesorter.statement.string.utils.Resolution;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;

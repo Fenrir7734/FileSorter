@@ -37,7 +37,7 @@ public class Sorter {
         copyFromSourceToTarget();
     }
 
-    private void createTargetPath(FileData file) {
+    private void createTargetPath(FileData file) throws IOException {
         Path dirPath = new SortRuleParser(sortRule, file).resolveRule();
         String fileName = new RenameRuleParser(renameRule, file).resolveRule();
         Path targetPath = targetDir.resolve(dirPath).resolve(fileName);

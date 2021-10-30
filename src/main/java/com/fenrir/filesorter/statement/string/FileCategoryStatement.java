@@ -3,8 +3,8 @@ package com.fenrir.filesorter.statement.string;
 import com.fenrir.filesorter.file.FileData;
 import com.fenrir.filesorter.file.FileUtils;
 import com.fenrir.filesorter.statement.StatementDescription;
-import com.fenrir.filesorter.statement.utils.Category;
-import com.fenrir.filesorter.statement.utils.FilesCategory;
+import com.fenrir.filesorter.statement.string.utils.Category;
+import com.fenrir.filesorter.statement.string.utils.FilesCategory;
 
 import java.io.IOException;
 
