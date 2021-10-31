@@ -3,8 +3,8 @@ package com.fenrir.filesorter;
 import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
-import com.fenrir.filesorter.model.rules.RenameRule;
-import com.fenrir.filesorter.model.rules.SortRule;
+import com.fenrir.filesorter.model.rules.type.RenameRule;
+import com.fenrir.filesorter.model.rules.type.SortRule;
 
 import java.io.IOException;
 import java.nio.file.Path;

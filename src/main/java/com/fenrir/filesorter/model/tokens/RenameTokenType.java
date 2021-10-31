@@ -12,9 +12,9 @@ public enum RenameTokenType {
 
     public static RenameTokenType get(String token) {
         RenameTokenType[] tokenTypes = RenameTokenType.values();
-        for (int i = 0; i < tokenTypes.length; i++) {
-            if (tokenTypes[i].token.equals(token)) {
-                return tokenTypes[i];
+        for (RenameTokenType tokenType : tokenTypes) {
+            if (tokenType.token.equals(token)) {
+                return tokenType;
             }
         }
         return null;
