@@ -14,6 +14,9 @@ public class FileNameStatement implements StringStatement {
 
     @Override
     public String execute() throws IOException {
-        return fileData.getSourcePath().getFileName().toString();
+        String fileName =  fileData.getSourcePath().getFileName().toString();
+        int extensionIndex = fileName.lastIndexOf(".");
+        return extensionIndex != -1 ?
+                fileName.substring(0, extensionIndex) : fileName;
     }
 }

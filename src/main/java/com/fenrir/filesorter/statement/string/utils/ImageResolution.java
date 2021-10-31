@@ -17,7 +17,6 @@ public class ImageResolution {
 
     public ImageResolution() throws IOException {
         readResolutionsFromFile();
-        System.out.println(resolutions);
     }
 
     private void readResolutionsFromFile() throws IOException {
@@ -38,7 +37,7 @@ public class ImageResolution {
         return new Resolution(width, height);
     }
 
-    public boolean contains(Resolution resolution) {
+    public boolean matchResolution(Resolution resolution) {
         return resolutions.contains(resolution);
     }
 

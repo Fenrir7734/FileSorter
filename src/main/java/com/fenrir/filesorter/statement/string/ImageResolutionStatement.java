@@ -33,7 +33,7 @@ public class ImageResolutionStatement implements StringStatement {
         }
 
         ImageResolution imageResolution = ImageResolution.getInstance();
-        return imageResolution.contains(resolution) ? resolution.toString() : "Other";
+        return imageResolution.matchResolution(resolution) ? resolution.toString() : "Other";
     }
 
     private Resolution getImageResolution() throws IOException {
