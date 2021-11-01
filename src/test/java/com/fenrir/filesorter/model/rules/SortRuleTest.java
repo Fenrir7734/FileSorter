@@ -1,7 +1,5 @@
 package com.fenrir.filesorter.model.rules;
 
-import com.fenrir.filesorter.model.rules.type.Rule;
-import com.fenrir.filesorter.model.rules.type.SortRule;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

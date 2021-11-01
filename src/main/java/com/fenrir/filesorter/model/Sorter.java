@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.rules.type.RenameRule;
-import com.fenrir.filesorter.model.rules.type.SortRule;
+import com.fenrir.filesorter.model.rules.RenameRule;
+import com.fenrir.filesorter.model.rules.SortRule;
 import com.fenrir.filesorter.model.parsers.RenameRuleParser;
 import com.fenrir.filesorter.model.parsers.SortRuleParser;
 

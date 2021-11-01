@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.rules.type.Rule;
-import com.fenrir.filesorter.model.rules.type.SortRule;
+import com.fenrir.filesorter.model.rules.Rule;
+import com.fenrir.filesorter.model.rules.SortRule;
 import com.fenrir.filesorter.model.statement.StatementDescription;
 import com.fenrir.filesorter.model.statement.string.DateStatement;
 import com.fenrir.filesorter.model.statement.string.StringStatement;
