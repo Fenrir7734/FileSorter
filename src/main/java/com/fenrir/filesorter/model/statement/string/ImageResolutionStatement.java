@@ -1,7 +1,6 @@
 package com.fenrir.filesorter.model.statement.string;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.statement.StatementDescription;
 import com.fenrir.filesorter.model.statement.string.utils.ImageResolution;
 import com.fenrir.filesorter.model.statement.string.utils.Resolution;
 
@@ -16,7 +15,7 @@ import java.util.Iterator;
 public class ImageResolutionStatement implements StringStatement {
     private FileData fileData;
 
-    public ImageResolutionStatement(FileData fileData, StatementDescription description) {
+    public ImageResolutionStatement(FileData fileData, StringStatementDescription description) {
         this.fileData = fileData;
     }
 
