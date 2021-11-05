@@ -1,7 +1,9 @@
-package com.fenrir.filesorter.model.statement;
+package com.fenrir.filesorter.model.statement.string;
+
+import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
 
 public class StatementDescription {
-    private String datePattern;
+    private final String datePattern;
 
     public StatementDescription(String datePattern) {
         this.datePattern = datePattern;
