@@ -24,8 +24,8 @@ class ImageResolutionStatementTest {
     public void getResolutionOfNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new ImageResolutionStatement(fileData, null);
-        String resolution = statement.execute();
+        StringStatement statement = new ImageResolutionStatement(null);
+        String resolution = statement.execute(fileData);
         assertEquals("NonImage", resolution);
     }
 
@@ -57,8 +57,8 @@ class ImageResolutionStatementTest {
         @Test
         public void getResolutionOfImageWithDeclaredResolution() throws IOException {
             FileData fileData = new FileData(path);
-            StringStatement statement = new ImageResolutionStatement(fileData, null);
-            String resolution = statement.execute();
+            StringStatement statement = new ImageResolutionStatement(null);
+            String resolution = statement.execute(fileData);
             assertEquals("320x480", resolution);
         }
     }
@@ -91,8 +91,8 @@ class ImageResolutionStatementTest {
         @Test
         public void getResolutionOfImageWithDeclaredResolution() throws IOException {
             FileData fileData = new FileData(path);
-            StringStatement statement = new ImageResolutionStatement(fileData, null);
-            String resolution = statement.execute();
+            StringStatement statement = new ImageResolutionStatement(null);
+            String resolution = statement.execute(fileData);
             assertEquals("Other", resolution);
         }
     }

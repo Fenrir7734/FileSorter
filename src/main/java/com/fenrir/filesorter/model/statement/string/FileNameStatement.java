@@ -5,14 +5,15 @@ import com.fenrir.filesorter.model.file.FileData;
 import java.io.IOException;
 
 public class FileNameStatement implements StringStatement {
-    private FileData fileData;
 
-    public FileNameStatement(FileData fileData, StringStatementDescription description) {
-        this.fileData = fileData;
-    }
+    public FileNameStatement(StringStatementDescription description) { }
 
     @Override
-    public String execute() throws IOException {
+    public String execute(FileData fileData) throws IOException {
+        return getFileName(fileData);
+    }
+
+    private String getFileName(FileData fileData) throws IOException {
         String fileName =  fileData.getSourcePath().getFileName().toString();
         int extensionIndex = fileName.lastIndexOf(".");
         return extensionIndex != -1 ?

@@ -19,8 +19,8 @@ class FileExtensionStatementTest {
     public void getFileExtensionForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileExtensionStatement(fileData, null);
-        String extension = statement.execute();
+        StringStatement statement = new FileExtensionStatement(null);
+        String extension = statement.execute(fileData);
         assertEquals("txt", extension);
     }
 
@@ -28,8 +28,8 @@ class FileExtensionStatementTest {
     public void getFileExtensionForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileExtensionStatement(fileData, null);
-        String extension = statement.execute();
+        StringStatement statement = new FileExtensionStatement(null);
+        String extension = statement.execute(fileData);
         assertEquals("", extension);
     }
 
@@ -37,8 +37,8 @@ class FileExtensionStatementTest {
     public void getFileExtensionForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileExtensionStatement(fileData, null);
-        String extension = statement.execute();
+        StringStatement statement = new FileExtensionStatement(null);
+        String extension = statement.execute(fileData);
         assertEquals("txt", extension);
     }
 }

@@ -7,20 +7,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateStatement implements StringStatement {
-    private final FileData fileData;
     private final StringStatementDescription description;
 
-    public DateStatement(FileData fileData, StringStatementDescription description) {
-        this.fileData = fileData;
+    public DateStatement(StringStatementDescription description) {
         this.description = description;
     }
 
     @Override
-    public String execute() throws IOException {
-        return getDate();
+    public String execute(FileData fileData) throws IOException {
+        return getDate(fileData);
     }
 
-    private String getDate() {
+    private String getDate(FileData fileData) {
         String datePattern = description.getDatePattern();
         Calendar calendar = fileData.creationTime();
         return new SimpleDateFormat(datePattern).format(calendar.getTime());

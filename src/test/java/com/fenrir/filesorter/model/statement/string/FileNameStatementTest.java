@@ -19,8 +19,8 @@ class FileNameStatementTest {
     public void getFileNameForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileNameStatement(fileData, null);
-        String name = statement.execute();
+        StringStatement statement = new FileNameStatement(null);
+        String name = statement.execute(fileData);
         assertEquals("testfile", name);
     }
 
@@ -28,8 +28,8 @@ class FileNameStatementTest {
     public void getFileNameForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileNameStatement(fileData, null);
-        String name = statement.execute();
+        StringStatement statement = new FileNameStatement(null);
+        String name = statement.execute(fileData);
         assertEquals("testfile", name);
     }
 
@@ -37,8 +37,8 @@ class FileNameStatementTest {
     public void getFileNameForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new FileNameStatement(fileData, null);
-        String name = statement.execute();
+        StringStatement statement = new FileNameStatement(null);
+        String name = statement.execute(fileData);
         assertEquals("", name);
     }
 }

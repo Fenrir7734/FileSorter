@@ -3,48 +3,40 @@ package com.fenrir.filesorter.model.parsers;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rules.Rule;
 import com.fenrir.filesorter.model.rules.SortRule;
-import com.fenrir.filesorter.model.statement.StatementDescription;
-import com.fenrir.filesorter.model.statement.string.DateStatement;
-import com.fenrir.filesorter.model.statement.string.StringStatement;
-import com.fenrir.filesorter.model.statement.string.StringStatementFactory;
+import com.fenrir.filesorter.model.statement.string.*;
 import com.fenrir.filesorter.model.tokens.DateTokenType;
 import com.fenrir.filesorter.model.tokens.SortTokenType;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SortRuleParser {
-    private Rule rule;
-    private FileData fileData;
-
-    public SortRuleParser(SortRule rule, FileData fileData) {
-        this.rule = rule;
-        this.fileData = fileData;
-    }
-
-    public Path resolveRule() throws IOException {
-        StringBuilder resolvedRule = new StringBuilder();
+    public List<StringStatement> resolveRule(SortRule rule) throws IOException {
+        List<StringStatement> statements = new ArrayList<>();
 
         Rule.RuleElement element;
         while ((element = rule.next()) != null) {
-            if (element.isToken()) {
-                StringStatement statement = parseToken(element.element());
-                resolvedRule.append(statement.execute());
-            } else {
-                resolvedRule.append(element.element());
-            }
+            StringStatement statement = parseElement(element);
+            statements.add(statement);
         }
 
-        this.rule.resetIter();
-        return Path.of(resolvedRule.toString());
+        return statements;
     }
 
-    private StringStatement parseToken(String token) throws IllegalArgumentException, IOException {
+    private StringStatement parseElement(Rule.RuleElement element) throws IllegalArgumentException, IOException {
+        if (!element.isToken()) {
+            StringStatementDescription description = new StringStatementDescription(null, element.element());
+            return new LiteralStatement(description);
+        }
+
+        String token = element.element();
         DateTokenType dateTokenType = DateTokenType.get(token);
 
         if (dateTokenType != null) {
-            StatementDescription description = new StatementDescription(dateTokenType.getPattern());
-            return new DateStatement(fileData, description);
+            StringStatementDescription description = new StringStatementDescription(dateTokenType.getPattern(), null);
+            return new DateStatement(description);
         }
 
         SortTokenType sortTokenType = SortTokenType.get(token);
@@ -53,7 +45,7 @@ public class SortRuleParser {
             throw new IllegalArgumentException();
         }
 
-        return StringStatementFactory.get(fileData, null, sortTokenType);
+        return StringStatementFactory.get(null, sortTokenType);
     }
 
 }

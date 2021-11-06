@@ -8,18 +8,15 @@ import com.fenrir.filesorter.model.statement.string.utils.FilesCategory;
 import java.io.IOException;
 
 public class FileCategoryStatement implements StringStatement {
-    private final FileData fileData;
 
-    public FileCategoryStatement(FileData fileData, StringStatementDescription description) {
-        this.fileData = fileData;
-    }
+    public FileCategoryStatement(StringStatementDescription description) { }
 
     @Override
-    public String execute() throws IOException {
-        return getFileCategory();
+    public String execute(FileData fileData) throws IOException {
+        return getFileCategory(fileData);
     }
 
-    private String getFileCategory() throws IOException {
+    private String getFileCategory(FileData fileData) throws IOException {
         if (!FileUtils.hasExtension(fileData.getSourcePath())) {
             return Category.OTHERS.getName();
         }

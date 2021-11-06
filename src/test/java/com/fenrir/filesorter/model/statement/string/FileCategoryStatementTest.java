@@ -19,8 +19,8 @@ class FileCategoryStatementTest {
     public void getFileCategoryForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        FileCategoryStatement statement = new FileCategoryStatement(fileData, null);
-        String category = statement.execute();
+        FileCategoryStatement statement = new FileCategoryStatement(null);
+        String category = statement.execute(fileData);
         assertEquals("text", category);
     }
 
@@ -28,8 +28,8 @@ class FileCategoryStatementTest {
     public void getFileCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        FileCategoryStatement statement = new FileCategoryStatement(fileData, null);
-        String category = statement.execute();
+        FileCategoryStatement statement = new FileCategoryStatement(null);
+        String category = statement.execute(fileData);
         assertEquals("others", category);
     }
 
@@ -37,8 +37,8 @@ class FileCategoryStatementTest {
     public void getFileCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
-        FileCategoryStatement statement = new FileCategoryStatement(fileData, null);
-        String category = statement.execute();
+        FileCategoryStatement statement = new FileCategoryStatement(null);
+        String category = statement.execute(fileData);
         assertEquals("text", category);
     }
 
@@ -46,8 +46,8 @@ class FileCategoryStatementTest {
     public void getFileCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
-        FileCategoryStatement statement = new FileCategoryStatement(fileData, null);
-        String category = statement.execute();
+        FileCategoryStatement statement = new FileCategoryStatement(null);
+        String category = statement.execute(fileData);
         assertEquals("others", category);
     }
 }

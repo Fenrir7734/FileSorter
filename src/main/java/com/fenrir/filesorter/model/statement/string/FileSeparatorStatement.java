@@ -7,10 +7,10 @@ import java.io.IOException;
 
 public class FileSeparatorStatement implements StringStatement {
 
-    public FileSeparatorStatement(FileData data, StringStatementDescription description) { }
+    public FileSeparatorStatement(StringStatementDescription description) { }
 
     @Override
-    public String execute() throws IOException {
+    public String execute(FileData fileData) throws IOException {
         return File.separator;
     }
 }

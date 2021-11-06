@@ -13,19 +13,16 @@ import java.net.URL;
 import java.util.Iterator;
 
 public class ImageResolutionStatement implements StringStatement {
-    private FileData fileData;
 
-    public ImageResolutionStatement(FileData fileData, StringStatementDescription description) {
-        this.fileData = fileData;
-    }
+    public ImageResolutionStatement(StringStatementDescription description) { }
 
     @Override
-    public String execute() throws IOException {
-        return getImageResolutionAsString();
+    public String execute(FileData fileData) throws IOException {
+        return getImageResolutionAsString(fileData);
     }
 
-    private String getImageResolutionAsString() throws IOException {
-        Resolution resolution = getImageResolution();
+    private String getImageResolutionAsString(FileData fileData) throws IOException {
+        Resolution resolution = getImageResolution(fileData);
 
         if (resolution == null) {
             return "NonImage";
@@ -35,8 +32,8 @@ public class ImageResolutionStatement implements StringStatement {
         return imageResolution.matchResolution(resolution) ? resolution.toString() : "Other";
     }
 
-    private Resolution getImageResolution() throws IOException {
-        InputStream inputStream = getInputStream();
+    private Resolution getImageResolution(FileData fileData) throws IOException {
+        InputStream inputStream = getInputStream(fileData);
         try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
             ImageReader reader = getImageReader(imageInputStream);
             if (reader != null) {
@@ -51,7 +48,7 @@ public class ImageResolutionStatement implements StringStatement {
         return null;
     }
 
-    private InputStream getInputStream() throws IOException {
+    private InputStream getInputStream(FileData fileData) throws IOException {
         URL url = fileData.getSourcePath().toUri().toURL();
         return url.openStream();
     }
