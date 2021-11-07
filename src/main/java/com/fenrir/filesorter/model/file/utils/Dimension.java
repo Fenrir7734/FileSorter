@@ -1,6 +1,5 @@
-package com.fenrir.filesorter.model.statement.string.utils;
+package com.fenrir.filesorter.model.file.utils;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 

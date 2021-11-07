@@ -1,11 +1,23 @@
 package com.fenrir.filesorter.model.file;
 
+import com.fenrir.filesorter.model.statement.string.utils.Category;
+import com.fenrir.filesorter.model.statement.string.utils.Dimension;
+import com.fenrir.filesorter.model.statement.string.utils.FilesCategory;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Calendar;
+import java.util.Iterator;
 
 public class FileData {
     private final Path sourcePath;
@@ -35,6 +47,18 @@ public class FileData {
         return calendar;
     }
 
+    public String getFileName() {
+        return sourcePath.getFileName().toString();
+    }
+
+    public boolean hasExtension() {
+        if (!isDirectory) {
+            return false;
+        }
+        String fileName = sourcePath.getFileName().toString();
+        return fileName.lastIndexOf(".") != -1;
+    }
+
     public String getFileExtension() {
         if (!isDirectory) {
             String fileName = sourcePath.getFileName().toString();
@@ -44,6 +68,59 @@ public class FileData {
             }
         }
         return null;
+    }
+
+    public Category getFileCategory() throws IOException {
+        if (!hasExtension()) {
+            return Category.OTHERS;
+        }
+        String extension = getFileExtension();
+        FilesCategory filesCategory = FilesCategory.getInstance();
+        Category category = filesCategory.matchCategory(extension);
+        return category != null ? category : Category.OTHERS;
+    }
+
+    public long getFileSize() {
+        File file = sourcePath.toFile();
+        return file.length();
+    }
+
+    private boolean isImage() throws IOException {
+        File file = sourcePath.toFile();
+        Image image = ImageIO.read(file);
+        return image != null;
+    }
+
+    private Dimension getImageDimension() throws IOException {
+        InputStream inputStream = getInputStream();
+        try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
+            ImageReader reader = getImageReader(imageInputStream);
+            if (reader != null) {
+                try {
+                    reader.setInput(imageInputStream);
+                    return getImageDimensionFromReader(reader);
+                } finally {
+                    reader.dispose();
+                }
+            }
+        }
+        return null;
+    }
+
+    private InputStream getInputStream() throws IOException {
+        URL url = sourcePath.toUri().toURL();
+        return url.openStream();
+    }
+
+    private ImageReader getImageReader(ImageInputStream inputStream) throws IOException {
+        Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
+        return readers.hasNext() ? readers.next() : null;
+    }
+
+    private Dimension getImageDimensionFromReader(ImageReader reader) throws IOException {
+        int width = reader.getWidth(0);
+        int height = reader.getHeight(0);
+        return Dimension.of(width, height);
     }
 
     public Path resolveTargetPath() {
