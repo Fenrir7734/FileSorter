@@ -4,7 +4,7 @@ public enum SortTokenType {
     SEPARATOR("/"),
     FILE_EXTENSION("EXT"),
     FILE_CATEGORY("CAT"),
-    IMAGE_RESOLUTION("RES");
+    IMAGE_DIMENSION("DIM");
 
     private final String token;
 
@@ -14,9 +14,9 @@ public enum SortTokenType {
 
     public static SortTokenType get(String token) {
         SortTokenType[] tokenTypes = SortTokenType.values();
-        for (int i = 0; i < tokenTypes.length; i++) {
-            if (tokenTypes[i].token.equals(token)) {
-                return tokenTypes[i];
+        for (SortTokenType tokenType : tokenTypes) {
+            if (tokenType.token.equals(token)) {
+                return tokenType;
             }
         }
         return null;

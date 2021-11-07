@@ -9,13 +9,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageResolution {
-    private static ImageResolution instance;
+public class ImageDimension {
+    private static ImageDimension instance;
 
     private final String path = "src/main/resources/image_resolutions.json";
-    private final List<Resolution> resolutions = new ArrayList<>();
+    private final List<Dimension> resolutions = new ArrayList<>();
 
-    public ImageResolution() throws IOException {
+    public ImageDimension() throws IOException {
         readResolutionsFromFile();
     }
 
@@ -26,24 +26,24 @@ public class ImageResolution {
 
         for (int i = 0; i < resolutionsJSONArray.length(); i++) {
             JSONObject resolutionJSONObject = resolutionsJSONArray.getJSONObject(i);
-            Resolution resolution = getResolutionFromJSONObject(resolutionJSONObject);
+            Dimension resolution = getResolutionFromJSONObject(resolutionJSONObject);
             resolutions.add(resolution);
         }
     }
 
-    private Resolution getResolutionFromJSONObject(JSONObject object) {
+    private Dimension getResolutionFromJSONObject(JSONObject object) {
         int width = object.getInt("width");
         int height = object.getInt("height");
-        return new Resolution(width, height);
+        return Dimension.of(width, height);
     }
 
-    public boolean matchResolution(Resolution resolution) {
+    public boolean matchResolution(Dimension resolution) {
         return resolutions.contains(resolution);
     }
 
-    public static ImageResolution getInstance() throws IOException {
+    public static ImageDimension getInstance() throws IOException {
         if (instance == null) {
-            instance = new ImageResolution();
+            instance = new ImageDimension();
         }
         return instance;
     }

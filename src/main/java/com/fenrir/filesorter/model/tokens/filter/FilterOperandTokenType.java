@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.model.tokens.filter;
 
 public enum FilterOperandTokenType {
-    CURRENT_FILE_NAME("CUR"), PATH("PAT"), DATE("DAT"), RESOLUTION("RES"), SIZE("SIZ"), FILE_EXTENSION("EXT"),
+    CURRENT_FILE_NAME("CUR"), PATH("PAT"), DATE("DAT"), DIMENSION("DIM"), SIZE("SIZ"), FILE_EXTENSION("EXT"),
     FILE_CATEGORY("CAT");
 
     private final String token;

@@ -1,8 +1,7 @@
-package com.fenrir.filesorter.model.statement.string;
+package com.fenrir.filesorter.model.statement.filter.operand;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.statement.string.utils.ImageResolution;
-import com.fenrir.filesorter.model.statement.string.utils.Resolution;
+import com.fenrir.filesorter.model.statement.string.utils.Dimension;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -12,27 +11,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
-public class ImageResolutionStatement implements StringStatement {
-
-    public ImageResolutionStatement(StringStatementDescription description) { }
-
+public class ImageDimensionOperandStatement implements FilterOperandStatement<Dimension> {
     @Override
-    public String execute(FileData fileData) throws IOException {
-        return getImageResolutionAsString(fileData);
+    public Dimension execute(FileData fileData) throws IOException {
+        return getImageResolution(fileData);
     }
 
-    private String getImageResolutionAsString(FileData fileData) throws IOException {
-        Resolution resolution = getImageResolution(fileData);
-
-        if (resolution == null) {
-            return "NonImage";
-        }
-
-        ImageResolution imageResolution = ImageResolution.getInstance();
-        return imageResolution.matchResolution(resolution) ? resolution.toString() : "Other";
-    }
-
-    private Resolution getImageResolution(FileData fileData) throws IOException {
+    private Dimension getImageResolution(FileData fileData) throws IOException {
         InputStream inputStream = getInputStream(fileData);
         try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
             ImageReader reader = getImageReader(imageInputStream);
@@ -58,11 +43,9 @@ public class ImageResolutionStatement implements StringStatement {
         return readers.hasNext() ? readers.next() : null;
     }
 
-    private Resolution getImageResolutionFromReader(ImageReader reader) throws IOException {
+    private Dimension getImageResolutionFromReader(ImageReader reader) throws IOException {
         int width = reader.getWidth(0);
         int height = reader.getHeight(0);
-        return new Resolution(width, height);
+        return Dimension.of(width, height);
     }
-
-
 }

@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ImageResolutionStatementTest {
+class ImageDimensionStatementTest {
     @TempDir
     Path tempDir;
 
@@ -24,7 +24,7 @@ class ImageResolutionStatementTest {
     public void getResolutionOfNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        StringStatement statement = new ImageResolutionStatement(null);
+        StringStatement statement = new ImageDimensionStatement(null);
         String resolution = statement.execute(fileData);
         assertEquals("NonImage", resolution);
     }
@@ -57,7 +57,7 @@ class ImageResolutionStatementTest {
         @Test
         public void getResolutionOfImageWithDeclaredResolution() throws IOException {
             FileData fileData = new FileData(path);
-            StringStatement statement = new ImageResolutionStatement(null);
+            StringStatement statement = new ImageDimensionStatement(null);
             String resolution = statement.execute(fileData);
             assertEquals("320x480", resolution);
         }
@@ -91,7 +91,7 @@ class ImageResolutionStatementTest {
         @Test
         public void getResolutionOfImageWithDeclaredResolution() throws IOException {
             FileData fileData = new FileData(path);
-            StringStatement statement = new ImageResolutionStatement(null);
+            StringStatement statement = new ImageDimensionStatement(null);
             String resolution = statement.execute(fileData);
             assertEquals("Other", resolution);
         }
