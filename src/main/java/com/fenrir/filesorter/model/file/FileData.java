@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model.file;
 
-import com.fenrir.filesorter.model.statement.string.utils.Category;
-import com.fenrir.filesorter.model.statement.string.utils.Dimension;
-import com.fenrir.filesorter.model.statement.string.utils.FilesCategory;
+import com.fenrir.filesorter.model.file.utils.Category;
+import com.fenrir.filesorter.model.file.utils.Dimension;
+import com.fenrir.filesorter.model.file.utils.FilesCategory;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -51,8 +51,15 @@ public class FileData {
         return sourcePath.getFileName().toString();
     }
 
+    public String getFileNameWithoutExtension() {
+        String fileName =  getFileName();
+        int extensionIndex = fileName.lastIndexOf(".");
+        return extensionIndex != -1 ?
+                fileName.substring(0, extensionIndex) : fileName;
+    }
+
     public boolean hasExtension() {
-        if (!isDirectory) {
+        if (isDirectory) {
             return false;
         }
         String fileName = sourcePath.getFileName().toString();
@@ -71,6 +78,9 @@ public class FileData {
     }
 
     public Category getFileCategory() throws IOException {
+        if (isDirectory) {
+            return null;
+        }
         if (!hasExtension()) {
             return Category.OTHERS;
         }
@@ -85,13 +95,13 @@ public class FileData {
         return file.length();
     }
 
-    private boolean isImage() throws IOException {
+    public boolean isImage() throws IOException {
         File file = sourcePath.toFile();
         Image image = ImageIO.read(file);
         return image != null;
     }
 
-    private Dimension getImageDimension() throws IOException {
+    public Dimension getImageDimension() throws IOException {
         InputStream inputStream = getInputStream();
         try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
             ImageReader reader = getImageReader(imageInputStream);
