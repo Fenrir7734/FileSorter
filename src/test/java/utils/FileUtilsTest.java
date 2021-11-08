@@ -25,4 +25,17 @@ public class FileUtilsTest {
         assertEquals(file.length(), 12L);
         assertTrue(file.getAbsolutePath().endsWith("testfile.txt"));
     }
+
+    @Test
+    public void createDirectory() {
+        Path path = FileUtils.createDirectory(tempDir, "dir");
+
+        assertNotNull(path);
+
+        File file = path.toFile();
+
+        assertTrue(file.exists());
+        assertTrue(file.isDirectory());
+        assertTrue(file.getAbsolutePath().endsWith("dir"));
+    }
 }

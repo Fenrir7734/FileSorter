@@ -43,7 +43,7 @@ class ImageDimensionStatementTest {
                 BufferedImage image = new BufferedImage(320, 480, BufferedImage.TYPE_BYTE_GRAY);
                 ImageIO.write(image, "png", out);
             } catch (IOException e) {
-                System.out.println("Error creating image: " + e);
+                System.err.println("Error creating image: " + e);
             }
         }
 
