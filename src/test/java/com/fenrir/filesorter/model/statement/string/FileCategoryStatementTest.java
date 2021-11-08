@@ -16,12 +16,21 @@ class FileCategoryStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileCategoryForFileWithExtension() throws IOException {
+    public void getFileCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);
         String category = statement.execute(fileData);
         assertEquals("text", category);
+    }
+
+    @Test
+    public void getFileCategoryForFileWithAudioExtension() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile.mp3");
+        FileData fileData = new FileData(path);
+        FileCategoryStatement statement = new FileCategoryStatement(null);
+        String category = statement.execute(fileData);
+        assertEquals("audio", category);
     }
 
     @Test

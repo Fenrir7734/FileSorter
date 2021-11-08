@@ -5,6 +5,6 @@ import com.fenrir.filesorter.model.file.FileData;
 public class FileNameOperandStatement implements FilterOperandStatement<String> {
     @Override
     public String execute(FileData fileData) {
-        return fileData.getSourcePath().getFileName().toString();
+        return fileData.getFileNameWithoutExtension();
     }
 }
