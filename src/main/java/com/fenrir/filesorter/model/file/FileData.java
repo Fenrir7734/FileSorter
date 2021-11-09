@@ -25,12 +25,14 @@ public class FileData {
     private long count;
     private final BasicFileAttributes attributes;
     private final boolean isDirectory;
+    private boolean isIncluded;
 
     public FileData(Path path) throws IOException {
         this.isDirectory = Files.isDirectory(path);
         this.sourcePath = path;
         this.targetPath = null;
         this.attributes = Files.readAttributes(path, BasicFileAttributes.class);
+        this.isIncluded = false;
     }
 
     public Calendar creationTime() {
@@ -163,6 +165,10 @@ public class FileData {
         return isDirectory;
     }
 
+    public boolean isIncluded() {
+        return isIncluded;
+    }
+
     public long getCount() {
         return count;
     }
@@ -170,5 +176,17 @@ public class FileData {
     public void setTargetPath(Path targetPath, long count) {
         this.targetPath = targetPath;
         this.count = count;
+    }
+
+    public void setIncluded(boolean included) {
+        isIncluded = included;
+    }
+
+    @Override
+    public String toString() {
+        return "FileData{" +
+                "sourcePath=" + sourcePath +
+                ", targetPath=" + targetPath +
+                '}';
     }
 }

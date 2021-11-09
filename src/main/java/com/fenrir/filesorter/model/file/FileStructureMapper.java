@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 public class FileStructureMapper {
     private Path source;
 
-    public FileStructureMapper(String source) {
-        this.source = Path.of(source);
+    public FileStructureMapper(Path source) {
+        this.source = source;
     }
 
     public List<FileData> map() throws IOException {
