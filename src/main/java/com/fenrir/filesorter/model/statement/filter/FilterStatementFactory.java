@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.statement.filter;
 
-import com.fenrir.filesorter.utils.Converter;
+import com.fenrir.filesorter.model.utils.Converter;
 import com.fenrir.filesorter.model.statement.filter.operand.*;
 import com.fenrir.filesorter.model.statement.filter.operator.*;
 import com.fenrir.filesorter.model.file.utils.Dimension;

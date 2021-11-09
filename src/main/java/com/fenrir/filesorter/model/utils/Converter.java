@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.utils;
+package com.fenrir.filesorter.model.utils;
 
 import com.fenrir.filesorter.model.file.utils.Dimension;
 
