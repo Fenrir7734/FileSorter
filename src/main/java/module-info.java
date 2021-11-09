@@ -20,8 +20,6 @@ module com.example.filesortere {
     opens com.fenrir.filesorter.model to javafx.fxml;
     exports com.fenrir.filesorter.model.parsers;
     opens com.fenrir.filesorter.model.parsers to javafx.fxml;
-    exports com.fenrir.filesorter.model.parsers.old;
-    opens com.fenrir.filesorter.model.parsers.old to javafx.fxml;
     exports com.fenrir.filesorter.model.utils;
     opens com.fenrir.filesorter.model.utils to javafx.fxml;
     exports com.fenrir.filesorter.model.file;
