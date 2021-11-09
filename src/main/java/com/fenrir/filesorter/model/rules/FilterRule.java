@@ -10,6 +10,7 @@ public class FilterRule extends Rule {
         resolveRule(rule);
     }
 
+    @Override
     protected void resolveRule(String rule) {
         Pattern pattern = Pattern.compile("%\\((.*?)\\)");
         Matcher matcher = pattern.matcher(rule);

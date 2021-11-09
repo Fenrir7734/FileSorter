@@ -1,33 +1,31 @@
 package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.rules.FilterRule;
 import com.fenrir.filesorter.model.rules.RenameRule;
 import com.fenrir.filesorter.model.rules.SortRule;
-import com.fenrir.filesorter.model.parsers.RenameRuleParser;
-import com.fenrir.filesorter.model.parsers.SortRuleParser;
+import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class Sorter {
     private final SortRule sortRule;
     private final RenameRule renameRule;
+    private final List<FilterRule> filterRules;
     private final List<FileData> filesToSort;
     private final Path targetDir;
+    private final List<? extends FilterOperatorStatement<?>> filterStatements = new ArrayList<>();
 
-    public Sorter(Path target, List<FileData> filesToSort, SortRule sortRule, RenameRule renameRule) {
+    public Sorter(Path target, List<FileData> filesToSort, List<FilterRule> filterRules, SortRule sortRule, RenameRule renameRule) {
         this.targetDir = target;
         this.filesToSort = filesToSort;
+        this.filterRules = filterRules;
         this.sortRule = sortRule;
         this.renameRule = renameRule;
     }
-
+    /*
     public void sort() throws IOException {
         for (FileData file: filesToSort) {
             if (!file.isDirectory()) {
@@ -74,4 +72,6 @@ public class Sorter {
 
         Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
     }
+
+     */
 }

@@ -1,27 +1,28 @@
 package com.fenrir.filesorter.model.rules;
 
+import java.util.List;
 import java.util.Queue;
 
 public class RuleGroup {
-    private final Rule renameRule;
-    private final Rule sortRule;
-    private final Queue<Rule> filterRules;
+    private final RenameRule renameRule;
+    private final SortRule sortRule;
+    private final List<FilterRule> filterRules;
 
-    public RuleGroup(RenameRule renameRule, SortRule sortRule, Queue<Rule> filterRules) {
+    public RuleGroup(RenameRule renameRule, SortRule sortRule, List<FilterRule> filterRules) {
         this.sortRule = sortRule;
         this.renameRule = renameRule;
         this.filterRules = filterRules;
     }
 
-    public Rule getRenameRule() {
+    public RenameRule getRenameRule() {
         return renameRule;
     }
 
-    public Rule getSortRule() {
+    public SortRule getSortRule() {
         return sortRule;
     }
 
-    public Queue<Rule> getFilterRules() {
+    public List<FilterRule> getFilterRules() {
         return filterRules;
     }
 }
