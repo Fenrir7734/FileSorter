@@ -1,7 +1,6 @@
 package com.fenrir.filesorter;
 
 import com.fenrir.filesorter.model.Processor;
-import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.rules.FilterRule;
@@ -10,9 +9,6 @@ import com.fenrir.filesorter.model.rules.RuleGroup;
 import com.fenrir.filesorter.model.rules.SortRule;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatementFactory;
-import com.fenrir.filesorter.model.tokens.filter.FilterOperandTokenType;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -58,11 +54,11 @@ public class Main {
     }
 
     private static void test3() throws IOException {
-        FilterOperandStatement operandStatement = FilterOperandStatementFactory.get(FilterOperandTokenType.DATE);
+        //FilterOperandStatement operandStatement = FilterOperandStatementFactory.get(FilterOperandTokenType.DATE);
         List<ChronoLocalDate> args = new ArrayList<>();
         args.add(LocalDate.of(1922, 2, 2));
         args.add(LocalDate.now());
-        FilterStatementDescription<ChronoLocalDate> description = new FilterStatementDescription<ChronoLocalDate>(operandStatement, args);
+        //FilterStatementDescription<ChronoLocalDate> description = new FilterStatementDescription<ChronoLocalDate>(operandStatement, args);
         //FilterStatement statement = FilterStatementFactory.get(description, FilterOperatorTokenType.EQUAL);
         //System.out.println(statement.execute(LocalDate.of(1999, 11, 2)).test(LocalDate.of(1922, 2, 2)));
     }
