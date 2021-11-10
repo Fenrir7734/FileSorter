@@ -33,7 +33,6 @@ class FileDataTest {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
-        assertEquals(time.toMillis(), fileData.creationTime().getTimeInMillis());
         long creationTimeInMillis = fileData.creationTime().getTimeInMillis();
         assertEquals(time.toMillis(), creationTimeInMillis);
     }
