@@ -61,9 +61,9 @@ public class Converter {
         List<Long> sizes = new ArrayList<>();
 
         for (String arg : args) {
-            char c = getPostfix(arg);
-            long l = Long.parseLong(arg.substring(0, arg.length() - 2));
-            long sizeInBytes = getSize(l, c);
+            char postfix = getPostfix(arg);
+            arg = checkIfNumber(postfix) ? arg : arg.substring(0, arg.length() - 1);
+            long sizeInBytes = getSize(Long.parseLong(arg), postfix);
             sizes.add(sizeInBytes);
         }
         return sizes;
@@ -84,7 +84,7 @@ public class Converter {
         arg = arg.trim();
         char c = arg.charAt(arg.length() - 1);
         if (!checkPostfix(c)) {
-            throw new ArgumentFormatException("Incorrect size type", arg);
+            throw new ArgumentFormatException("Incorrect size", arg);
         }
         return c;
     }
