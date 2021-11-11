@@ -16,7 +16,7 @@ public class Dimension implements Comparable<Dimension>{
         return new Dimension(width, height);
     }
 
-    public static Dimension of(String str) throws IllegalArgumentException, NumberFormatException {
+    public static Dimension of(String str) throws IllegalArgumentException {
         Integer[] dimensions = Arrays.stream(str.split("x|X"))
                 .map(Integer::valueOf)
                 .toArray(Integer[]::new);

@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model.parsers;
 
+import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rules.FilterRule;
@@ -31,6 +32,10 @@ public class FilterRuleParser {
             throw new TokenFormatException("Unknown operator.", rule, operator.element());
         }
 
-        return FilterStatementFactory.get(operandTokenType, operatorTokenType, List.of(operator.args()));
+        try {
+            return FilterStatementFactory.get(operandTokenType, operatorTokenType, List.of(operator.args()));
+        } catch (ArgumentFormatException e) {
+            throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
+        }
     }
 }

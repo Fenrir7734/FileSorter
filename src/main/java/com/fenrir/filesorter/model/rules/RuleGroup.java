@@ -1,7 +1,6 @@
 package com.fenrir.filesorter.model.rules;
 
 import java.util.List;
-import java.util.Queue;
 
 public class RuleGroup {
     private final RenameRule renameRule;

@@ -124,7 +124,7 @@ public class FileData {
         return url.openStream();
     }
 
-    private ImageReader getImageReader(ImageInputStream inputStream) throws IOException {
+    private ImageReader getImageReader(ImageInputStream inputStream) {
         Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
         return readers.hasNext() ? readers.next() : null;
     }

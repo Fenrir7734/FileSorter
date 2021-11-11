@@ -1,15 +1,12 @@
 package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rules.RenameRule;
 import com.fenrir.filesorter.model.rules.Rule;
-import com.fenrir.filesorter.model.rules.SortRule;
 import com.fenrir.filesorter.model.statement.string.*;
 import com.fenrir.filesorter.model.tokens.DateTokenType;
 import com.fenrir.filesorter.model.tokens.RenameTokenType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

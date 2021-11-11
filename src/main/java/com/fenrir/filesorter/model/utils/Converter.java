@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model.utils;
 
+import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 
 import java.nio.file.Path;
@@ -7,30 +8,56 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Converter {
 
-    public static List<String> toList(String[] args) {
-        return Arrays.stream(args).collect(Collectors.toList());
+    private Converter() {
+        throw new UnsupportedOperationException();
     }
 
-    public static List<ChronoLocalDate> convertToDate(List<String> args) {
-        return args.stream().map(LocalDate::parse).collect(Collectors.toList());
+    public static List<ChronoLocalDate> convertToDate(List<String> args) throws ArgumentFormatException {
+        List<ChronoLocalDate> dates = new ArrayList<>();
+        for (String arg: args) {
+            ChronoLocalDate date = convertToDate(arg);
+            dates.add(date);
+        }
+        return dates;
+    }
+
+    private static ChronoLocalDate convertToDate(String arg) throws ArgumentFormatException {
+        try {
+            return LocalDate.parse(arg);
+        } catch (DateTimeParseException e) {
+            throw new ArgumentFormatException("Incorrect date format.", e, arg);
+        }
     }
 
     public static List<Path> convertToPaths(List<String> args) {
         return args.stream().map(Path::of).collect(Collectors.toList());
     }
 
-    public static List<Dimension> convertToDimension(List<String> args) {
-        return args.stream().map(Dimension::of).collect(Collectors.toList());
+    public static List<Dimension> convertToDimension(List<String> args) throws ArgumentFormatException {
+        List<Dimension> dimensions = new ArrayList<>();
+        for (String arg: args) {
+            Dimension dimension = convertToDimension(arg);
+            dimensions.add(dimension);
+        }
+        return dimensions;
     }
 
-    public static List<Long> convertToBytes(List<String> args) throws IllegalArgumentException {
+    private static Dimension convertToDimension(String arg) throws ArgumentFormatException {
+        try {
+            return Dimension.of(arg);
+        } catch (IllegalArgumentException e) {
+            throw new ArgumentFormatException("Incorrect dimension format.", e, arg);
+        }
+    }
+
+    public static List<Long> convertToBytes(List<String> args) throws ArgumentFormatException {
         List<Long> sizes = new ArrayList<>();
 
         for (String arg : args) {
@@ -53,11 +80,11 @@ public class Converter {
         return size;
     }
 
-    private static char getPostfix(String arg) throws IllegalArgumentException {
+    private static char getPostfix(String arg) throws ArgumentFormatException {
         arg = arg.trim();
         char c = arg.charAt(arg.length() - 1);
         if (!checkPostfix(c)) {
-            throw new IllegalArgumentException();
+            throw new ArgumentFormatException("Incorrect size type", arg);
         }
         return c;
     }

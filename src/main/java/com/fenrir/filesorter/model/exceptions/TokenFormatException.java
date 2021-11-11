@@ -5,6 +5,14 @@ import com.fenrir.filesorter.model.rules.Rule;
 public class TokenFormatException extends ExpressionFormatException {
     private String token;
 
+    public TokenFormatException(String message) {
+        super(message);
+    }
+
+    public TokenFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public TokenFormatException(String message, String token) {
         super(message);
         this.token = token;

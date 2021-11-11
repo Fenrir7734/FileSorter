@@ -8,9 +8,7 @@ import com.fenrir.filesorter.model.rules.RuleGroup;
 import com.fenrir.filesorter.model.rules.SortRule;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Queue;
 
 public class RuleGroupParser {
     private StatementGroup statementGroup;
