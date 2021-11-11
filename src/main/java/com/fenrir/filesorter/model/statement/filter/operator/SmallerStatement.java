@@ -10,11 +10,11 @@ import java.util.function.Predicate;
 
 public class SmallerStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
     private final FilterOperandStatement<T> operandStatement;
-    private final List<T> args;
+    private final T arg;
 
     public SmallerStatement(FilterStatementDescription<T> description) {
         this.operandStatement = description.getOperand();
-        this.args = description.getArgs();
+        this.arg = description.getArgs().get(0);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SmallerStatement<T extends Comparable<T>> implements FilterOperator
             public boolean test(FileData fileData) {
                 try {
                     T operand = operandStatement.execute(fileData);
-                    return operand.compareTo(args.get(0)) < 0;
+                    return operand.compareTo(arg) < 0;
                 } catch (IOException e) {
                     return false;
                 }

@@ -5,16 +5,15 @@ import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class GraterStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
     private final FilterOperandStatement<T> operandStatement;
-    private final List<T> args;
+    private final T arg;
 
     public GraterStatement(FilterStatementDescription<T> description) {
         this.operandStatement = description.getOperand();
-        this.args = description.getArgs();
+        this.arg = description.getArgs().get(0);
     }
 
     @Override
@@ -24,7 +23,7 @@ public class GraterStatement<T extends Comparable<T>> implements FilterOperatorS
             public boolean test(FileData fileData) {
                 try {
                     T operand = operandStatement.execute(fileData);
-                    return operand.compareTo(args.get(0)) > 0;
+                    return operand.compareTo(arg) > 0;
                 } catch (IOException e) {
                     return false;
                 }
