@@ -15,8 +15,24 @@ import java.util.List;
 public class FilterRuleParser {
 
     public FilterOperatorStatement<? extends Comparable<?>> resolveRule(FilterRule rule) throws ExpressionFormatException {
+        try {
+            validateRule(rule);
+
+            Rule.RuleElement operand = rule.next();
+            Rule.RuleElement operator = rule.next();
+            FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
+            FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
+
+            return FilterStatementFactory.get(operandTokenType, operatorTokenType, List.of(operator.args()));
+        } catch (ArgumentFormatException e) {
+            throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
+        }
+    }
+
+    private void validateRule(FilterRule rule) throws ExpressionFormatException {
         Rule.RuleElement operand = rule.next();
         Rule.RuleElement operator = rule.next();
+        rule.resetIter();
 
         if (operand == null || operator == null || rule.next() != null) {
             throw new ExpressionFormatException("Incorrect expression. Some elements are missing.", rule);
@@ -32,10 +48,19 @@ public class FilterRuleParser {
             throw new TokenFormatException("Unknown operator.", rule, operator.element());
         }
 
-        try {
-            return FilterStatementFactory.get(operandTokenType, operatorTokenType, List.of(operator.args()));
-        } catch (ArgumentFormatException e) {
-            throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
+        String[] args = operator.args();
+
+        if (args == null || args.length < 1) {
+            throw new TokenFormatException("Expected at least one argument.", rule, operator.element());
+        }
+
+        if (args.length > 1 && (
+                operatorTokenType == FilterOperatorTokenType.GREATER ||
+                        operatorTokenType == FilterOperatorTokenType.GREATER_EQUAL ||
+                        operatorTokenType == FilterOperatorTokenType.SMALLER ||
+                        operatorTokenType == FilterOperatorTokenType.SMALLER_EQUAL
+                )) {
+            throw new TokenFormatException("Expected only one argument.", rule, operator.element());
         }
     }
 }
