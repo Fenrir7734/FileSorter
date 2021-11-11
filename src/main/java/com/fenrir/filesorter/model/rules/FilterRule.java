@@ -6,14 +6,14 @@ import java.util.regex.Pattern;
 public class FilterRule extends Rule {
 
     public FilterRule(String rule) {
-        super();
-        resolveRule(rule);
+        super(rule);
+        resolveExpression();
     }
 
     @Override
-    protected void resolveRule(String rule) {
+    protected void resolveExpression() {
         Pattern pattern = Pattern.compile("%\\((.*?)\\)");
-        Matcher matcher = pattern.matcher(rule);
+        Matcher matcher = pattern.matcher(getExpression());
 
         while (matcher.find()) {
             extractToken(matcher);

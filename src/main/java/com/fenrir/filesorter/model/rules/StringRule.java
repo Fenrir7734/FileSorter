@@ -6,26 +6,27 @@ import java.util.regex.Pattern;
 public class StringRule extends Rule {
 
     public StringRule(String rule) {
-        super();
-        resolveRule(rule);
+        super(rule);
+        resolveExpression();
     }
 
-    protected void resolveRule(String rule) {
+    protected void resolveExpression() {
+        String expression = getExpression();
         Pattern pattern = Pattern.compile("%\\((.*?)\\)");
-        Matcher matcher = pattern.matcher(rule);
+        Matcher matcher = pattern.matcher(expression);
         int lastMatchIndex = 0;
 
         while (matcher.find()) {
-            extractLiteral(rule, lastMatchIndex, matcher.start());
+            extractLiteral(expression, lastMatchIndex, matcher.start());
             extractToken(matcher);
             lastMatchIndex = matcher.end();
         }
-        extractLiteral(rule, lastMatchIndex, rule.length());
+        extractLiteral(expression, lastMatchIndex, expression.length());
     }
 
-    private void extractLiteral(String rule, int lastMatchIndex, int currentMatchIndex) {
+    private void extractLiteral(String expression, int lastMatchIndex, int currentMatchIndex) {
         if (lastMatchIndex != currentMatchIndex) {
-            String s = rule.substring(lastMatchIndex, currentMatchIndex);
+            String s = expression.substring(lastMatchIndex, currentMatchIndex);
             RuleElement element = new RuleElement(s, false, null);
             this.rule.add(element);
         }

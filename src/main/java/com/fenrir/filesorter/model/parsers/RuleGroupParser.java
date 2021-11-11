@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Queue;
 
-public class RuleParser {
+public class RuleGroupParser {
     private StatementGroup statementGroup;
     private final RenameRuleParser renameRuleParser;
     private final SortRuleParser sortRuleParser;
     private final FilterRuleParser filterRuleParser;
 
-    public RuleParser() {
+    public RuleGroupParser() {
         renameRuleParser = new RenameRuleParser();
         sortRuleParser = new SortRuleParser();
         filterRuleParser = new FilterRuleParser();
