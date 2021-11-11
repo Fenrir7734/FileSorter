@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model.parsers;
 
+import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rules.RenameRule;
 import com.fenrir.filesorter.model.rules.Rule;
@@ -14,19 +15,23 @@ import java.util.List;
 
 public class RenameRuleParser {
 
-    public List<StringStatement> resolveRule(RenameRule rule) throws IOException {
-        List<StringStatement> statements = new ArrayList<>();
+    public List<StringStatement> resolveRule(RenameRule rule) throws TokenFormatException {
+        try {
+            List<StringStatement> statements = new ArrayList<>();
 
-        Rule.RuleElement element;
-        while ((element = rule.next()) != null) {
-            StringStatement statement = parseElement(element);
-            statements.add(statement);
+            Rule.RuleElement element;
+            while ((element = rule.next()) != null) {
+                StringStatement statement = parseElement(element);
+                statements.add(statement);
+            }
+
+            return statements;
+        } catch (TokenFormatException e) {
+            throw new TokenFormatException(e.getMessage(), e, rule, e.getToken());
         }
-
-        return statements;
     }
 
-    private StringStatement parseElement(Rule.RuleElement element) throws IllegalArgumentException {
+    private StringStatement parseElement(Rule.RuleElement element) throws TokenFormatException {
         if (!element.isToken()) {
             StringStatementDescription description = new StringStatementDescription(null, element.element());
             return new LiteralStatement(description);
@@ -43,7 +48,7 @@ public class RenameRuleParser {
         RenameTokenType renameTokenType = RenameTokenType.get(token);
 
         if (renameTokenType == null) {
-            throw new IllegalArgumentException();
+            throw new TokenFormatException("Unknown token", token);
         }
 
         return StringStatementFactory.get(null, renameTokenType);

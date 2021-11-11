@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         test();
     }
 
@@ -28,7 +28,7 @@ public class Main {
         System.out.println(o1.equals(o2));
     }
 
-    private static void test() throws IOException {
+    private static void test() throws Exception {
         String sortRule = "%(YYYY)-%(MM)%(/)%(0D)";
         String renameRule = "%(0D)-%(MM)-%(YYYY)";
         String source = "/home/fenrir/Documents/Test_environment/screenshot";

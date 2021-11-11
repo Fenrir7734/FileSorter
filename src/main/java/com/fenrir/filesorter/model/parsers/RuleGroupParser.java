@@ -1,5 +1,7 @@
 package com.fenrir.filesorter.model.parsers;
 
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
+import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rules.FilterRule;
 import com.fenrir.filesorter.model.rules.RenameRule;
 import com.fenrir.filesorter.model.rules.RuleGroup;
@@ -22,7 +24,7 @@ public class RuleGroupParser {
         filterRuleParser = new FilterRuleParser();
     }
 
-    public StatementGroup parse(RuleGroup ruleGroup) throws IOException {
+    public StatementGroup parse(RuleGroup ruleGroup) throws ExpressionFormatException {
         initNewStatementGroup();
         createRenameStatement(ruleGroup.getRenameRule());
         createSortStatement(ruleGroup.getSortRule());
@@ -34,15 +36,15 @@ public class RuleGroupParser {
         statementGroup = new StatementGroup();
     }
 
-    private void createRenameStatement(RenameRule rule) throws IOException {
+    private void createRenameStatement(RenameRule rule) throws TokenFormatException {
         statementGroup.setRenameStatement(renameRuleParser.resolveRule(rule));
     }
 
-    private void createSortStatement(SortRule rule) throws IOException {
+    private void createSortStatement(SortRule rule) throws TokenFormatException {
         statementGroup.setSortStatement(sortRuleParser.resolveRule(rule));
     }
 
-    private void createFilterStatement(List<FilterRule> rules) throws IOException {
+    private void createFilterStatement(List<FilterRule> rules) throws ExpressionFormatException {
         for (FilterRule rule: rules) {
             statementGroup.addFilterStatement(filterRuleParser.resolveRule(rule));
         }

@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model;
 
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
@@ -23,7 +24,7 @@ public class Processor {
     private List<StatementGroup> statementGroups;
     private List<FileData> fileStructure;
 
-    public Processor(Path sourceRootDir, Path targetRootDir, List<RuleGroup> ruleGroup) throws IOException {
+    public Processor(Path sourceRootDir, Path targetRootDir, List<RuleGroup> ruleGroup) throws ExpressionFormatException, IOException {
         this.ruleParser = new RuleGroupParser();
         this.sourceRootDir = sourceRootDir;
         this.targetRootDir = targetRootDir;
@@ -32,7 +33,7 @@ public class Processor {
         mapFileStructure();
     }
 
-    private void parseRuleGroups() throws IOException {
+    private void parseRuleGroups() throws ExpressionFormatException {
         statementGroups = new ArrayList<>();
         for (RuleGroup ruleGroup: ruleGroups) {
             StatementGroup statementGroup = ruleParser.parse(ruleGroup);
