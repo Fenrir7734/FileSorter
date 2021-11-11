@@ -2,7 +2,7 @@ package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
-import com.fenrir.filesorter.model.parsers.RuleParser;
+import com.fenrir.filesorter.model.parsers.RuleGroupParser;
 import com.fenrir.filesorter.model.rules.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Processor {
-    private final RuleParser ruleParser;
+    private final RuleGroupParser ruleParser;
     private Path sourceRootDir;
     private Path targetRootDir;
     private List<RuleGroup> ruleGroups;
@@ -24,7 +24,7 @@ public class Processor {
     private List<FileData> fileStructure;
 
     public Processor(Path sourceRootDir, Path targetRootDir, List<RuleGroup> ruleGroup) throws IOException {
-        this.ruleParser = new RuleParser();
+        this.ruleParser = new RuleGroupParser();
         this.sourceRootDir = sourceRootDir;
         this.targetRootDir = targetRootDir;
         this.ruleGroups = ruleGroup;
