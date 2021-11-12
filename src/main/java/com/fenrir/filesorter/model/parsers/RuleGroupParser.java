@@ -2,7 +2,7 @@ package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.rules.*;
+import com.fenrir.filesorter.model.rule.*;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 
 import java.util.List;

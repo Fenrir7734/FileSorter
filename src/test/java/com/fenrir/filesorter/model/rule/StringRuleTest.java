@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.rules;
+package com.fenrir.filesorter.model.rule;
 
 import org.junit.jupiter.api.Test;
 

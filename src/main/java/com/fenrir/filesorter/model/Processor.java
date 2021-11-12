@@ -4,7 +4,7 @@ import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
-import com.fenrir.filesorter.model.rules.RuleGroup;
+import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
 import com.fenrir.filesorter.model.statement.string.StringStatement;

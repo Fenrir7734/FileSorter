@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.exceptions;
 
-import com.fenrir.filesorter.model.rules.Rule;
+import com.fenrir.filesorter.model.rule.Rule;
 
 public class ExpressionFormatException extends Exception {
     private Rule rule;

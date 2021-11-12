@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.rules;
+package com.fenrir.filesorter.model.rule;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

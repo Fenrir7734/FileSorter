@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.rules.Rule;
-import com.fenrir.filesorter.model.rules.StringRule;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.StringRule;
 import com.fenrir.filesorter.model.statement.string.*;
 import com.fenrir.filesorter.model.tokens.DateTokenType;
 import com.fenrir.filesorter.model.tokens.SortTokenType;

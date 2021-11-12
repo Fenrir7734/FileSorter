@@ -1,8 +1,6 @@
 package com.fenrir.filesorter.model.exceptions;
 
-import com.fenrir.filesorter.model.rules.Rule;
-
-import java.util.List;
+import com.fenrir.filesorter.model.rule.Rule;
 
 public class ArgumentFormatException extends TokenFormatException {
     private String arg;
