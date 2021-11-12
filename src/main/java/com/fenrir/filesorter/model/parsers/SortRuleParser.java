@@ -2,7 +2,6 @@ package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.Iterator;
-import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.rule.StringRule;
 import com.fenrir.filesorter.model.statement.string.*;

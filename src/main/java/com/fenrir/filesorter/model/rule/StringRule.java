@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringRule extends Rule {
-    private RuleElementContainer container = new RuleElementContainer();
+    private final RuleElementContainer container = new RuleElementContainer();
 
     public StringRule(String expression) {
         super(expression);

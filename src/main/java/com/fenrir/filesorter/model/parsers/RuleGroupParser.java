@@ -21,9 +21,9 @@ public class RuleGroupParser {
 
     public StatementGroup parse(RuleGroup ruleGroup) throws ExpressionFormatException {
         initNewStatementGroup();
-        createRenameStatement(ruleGroup.getRenameRule());
-        createSortStatement(ruleGroup.getSortRule());
-        createFilterStatement(ruleGroup.getFilterRules());
+        createRenameStatement(ruleGroup.renameRule());
+        createSortStatement(ruleGroup.sortRule());
+        createFilterStatement(ruleGroup.filterRules());
         return statementGroup;
     }
 
