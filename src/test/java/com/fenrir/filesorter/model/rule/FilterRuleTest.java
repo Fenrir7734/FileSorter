@@ -7,7 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class FilterRuleTest {
 
     @Test
-    public void resolveRuleWithoutToken() {
+    public void getRuleElementsIteratorShouldReturnIterator() {
+        Rule rule = new StringRule("%(YYYY)%(MM)%(/)%(DD)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+        assertNotNull(iterator);
+    }
+
+    @Test
+    public void toStringShouldReturnExpression() {
+        String expression = "%(YYYY)%(MM)%(/)%(DD)";
+        Rule rule = new StringRule(expression);
+        assertEquals(expression, rule.toString());
+    }
+
+    @Test
+    public void resolveExpressionWithoutToken() {
         Rule rule = new FilterRule("abcd");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
         RuleElement element = iterator.next();
@@ -15,7 +29,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveRuleContainingOneToken() {
+    void resolveExpressionContainingOneToken() {
         Rule rule = new FilterRule("%(INC)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -29,7 +43,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveRuleContainingTokenWithArguments() {
+    void resolveExpressionContainingTokenWithArguments() {
         Rule rule = new FilterRule("%(==:123,456,789)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -43,7 +57,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveRuleContainingLiterals() {
+    void resolveExpressionContainingLiterals() {
         Rule rule = new FilterRule("--%(INC)--");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 

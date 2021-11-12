@@ -7,7 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class StringRuleTest {
 
     @Test
-    public void resolveRuleWithoutFlags() {
+    public void getRuleElementsIteratorShouldReturnIterator() {
+        Rule rule = new StringRule("%(YYYY)%(MM)%(/)%(DD)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+        assertNotNull(iterator);
+    }
+
+    @Test
+    public void toStringShouldReturnExpression() {
+        String expression = "%(YYYY)%(MM)%(/)%(DD)";
+        Rule rule = new StringRule(expression);
+        assertEquals(expression, rule.toString());
+    }
+
+    @Test
+    public void resolveExpressionWithoutTokens() {
         Rule rule = new StringRule("abcd");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -20,7 +34,7 @@ class StringRuleTest {
     }
 
     @Test
-    void resolveRuleContainingOneElement() {
+    void resolveExpressionContainingOneElement() {
         Rule rule = new StringRule("-");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -33,7 +47,7 @@ class StringRuleTest {
     }
 
     @Test
-    void resolveRuleContainingOnlyFlags() {
+    void resolveExpressionContainingOnlyTokens() {
         Rule rule = new StringRule("%(YYYY)%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -58,7 +72,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveRuleWithFlagAtTheBeginning() {
+    public void resolveExpressionWithTokenAtTheBeginning() {
         Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)-");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -91,7 +105,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveRuleWithFlagAtTheEnd() {
+    public void resolveExpressionWithTokenAtTheEnd() {
         Rule rule = new StringRule("-%(YYYY)-%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -124,7 +138,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveRuleWithFlagsAtBothEnds() {
+    public void resolveExpressionWithTokensAtBothEnds() {
         Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
