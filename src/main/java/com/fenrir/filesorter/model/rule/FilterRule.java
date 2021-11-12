@@ -4,9 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FilterRule extends Rule {
+    private RuleElementContainer container = new RuleElementContainer();
 
-    public FilterRule(String rule) {
-        super(rule);
+    public FilterRule(String expression) {
+        super(expression);
         resolveExpression();
     }
 
@@ -33,11 +34,16 @@ public class FilterRule extends Rule {
         }
 
         RuleElement element = new RuleElement(token, true, args);
-        this.rule.add(element);
+        container.add(element);
     }
 
     private String[] extractArgs(String token, int index) {
         String args = token.substring(index);
         return args.split(",");
+    }
+
+    @Override
+    public Iterator<RuleElement> getRuleElementsIterator() {
+        return container.iterator();
     }
 }

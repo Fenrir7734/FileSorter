@@ -4,7 +4,9 @@ import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementFactory;
 import com.fenrir.filesorter.model.tokens.filter.ArgumentNumber;
@@ -19,8 +21,9 @@ public class FilterRuleParser {
         try {
             validateRule(rule);
 
-            Rule.RuleElement operand = rule.next();
-            Rule.RuleElement operator = rule.next();
+            Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+            RuleElement operand = iterator.next();
+            RuleElement operator = iterator.next();
             FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
             FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
 
@@ -31,15 +34,16 @@ public class FilterRuleParser {
     }
 
     private void validateRule(FilterRule rule) throws ExpressionFormatException {
-        Rule.RuleElement operand = rule.next();
-        Rule.RuleElement operator = rule.next();
-        rule.resetIter();
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+        RuleElement operand = iterator.next();
+        RuleElement operator = iterator.next();
+        iterator.reset();
 
         validateOperand(rule, operand);
         validateOperator(rule, operator);
     }
 
-    private void validateOperand(FilterRule rule, Rule.RuleElement operand) throws ExpressionFormatException {
+    private void validateOperand(FilterRule rule, RuleElement operand) throws ExpressionFormatException {
         if (operand == null) {
             throw new ExpressionFormatException("Incorrect expression, operand is missing.", rule);
         }
@@ -50,7 +54,7 @@ public class FilterRuleParser {
         }
     }
 
-    private void validateOperator(FilterRule rule, Rule.RuleElement operator) throws ExpressionFormatException {
+    private void validateOperator(FilterRule rule, RuleElement operator) throws ExpressionFormatException {
         if (operator == null) {
             throw new ExpressionFormatException("Incorrect expression, operand is missing.", rule);
         }
@@ -62,7 +66,7 @@ public class FilterRuleParser {
         validateArgumentNumber(rule, operator);
     }
 
-    private void validateArgumentNumber(FilterRule rule, Rule.RuleElement operator) throws TokenFormatException {
+    private void validateArgumentNumber(FilterRule rule, RuleElement operator) throws TokenFormatException {
         String[] args = operator.args();
         ArgumentNumber argumentNumber = FilterOperatorTokenType.get(operator.element()).getArgumentNumber();
 

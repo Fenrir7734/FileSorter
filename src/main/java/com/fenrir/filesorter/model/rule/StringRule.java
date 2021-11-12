@@ -4,9 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringRule extends Rule {
+    private RuleElementContainer container = new RuleElementContainer();
 
-    public StringRule(String rule) {
-        super(rule);
+    public StringRule(String expression) {
+        super(expression);
         resolveExpression();
     }
 
@@ -28,13 +29,18 @@ public class StringRule extends Rule {
         if (lastMatchIndex != currentMatchIndex) {
             String s = expression.substring(lastMatchIndex, currentMatchIndex);
             RuleElement element = new RuleElement(s, false, null);
-            this.rule.add(element);
+            container.add(element);
         }
     }
 
     private void extractToken(Matcher matcher) {
         String token = matcher.group(1);
         RuleElement element = new RuleElement(token, true, null);
-        this.rule.add(element);
+        container.add(element);
+    }
+
+    @Override
+    public Iterator<RuleElement> getRuleElementsIterator() {
+        return container.iterator();
     }
 }

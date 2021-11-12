@@ -9,46 +9,50 @@ class FilterRuleTest {
     @Test
     public void resolveRuleWithoutToken() {
         Rule rule = new FilterRule("abcd");
-        Rule.RuleElement element = rule.next();
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+        RuleElement element = iterator.next();
         assertNull(element);
     }
 
     @Test
     void resolveRuleContainingOneToken() {
         Rule rule = new FilterRule("%(INC)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
-        Rule.RuleElement element = rule.next();
+        RuleElement element = iterator.next();
         assertEquals("INC", element.element());
         assertTrue(element.isToken());
         assertNull(element.args());
 
-        element = rule.next();
+        element = iterator.next();
         assertNull(element);
     }
 
     @Test
     void resolveRuleContainingTokenWithArguments() {
         Rule rule = new FilterRule("%(==:123,456,789)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
-        Rule.RuleElement element = rule.next();
+        RuleElement element = iterator.next();
         assertEquals("==", element.element());
         assertTrue(element.isToken());
         assertArrayEquals(new String[]{"123", "456", "789"}, element.args());
 
-        element = rule.next();
+        element = iterator.next();
         assertNull(element);
     }
 
     @Test
     void resolveRuleContainingLiterals() {
         Rule rule = new FilterRule("--%(INC)--");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
-        Rule.RuleElement element = rule.next();
+        RuleElement element = iterator.next();
         assertEquals("INC", element.element());
         assertTrue(element.isToken());
         assertNull(element.args());
 
-        element = rule.next();
+        element = iterator.next();
         assertNull(element);
     }
 }
