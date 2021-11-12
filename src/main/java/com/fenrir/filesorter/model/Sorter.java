@@ -1,16 +1,7 @@
 package com.fenrir.filesorter.model;
 
-import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.rules.FilterRule;
-import com.fenrir.filesorter.model.rules.RenameRule;
-import com.fenrir.filesorter.model.rules.SortRule;
-import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Sorter {
+    /*
     private final SortRule sortRule;
     private final RenameRule renameRule;
     private final List<FilterRule> filterRules;
@@ -25,6 +16,7 @@ public class Sorter {
         this.sortRule = sortRule;
         this.renameRule = renameRule;
     }
+    */
     /*
     public void sort() throws IOException {
         for (FileData file: filesToSort) {

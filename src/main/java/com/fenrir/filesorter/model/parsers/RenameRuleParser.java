@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.rules.RenameRule;
 import com.fenrir.filesorter.model.rules.Rule;
+import com.fenrir.filesorter.model.rules.StringRule;
 import com.fenrir.filesorter.model.statement.string.*;
 import com.fenrir.filesorter.model.tokens.DateTokenType;
 import com.fenrir.filesorter.model.tokens.RenameTokenType;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RenameRuleParser {
 
-    public List<StringStatement> resolveRule(RenameRule rule) throws TokenFormatException {
+    public List<StringStatement> resolveRule(StringRule rule) throws TokenFormatException {
         try {
             List<StringStatement> statements = new ArrayList<>();
 

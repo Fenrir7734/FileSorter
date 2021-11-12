@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SortRuleTest {
+class StringRuleTest {
 
     @Test
     public void resolveRuleWithoutFlags() {
-        Rule rule = new SortRule("abcd");
+        Rule rule = new StringRule("abcd");
         Rule.RuleElement element = rule.next();
         assertEquals("abcd", element.element());
         assertFalse(element.isToken());
@@ -19,7 +19,7 @@ class SortRuleTest {
 
     @Test
     void resolveRuleContainingOneElement() {
-        Rule rule = new SortRule("-");
+        Rule rule = new StringRule("-");
 
         Rule.RuleElement element = rule.next();
         assertEquals("-", element.element());
@@ -31,7 +31,7 @@ class SortRuleTest {
 
     @Test
     void resolveRuleContainingOnlyFlags() {
-        Rule rule = new SortRule("%(YYYY)%(MM)%(/)%(DD)");
+        Rule rule = new StringRule("%(YYYY)%(MM)%(/)%(DD)");
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());
@@ -55,7 +55,7 @@ class SortRuleTest {
 
     @Test
     public void resolveRuleWithFlagAtTheBeginning() {
-        Rule rule = new SortRule("%(YYYY)-%(MM)%(/)%(DD)-");
+        Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)-");
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());
@@ -87,7 +87,7 @@ class SortRuleTest {
 
     @Test
     public void resolveRuleWithFlagAtTheEnd() {
-        Rule rule = new SortRule("-%(YYYY)-%(MM)%(/)%(DD)");
+        Rule rule = new StringRule("-%(YYYY)-%(MM)%(/)%(DD)");
 
         Rule.RuleElement element = rule.next();
         assertEquals("-", element.element());
@@ -119,7 +119,7 @@ class SortRuleTest {
 
     @Test
     public void resolveRuleWithFlagsAtBothEnds() {
-        Rule rule = new SortRule("%(YYYY)-%(MM)%(/)%(DD)");
+        Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)");
 
         Rule.RuleElement element = rule.next();
         assertEquals("YYYY", element.element());

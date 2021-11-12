@@ -2,7 +2,7 @@ package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rules.Rule;
-import com.fenrir.filesorter.model.rules.SortRule;
+import com.fenrir.filesorter.model.rules.StringRule;
 import com.fenrir.filesorter.model.statement.string.*;
 import com.fenrir.filesorter.model.tokens.DateTokenType;
 import com.fenrir.filesorter.model.tokens.SortTokenType;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SortRuleParser {
-    public List<StringStatement> resolveRule(SortRule rule) throws TokenFormatException {
+    public List<StringStatement> resolveRule(StringRule rule) throws TokenFormatException {
         try {
             List<StringStatement> statements = new ArrayList<>();
 

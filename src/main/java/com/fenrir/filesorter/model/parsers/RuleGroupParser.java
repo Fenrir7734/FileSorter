@@ -2,10 +2,7 @@ package com.fenrir.filesorter.model.parsers;
 
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.rules.FilterRule;
-import com.fenrir.filesorter.model.rules.RenameRule;
-import com.fenrir.filesorter.model.rules.RuleGroup;
-import com.fenrir.filesorter.model.rules.SortRule;
+import com.fenrir.filesorter.model.rules.*;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 
 import java.util.List;
@@ -34,11 +31,11 @@ public class RuleGroupParser {
         statementGroup = new StatementGroup();
     }
 
-    private void createRenameStatement(RenameRule rule) throws TokenFormatException {
+    private void createRenameStatement(StringRule rule) throws TokenFormatException {
         statementGroup.setRenameStatement(renameRuleParser.resolveRule(rule));
     }
 
-    private void createSortStatement(SortRule rule) throws TokenFormatException {
+    private void createSortStatement(StringRule rule) throws TokenFormatException {
         statementGroup.setSortStatement(sortRuleParser.resolveRule(rule));
     }
 

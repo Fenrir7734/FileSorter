@@ -3,10 +3,7 @@ package com.fenrir.filesorter;
 import com.fenrir.filesorter.model.Processor;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
-import com.fenrir.filesorter.model.rules.FilterRule;
-import com.fenrir.filesorter.model.rules.RenameRule;
-import com.fenrir.filesorter.model.rules.RuleGroup;
-import com.fenrir.filesorter.model.rules.SortRule;
+import com.fenrir.filesorter.model.rules.*;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 
@@ -35,8 +32,8 @@ public class Main {
         String target = "/home/fenrir/Documents/Test_environment/target/";
 
         List<FileData> fileDataList = new FileStructureMapper(Path.of(source)).map();
-        SortRule sortRule1 = new SortRule(sortRule);
-        RenameRule renameRule1 = new RenameRule(renameRule);
+        StringRule sortRule1 = new StringRule(sortRule);
+        StringRule renameRule1 = new StringRule(renameRule);
         Path targetPath = Path.of(target);
 
         FilterRule filterRule1 = new FilterRule("%(DAT)%(>:2021-09-04)");

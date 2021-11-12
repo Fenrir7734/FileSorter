@@ -2,22 +2,15 @@ package com.fenrir.filesorter.model.rules;
 
 import java.util.List;
 
-public class RuleGroup {
-    private final RenameRule renameRule;
-    private final SortRule sortRule;
-    private final List<FilterRule> filterRules;
+public record RuleGroup(StringRule renameRule,
+                        StringRule sortRule,
+                        List<FilterRule> filterRules) {
 
-    public RuleGroup(RenameRule renameRule, SortRule sortRule, List<FilterRule> filterRules) {
-        this.sortRule = sortRule;
-        this.renameRule = renameRule;
-        this.filterRules = filterRules;
-    }
-
-    public RenameRule getRenameRule() {
+    public StringRule getRenameRule() {
         return renameRule;
     }
 
-    public SortRule getSortRule() {
+    public StringRule getSortRule() {
         return sortRule;
     }
 
