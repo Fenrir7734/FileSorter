@@ -26,8 +26,7 @@ class FilterRuleTest {
     public void resolveExpressionWithoutToken() {
         Rule rule = new FilterRule("abcd");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
-        RuleElement element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -40,8 +39,7 @@ class FilterRuleTest {
         assertTrue(element.isToken());
         assertNull(element.args());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -54,8 +52,7 @@ class FilterRuleTest {
         assertTrue(element.isToken());
         assertEquals(List.of("123", "456", "789"), element.args());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -68,7 +65,32 @@ class FilterRuleTest {
         assertTrue(element.isToken());
         assertNull(element.args());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void resolveExpressionForOperatorWithZeroArguments() {
+        Rule rule = new FilterRule("%(<:)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+
+        RuleElement element = iterator.next();
+        assertEquals("<", element.element());
+        assertTrue(element.isToken());
+        assertNull(element.args());
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void resolveExpressionForOperatorWithSpaceAsArgument() {
+        Rule rule = new FilterRule("%(<:12k, ,54M)");
+        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
+
+        RuleElement element = iterator.next();
+        assertTrue(element.isToken());
+        List<String> expectedArgs = List.of("12k", "54M");
+        assertEquals(expectedArgs, element.args());
+
+        assertFalse(iterator.hasNext());
     }
 }

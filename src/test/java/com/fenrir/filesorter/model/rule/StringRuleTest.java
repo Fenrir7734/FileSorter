@@ -29,8 +29,7 @@ class StringRuleTest {
         assertEquals("abcd", element.element());
         assertFalse(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -42,8 +41,7 @@ class StringRuleTest {
         assertEquals("-", element.element());
         assertFalse(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -67,8 +65,7 @@ class StringRuleTest {
         assertEquals("DD", element.element());
         assertTrue(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -100,8 +97,7 @@ class StringRuleTest {
         assertEquals("-", element.element());
         assertFalse(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -133,8 +129,7 @@ class StringRuleTest {
         assertEquals("DD", element.element());
         assertTrue(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -162,7 +157,6 @@ class StringRuleTest {
         assertEquals("DD", element.element());
         assertTrue(element.isToken());
 
-        element = iterator.next();
-        assertNull(element);
+        assertFalse(iterator.hasNext());
     }
 }

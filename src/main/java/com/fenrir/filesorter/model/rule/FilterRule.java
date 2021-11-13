@@ -26,28 +26,28 @@ public class FilterRule extends Rule {
 
     private void extractToken(Matcher matcher) {
         String token = matcher.group(1);
-        List<String> argsList;
+        List<String> args;
 
         int i = token.indexOf(":");
         if (i == -1) {
-            argsList = null;
+            args = null;
         } else {
-            String[] args = extractArgs(token, i + 1);
-            argsList = Arrays.stream(args)
-                    .map(String::trim)
-                    .filter(arg -> arg.length() != 0)
-                    .collect(Collectors.toList());
-            argsList = argsList.isEmpty() ? null : argsList;
+            args = extractArgs(token, i + 1);
             token = token.substring(0, i);
         }
 
-        RuleElement element = new RuleElement(token, true, argsList);
+        RuleElement element = new RuleElement(token, true, args);
         container.add(element);
     }
 
-    private String[] extractArgs(String token, int index) {
+    private List<String> extractArgs(String token, int index) {
         String args = token.substring(index);
-        return args.split(",");
+        List<String> argsList = List.of(args.split(","));
+        argsList = argsList.stream()
+                .map(String::trim)
+                .filter(arg -> arg.length() != 0)
+                .collect(Collectors.toList());
+        return argsList.isEmpty() ? null : argsList;
     }
 
     @Override
