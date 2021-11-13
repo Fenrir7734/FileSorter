@@ -13,8 +13,8 @@ public class NotEqualStatement<T extends Comparable<T>> implements FilterOperato
     private final List<T> args;
 
     public NotEqualStatement(FilterStatementDescription<T> description) {
-        this.operandStatement = description.getOperand();
-        this.args = description.getArgs();
+        this.operandStatement = description.operand();
+        this.args = description.args();
     }
 
     @Override

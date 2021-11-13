@@ -8,7 +8,7 @@ public class LiteralStatement implements StringStatement {
     private final String literal;
 
     public LiteralStatement(StringStatementDescription description) {
-        this.literal = description.getLiteral();
+        this.literal = description.literal();
     }
 
     @Override

@@ -13,8 +13,8 @@ public class SmallerStatement<T extends Comparable<T>> implements FilterOperator
     private final T arg;
 
     public SmallerStatement(FilterStatementDescription<T> description) {
-        this.operandStatement = description.getOperand();
-        this.arg = description.getArgs().get(0);
+        this.operandStatement = description.operand();
+        this.arg = description.args().get(0);
     }
 
     @Override

@@ -12,8 +12,8 @@ public class GraterStatement<T extends Comparable<T>> implements FilterOperatorS
     private final T arg;
 
     public GraterStatement(FilterStatementDescription<T> description) {
-        this.operandStatement = description.getOperand();
-        this.arg = description.getArgs().get(0);
+        this.operandStatement = description.operand();
+        this.arg = description.args().get(0);
     }
 
     @Override

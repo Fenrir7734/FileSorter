@@ -13,8 +13,8 @@ public class StartsWithStatement implements FilterOperatorStatement<String> {
     private final List<String> args;
 
     public StartsWithStatement(FilterStatementDescription<String> description) {
-        this.operandStatement = description.getOperand();
-        this.args = description.getArgs();
+        this.operandStatement = description.operand();
+        this.args = description.args();
     }
     @Override
     public Predicate<FileData> execute() {

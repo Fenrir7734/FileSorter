@@ -6,15 +6,6 @@ import java.util.List;
 
 public record FilterStatementDescription<T extends Comparable<T>>(
         FilterOperandStatement<T> operand,
-        List<T> args) {
-
-    public FilterOperandStatement<T> getOperand() {
-        return operand;
-    }
-
-    public List<T> getArgs() {
-        return args;
-    }
-}
+        List<T> args) { }
 
 

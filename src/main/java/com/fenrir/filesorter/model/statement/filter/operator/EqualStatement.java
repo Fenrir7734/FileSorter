@@ -13,8 +13,8 @@ public class EqualStatement<T extends Comparable<T>> implements FilterOperatorSt
     private final List<T> args;
 
     public EqualStatement(FilterStatementDescription<T> description) {
-        this.operandStatement = description.getOperand();
-        this.args = description.getArgs();
+        this.operandStatement = description.operand();
+        this.args = description.args();
     }
 
     @Override

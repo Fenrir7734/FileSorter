@@ -19,7 +19,7 @@ public class DateStatement implements StringStatement {
     }
 
     private String getDate(FileData fileData) {
-        String datePattern = description.getDatePattern();
+        String datePattern = description.datePattern();
         Calendar calendar = fileData.creationTime();
         return new SimpleDateFormat(datePattern).format(calendar.getTime());
     }
