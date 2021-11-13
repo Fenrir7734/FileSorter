@@ -11,6 +11,7 @@ public class FileExtensionStatement implements StringStatement {
     @Override
     public String execute(FileData fileData) throws IOException {
         String extension = fileData.getFileExtension();
-        return extension != null ? extension : "";
+        extension = extension != null ? "." + extension : "";
+        return extension;
     }
 }
