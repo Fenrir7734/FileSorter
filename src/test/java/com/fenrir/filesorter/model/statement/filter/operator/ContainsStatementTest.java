@@ -22,7 +22,7 @@ class ContainsStatementTest {
     FileData file;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void initFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         file = new FileData(path);
     }
@@ -30,13 +30,13 @@ class ContainsStatementTest {
     @Test
     public void shouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> equalStatement = new ContainsStatement(description);
-        Predicate<FileData> predicate = equalStatement.execute();
+        FilterOperatorStatement<String> operator = new ContainsStatement(description);
+        Predicate<FileData> predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
-    public void predicateShouldReturnTrue() {
+    public void predicateShouldReturnTrueIfOperandValueContainsAtLeastOneArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "stfi");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
@@ -46,7 +46,7 @@ class ContainsStatementTest {
     }
 
     @Test
-    public void predicateShouldReturnFalse() {
+    public void predicateShouldReturnFalseIfOperandNotContainsAnyArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "cde");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);

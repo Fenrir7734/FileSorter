@@ -22,7 +22,7 @@ class EndsWithStatementTest {
     FileData file;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void initFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         file = new FileData(path);
     }
@@ -30,13 +30,13 @@ class EndsWithStatementTest {
     @Test
     public void shouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> equalStatement = new EndsWithStatement(description);
-        Predicate<FileData> predicate = equalStatement.execute();
+        FilterOperatorStatement<String> operator = new EndsWithStatement(description);
+        Predicate<FileData> predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
-    public void predicateShouldReturnTrue() {
+    public void predicateShouldReturnTrueIfOperandValueEndsWithAtLeastOneArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "file");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
@@ -46,7 +46,7 @@ class EndsWithStatementTest {
     }
 
     @Test
-    public void predicateShouldReturnFalse() {
+    public void predicateShouldReturnFalseIfOperandValueNotEndsWithAnyArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "cde");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);

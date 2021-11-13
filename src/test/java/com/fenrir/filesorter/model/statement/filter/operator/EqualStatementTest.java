@@ -6,7 +6,6 @@ import com.fenrir.filesorter.model.statement.filter.operand.FileNameOperandState
 import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import utils.FileUtils;
 
@@ -23,7 +22,7 @@ class EqualStatementTest {
     FileData file;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void initFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         file = new FileData(path);
     }
@@ -31,8 +30,8 @@ class EqualStatementTest {
     @Test
     public void shouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> equalStatement = new EqualStatement<>(description);
-        Predicate<FileData> predicate = equalStatement.execute();
+        FilterOperatorStatement<String> operator = new EqualStatement<>(description);
+        Predicate<FileData> predicate = operator.execute();
         assertNotNull(predicate);
     }
 

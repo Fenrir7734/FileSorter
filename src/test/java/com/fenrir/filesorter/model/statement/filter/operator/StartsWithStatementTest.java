@@ -22,7 +22,7 @@ class StartsWithStatementTest {
     FileData file;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void initFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         file = new FileData(path);
     }
@@ -30,13 +30,13 @@ class StartsWithStatementTest {
     @Test
     public void shouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> equalStatement = new StartsWithStatement(description);
-        Predicate<FileData> predicate = equalStatement.execute();
+        FilterOperatorStatement<String> operator = new StartsWithStatement(description);
+        Predicate<FileData> predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
-    public void predicateShouldReturnTrue() {
+    public void predicateShouldReturnTrueIfOperandStartsWithAtLeastOneArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "test");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
@@ -46,7 +46,7 @@ class StartsWithStatementTest {
     }
 
     @Test
-    public void predicateShouldReturnFalse() {
+    public void predicateShouldReturnFalseIfOperandNotStartsWithAnyArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "bcd", "cde");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);

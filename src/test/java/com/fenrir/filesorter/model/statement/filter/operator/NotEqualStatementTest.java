@@ -22,7 +22,7 @@ class NotEqualStatementTest {
     FileData file;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void initFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         file = new FileData(path);
     }
@@ -30,13 +30,13 @@ class NotEqualStatementTest {
     @Test
     public void shouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> equalStatement = new NotEqualStatement<>(description);
-        Predicate<FileData> predicate = equalStatement.execute();
+        FilterOperatorStatement<String> operator = new NotEqualStatement<>(description);
+        Predicate<FileData> predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
-    public void predicateShouldReturnTrue() {
+    public void predicateShouldReturnTrueIfOperandValueNotEqualToAnyArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "cbd", "def");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
@@ -46,7 +46,7 @@ class NotEqualStatementTest {
     }
 
     @Test
-    public void predicateShouldReturnFalse() {
+    public void predicateShouldReturnFalseIfOperandValueEqualsToAtLeastOneArgumentValue() {
         FilterOperandStatement<String> operand = new FileNameOperandStatement();
         List<String> args = List.of("abc", "cbd", "testfile");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
