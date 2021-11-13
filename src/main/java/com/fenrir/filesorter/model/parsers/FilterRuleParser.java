@@ -15,6 +15,9 @@ import com.fenrir.filesorter.model.tokens.filter.FilterOperatorTokenType;
 
 import java.util.List;
 
+/**
+ * TODO: 1.Sprawdzenie kolejności tokenów 2. Jeżeli któregoś tokenu brakuje powinien informować którego
+ */
 public class FilterRuleParser {
 
     public FilterOperatorStatement<? extends Comparable<?>> resolveRule(FilterRule rule) throws ExpressionFormatException {
@@ -27,7 +30,7 @@ public class FilterRuleParser {
             FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
             FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
 
-            return FilterStatementFactory.get(operandTokenType, operatorTokenType, List.of(operator.args()));
+            return FilterStatementFactory.get(operandTokenType, operatorTokenType, operator.args());
         } catch (ArgumentFormatException e) {
             throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
         }
@@ -37,6 +40,12 @@ public class FilterRuleParser {
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
         RuleElement operand = iterator.next();
         RuleElement operator = iterator.next();
+        if (iterator.hasNext()) {
+            throw new ExpressionFormatException(
+                    "Filter expression should contain only operand and operator token.",
+                    rule
+            );
+        }
         iterator.reset();
 
         validateOperand(rule, operand);
@@ -45,7 +54,10 @@ public class FilterRuleParser {
 
     private void validateOperand(FilterRule rule, RuleElement operand) throws ExpressionFormatException {
         if (operand == null) {
-            throw new ExpressionFormatException("Incorrect expression, operand is missing.", rule);
+            throw new ExpressionFormatException(
+                    "Invalid expression, one of the mandatory tokens is missing.",
+                    rule
+            );
         }
         FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
 
@@ -56,7 +68,10 @@ public class FilterRuleParser {
 
     private void validateOperator(FilterRule rule, RuleElement operator) throws ExpressionFormatException {
         if (operator == null) {
-            throw new ExpressionFormatException("Incorrect expression, operand is missing.", rule);
+            throw new ExpressionFormatException(
+                    "Invalid expression, one of the mandatory tokens is missing.",
+                    rule
+            );
         }
         FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
 
@@ -67,7 +82,7 @@ public class FilterRuleParser {
     }
 
     private void validateArgumentNumber(FilterRule rule, RuleElement operator) throws TokenFormatException {
-        String[] args = operator.args();
+        List<String> args = operator.args();
         ArgumentNumber argumentNumber = FilterOperatorTokenType.get(operator.element()).getArgumentNumber();
 
         if (argumentNumber == ArgumentNumber.NONE && !checkIfArgsEmpty(args)) {
@@ -81,15 +96,15 @@ public class FilterRuleParser {
         }
     }
 
-    private boolean checkIfArgsEmpty(String[] args) {
-        return args == null || args.length < 1;
+    private boolean checkIfArgsEmpty(List<String> args) {
+        return args == null || args.size() < 1;
     }
 
-    private boolean checkIfOnlyOneArg(String[] args) {
-        return !checkIfArgsEmpty(args) && args.length < 2;
+    private boolean checkIfOnlyOneArg(List<String> args) {
+        return !checkIfArgsEmpty(args) && args.size() < 2;
     }
 
-    private boolean checkIfAtLeastOne(String[] args) {
+    private boolean checkIfAtLeastOne(List<String> args) {
         return !checkIfArgsEmpty(args);
     }
 }

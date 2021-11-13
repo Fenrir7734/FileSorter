@@ -67,7 +67,7 @@ public class FilterStatementFactory {
                 }
             }
         } catch (ArgumentFormatException e) {
-            throw new ArgumentFormatException(e.getMessage(), operandType.name(), e.getArg());
+            throw new ArgumentFormatException(e.getMessage(), operandType.getToken(), e.getArg());
         }
     }
 

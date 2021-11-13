@@ -19,4 +19,8 @@ public enum FilterOperandTokenType {
         }
         return null;
     }
+
+    public String getToken() {
+        return token;
+    }
 }

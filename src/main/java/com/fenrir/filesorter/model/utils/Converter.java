@@ -95,11 +95,11 @@ public class Converter {
 
     private static boolean checkIfPostfix(char c) {
         CharacterIterator validPostfix = new StringCharacterIterator("kMGTP");
-        while (validPostfix.next() != CharacterIterator.DONE) {
+        do {
             if (validPostfix.current() == c) {
                 return true;
             }
-        }
+        } while (validPostfix.next() != CharacterIterator.DONE);
         return false;
     }
 
