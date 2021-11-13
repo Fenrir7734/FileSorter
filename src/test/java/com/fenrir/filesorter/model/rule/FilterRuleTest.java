@@ -2,6 +2,8 @@ package com.fenrir.filesorter.model.rule;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class FilterRuleTest {
@@ -50,7 +52,7 @@ class FilterRuleTest {
         RuleElement element = iterator.next();
         assertEquals("==", element.element());
         assertTrue(element.isToken());
-        assertArrayEquals(new String[]{"123", "456", "789"}, element.args());
+        assertEquals(List.of("123", "456", "789"), element.args());
 
         element = iterator.next();
         assertNull(element);

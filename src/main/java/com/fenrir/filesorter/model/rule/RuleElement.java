@@ -1,3 +1,5 @@
 package com.fenrir.filesorter.model.rule;
 
-public record RuleElement(String element, boolean isToken, String[] args) { }
+import java.util.List;
+
+public record RuleElement(String element, boolean isToken, List<String> args) { }

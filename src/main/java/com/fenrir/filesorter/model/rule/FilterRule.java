@@ -1,7 +1,10 @@
 package com.fenrir.filesorter.model.rule;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class FilterRule extends Rule {
     private final RuleElementContainer container = new RuleElementContainer();
@@ -23,17 +26,22 @@ public class FilterRule extends Rule {
 
     private void extractToken(Matcher matcher) {
         String token = matcher.group(1);
-        String[] args;
+        List<String> argsList;
 
         int i = token.indexOf(":");
         if (i == -1) {
-            args = null;
+            argsList = null;
         } else {
-            args = extractArgs(token, i + 1);
+            String[] args = extractArgs(token, i + 1);
+            argsList = Arrays.stream(args)
+                    .map(String::trim)
+                    .filter(arg -> arg.length() != 0)
+                    .collect(Collectors.toList());
+            argsList = argsList.isEmpty() ? null : argsList;
             token = token.substring(0, i);
         }
 
-        RuleElement element = new RuleElement(token, true, args);
+        RuleElement element = new RuleElement(token, true, argsList);
         container.add(element);
     }
 

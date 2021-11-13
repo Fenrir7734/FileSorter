@@ -35,10 +35,10 @@ class FileExtensionStatementTest {
 
     @Test
     public void getFileExtensionForFileWithOnlyExtension() throws IOException {
-        Path path = FileUtils.createFile(tempDir, "txt");
+        Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileExtensionStatement(null);
         String extension = statement.execute(fileData);
-        assertEquals(".txt", extension);
+        assertEquals("txt", extension);
     }
 }

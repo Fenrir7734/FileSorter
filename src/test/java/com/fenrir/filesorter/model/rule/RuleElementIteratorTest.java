@@ -26,7 +26,7 @@ class RuleElementIteratorTest {
         List<RuleElement> elements = List.of(
                 new RuleElement("A", false, null),
                 new RuleElement("B", true, null),
-                new RuleElement("C", true, new String[5])
+                new RuleElement("C", true, new ArrayList<>())
         );
         Iterator<RuleElement> iterator = new RuleElementIterator(elements);
         assertEquals(elements.get(0), iterator.next());
@@ -40,7 +40,7 @@ class RuleElementIteratorTest {
         List<RuleElement> elements = List.of(
                 new RuleElement("A", false, null),
                 new RuleElement("B", true, null),
-                new RuleElement("C", true, new String[5])
+                new RuleElement("C", true, new ArrayList<>())
         );
         Iterator<RuleElement> iterator = new RuleElementIterator(elements);
         iterator.next();
