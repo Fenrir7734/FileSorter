@@ -21,7 +21,7 @@ class ImageDimensionStatementTest {
     Path tempDir;
 
     @Test
-    public void getResolutionOfNonImageFile() throws IOException {
+    public void executeShouldReturnStringForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new ImageDimensionStatement(null);
@@ -30,7 +30,7 @@ class ImageDimensionStatementTest {
     }
 
     @Nested
-    class ImageWithDeclaredResolution {
+    class TestForImageFileWithMatchingDimension {
         Path path;
         File file;
 
@@ -48,14 +48,14 @@ class ImageDimensionStatementTest {
         }
 
         @Test
-        public void testTempImage() {
+        public void testTempImageShouldPassIfFileIsImage() {
             assertTrue(file.exists());
             assertTrue(file.isFile());
             assertTrue(file.getAbsolutePath().endsWith("testimg.png"));
         }
 
         @Test
-        public void getResolutionOfImageWithDeclaredResolution() throws IOException {
+        public void executeShouldReturnImageDimensionAsStringForImageFileWithMatchingDimension() throws IOException {
             FileData fileData = new FileData(path);
             StringStatement statement = new ImageDimensionStatement(null);
             String resolution = statement.execute(fileData);
@@ -64,7 +64,7 @@ class ImageDimensionStatementTest {
     }
 
     @Nested
-    class ImageWithUndeclaredResolution {
+    class TestForImageFileWithNotMatchingDimension {
         Path path;
         File file;
 
@@ -82,14 +82,14 @@ class ImageDimensionStatementTest {
         }
 
         @Test
-        public void testTempImage() {
+        public void testTempImageShouldPassIfFileIsImage() {
             assertTrue(file.exists());
             assertTrue(file.isFile());
             assertTrue(file.getAbsolutePath().endsWith("testimg.png"));
         }
 
         @Test
-        public void getResolutionOfImageWithDeclaredResolution() throws IOException {
+        public void executeShouldReturnStringForImageFileWithNotMatchingDimension() throws IOException {
             FileData fileData = new FileData(path);
             StringStatement statement = new ImageDimensionStatement(null);
             String resolution = statement.execute(fileData);

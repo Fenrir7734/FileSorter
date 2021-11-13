@@ -16,7 +16,7 @@ class PathOperandStatementTest {
     Path tempDir;
 
     @Test
-    public void getFilePath() throws IOException {
+    public void executeShouldReturnFileSourcePath() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FilterOperandStatement<Path> statement = new PathOperandStatement();

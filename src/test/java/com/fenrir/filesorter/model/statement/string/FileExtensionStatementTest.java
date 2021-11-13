@@ -16,7 +16,7 @@ class FileExtensionStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileExtensionForFileWithExtension() throws IOException {
+    public void executeShouldReturnFileExtensionForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileExtensionStatement(null);
@@ -25,7 +25,7 @@ class FileExtensionStatementTest {
     }
 
     @Test
-    public void getFileExtensionForFileWithoutExtension() throws IOException {
+    public void executeShouldReturnEmptyStringForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileExtensionStatement(null);
@@ -34,7 +34,7 @@ class FileExtensionStatementTest {
     }
 
     @Test
-    public void getFileExtensionForFileWithOnlyExtension() throws IOException {
+    public void executeShouldReturnFileExtensionForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileExtensionStatement(null);

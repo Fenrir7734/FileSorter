@@ -28,7 +28,7 @@ class StartsWithStatementTest {
     }
 
     @Test
-    public void shouldReturnPredicate() {
+    public void executeShouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
         FilterOperatorStatement<String> operator = new StartsWithStatement(description);
         Predicate<FileData> predicate = operator.execute();

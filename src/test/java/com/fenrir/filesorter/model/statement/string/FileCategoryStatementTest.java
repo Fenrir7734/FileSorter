@@ -16,7 +16,7 @@ class FileCategoryStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileCategoryForFileWithTextExtension() throws IOException {
+    public void executeShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);
@@ -25,7 +25,7 @@ class FileCategoryStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithAudioExtension() throws IOException {
+    public void executeShouldReturnAudioCategoryForFileWithAudioExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.mp3");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);
@@ -34,7 +34,7 @@ class FileCategoryStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutExtension() throws IOException {
+    public void executeShouldReturnOthersCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);
@@ -43,7 +43,7 @@ class FileCategoryStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithOnlyExtension() throws IOException {
+    public void executeShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);
@@ -52,7 +52,7 @@ class FileCategoryStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutMatchingCategory() throws IOException {
+    public void executeShouldReturnOthersCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
         FileCategoryStatement statement = new FileCategoryStatement(null);

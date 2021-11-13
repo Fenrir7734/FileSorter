@@ -2,7 +2,6 @@ package com.fenrir.filesorter.model.file;
 
 import com.fenrir.filesorter.model.file.utils.Category;
 import com.fenrir.filesorter.model.file.utils.Dimension;
-import com.fenrir.filesorter.model.statement.string.FileCategoryStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,10 +15,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +26,7 @@ class FileDataTest {
     Path tempDir;
 
     @Test
-    public void getCreationTime() throws IOException {
+    public void getCreationTimeShouldReturnFileTimeOfFileCreationTime() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
@@ -38,7 +35,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getLastModifiedTime() throws IOException {
+    public void getLastModifiedTimeShouldReturnFileTimeOfFileLastModifiedTime() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).lastModifiedTime();
@@ -47,7 +44,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileNameWithExtension() throws IOException {
+    public void getFileNameWithExtensionShouldReturnFileNameWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         String fileName = fileData.getFileName();
@@ -55,7 +52,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileNameWithoutExtensionOfFileWithExtension() throws IOException {
+    public void getFileNameWithoutExtensionShouldReturnFileNameWithoutExtensionForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         String fileName = fileData.getFileNameWithoutExtension();
@@ -63,7 +60,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileNameWithoutExtensionOfFileWithoutExtension() throws IOException {
+    public void getFileNameWithoutExtensionShouldReturnFileNameWithoutExtensionForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         String fileName = fileData.getFileNameWithoutExtension();
@@ -71,7 +68,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileNameWithoutExtensionOfFileWithOnlyExtension() throws IOException {
+    public void getFileNameWithoutExtensionShouldReturnEmptyStringForFileNameWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         String fileName = fileData.getFileNameWithoutExtension();
@@ -87,7 +84,7 @@ class FileDataTest {
     }
 
     @Test
-    public void hasExtensionOfFileWithExtension() throws IOException {
+    public void hasExtensionShouldReturnTrueForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         boolean hasExtension = fileData.hasExtension();
@@ -95,7 +92,7 @@ class FileDataTest {
     }
 
     @Test
-    public void hasExtensionOfFileWithoutExtension() throws IOException {
+    public void hasExtensionShouldReturnFalseForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         boolean hasExtension = fileData.hasExtension();
@@ -103,7 +100,7 @@ class FileDataTest {
     }
 
     @Test
-    public void hasExtensionOfDirectory() throws IOException {
+    public void hasExtensionShouldReturnFalseForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
         boolean hasExtension = fileData.hasExtension();
@@ -111,7 +108,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryOfFileWithTextExtension() throws IOException {
+    public void getFileCategoryShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         Category category = fileData.getFileCategory();
@@ -119,7 +116,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutExtension() throws IOException {
+    public void getFileCategoryShouldReturnOtherCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         Category category = fileData.getFileCategory();
@@ -127,7 +124,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithOnlyExtension() throws IOException {
+    public void getFileCategoryShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".mp3");
         FileData fileData = new FileData(path);
         Category category = fileData.getFileCategory();
@@ -135,7 +132,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryForDirectory() throws IOException {
+    public void getFileCategoryShouldReturnNullForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
         Category category = fileData.getFileCategory();
@@ -143,7 +140,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutMatchingCategory() throws IOException {
+    public void getFileCategoryShouldReturnOtherCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
         Category category = fileData.getFileCategory();
@@ -151,7 +148,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileSize() throws IOException {
+    public void getFileSizeShouldReturnFileSize() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         long size = fileData.getFileSize();
@@ -159,7 +156,7 @@ class FileDataTest {
     }
 
     @Test
-    public void isImageForNonImageFile() throws IOException {
+    public void isImageShouldReturnFalseForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         boolean isImage = fileData.isImage();
@@ -167,7 +164,7 @@ class FileDataTest {
     }
 
     @Test
-    public void getImageDimensionOfNonImageFile() throws IOException {
+    public void getImageDimensionShouldReturnNullForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         Dimension dimension = fileData.getImageDimension();
@@ -175,7 +172,7 @@ class FileDataTest {
     }
 
     @Test
-    public void resolveTargetPathForFileWithExtensionAndCountEqualZero() throws IOException {
+    public void testResolveTargetPathForFileWithExtensionAndCountEqualZero() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         Path targetPath = Path.of("/home/user/Documents/testfile.txt");
@@ -185,7 +182,7 @@ class FileDataTest {
     }
 
     @Test
-    public void resolveTargetPathForFileWithExtensionAndCountEqualOne() throws IOException {
+    public void testResolveTargetPathForFileWithExtensionAndCountEqualOne() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         Path targetPath = Path.of("/home/user/Documents/testfile.txt");
@@ -196,7 +193,7 @@ class FileDataTest {
     }
 
     @Test
-    public void resolveTargetPathForDirectory() throws IOException {
+    public void testResolveTargetPathForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
         Path targetPath = Path.of("/home/user/Documents/dir");
@@ -206,7 +203,7 @@ class FileDataTest {
     }
 
     @Test
-    public void resolveTargetPathForFileWithoutExtensionAndCountEqualOne() throws IOException {
+    public void testResolveTargetPathForFileWithoutExtensionAndCountEqualOne() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         Path targetPath = Path.of("/home/user/Documents/testfile");
@@ -235,21 +232,21 @@ class FileDataTest {
         }
 
         @Test
-        public void testTempImage() {
+        public void testTempImageShouldPassIfFileIsImage() {
             assertTrue(file.exists());
             assertTrue(file.isFile());
             assertTrue(file.getAbsolutePath().endsWith("testimg.png"));
         }
 
         @Test
-        public void isImage() throws IOException {
+        public void isImageShouldReturnTrueForImage() throws IOException {
             FileData fileData = new FileData(path);
             boolean isImage = fileData.isImage();
             assertTrue(isImage);
         }
 
         @Test
-        public void getImageDimension() throws IOException {
+        public void getImageDimensionShouldReturnImageDimensionForImageFile() throws IOException {
             FileData fileData = new FileData(path);
             Dimension actualDimension = fileData.getImageDimension();
             Dimension expectedDimension = Dimension.of(320, 480);
@@ -258,7 +255,7 @@ class FileDataTest {
     }
 
     @Test
-    public void isDirectoryForDirectory()throws IOException {
+    public void isDirectoryShouldReturnTrueForDirectory()throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
         boolean isDir = fileData.isDirectory();
@@ -266,7 +263,7 @@ class FileDataTest {
     }
 
     @Test
-    public void isDirectoryForFile() throws IOException {
+    public void isDirectoryShouldReturnFalseForFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         boolean isDir = fileData.isDirectory();

@@ -28,7 +28,7 @@ class SmallerStatementTest {
     }
 
     @Test
-    public void shouldReturnPredicate() {
+    public void executeShouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, List.of("abc"));
         FilterOperatorStatement<String> operator = new SmallerStatement<>(description);
         Predicate<FileData> predicate = operator.execute();

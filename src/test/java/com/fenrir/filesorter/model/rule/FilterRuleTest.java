@@ -23,14 +23,14 @@ class FilterRuleTest {
     }
 
     @Test
-    public void resolveExpressionWithoutToken() {
+    public void testResolveExpressionForExpressionWithoutTokens() {
         Rule rule = new FilterRule("abcd");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
         assertFalse(iterator.hasNext());
     }
 
     @Test
-    void resolveExpressionContainingOneToken() {
+    void testResolveExpressionForExpressionWithOneToken() {
         Rule rule = new FilterRule("%(INC)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -43,7 +43,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveExpressionContainingTokenWithArguments() {
+    void testResolveExpressionForExpressionWithTokenWithArguments() {
         Rule rule = new FilterRule("%(==:123,456,789)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -56,7 +56,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveExpressionContainingLiterals() {
+    void testResolveExpressionForExpressionWithLiterals() {
         Rule rule = new FilterRule("--%(INC)--");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -69,7 +69,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveExpressionForOperatorWithZeroArguments() {
+    void testResolveExpressionForExpressionWithOperatorWithZeroArguments() {
         Rule rule = new FilterRule("%(<:)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -82,7 +82,7 @@ class FilterRuleTest {
     }
 
     @Test
-    void resolveExpressionForOperatorWithSpaceAsArgument() {
+    void testResolveExpressionForExpressionWithOperatorWithSpaceAsArgument() {
         Rule rule = new FilterRule("%(<:12k, ,54M)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 

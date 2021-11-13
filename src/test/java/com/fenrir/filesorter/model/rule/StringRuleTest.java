@@ -21,7 +21,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveExpressionWithoutTokens() {
+    public void testResolveExpressionForExpressionWithTokens() {
         Rule rule = new StringRule("abcd");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -33,7 +33,7 @@ class StringRuleTest {
     }
 
     @Test
-    void resolveExpressionContainingOneElement() {
+    void testResolveExpressionForExpressionWithOneElement() {
         Rule rule = new StringRule("-");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -45,7 +45,7 @@ class StringRuleTest {
     }
 
     @Test
-    void resolveExpressionContainingOnlyTokens() {
+    void testResolveExpressionForExpressionWithOnlyTokens() {
         Rule rule = new StringRule("%(YYYY)%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -69,7 +69,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveExpressionWithTokenAtTheBeginning() {
+    public void testResolveExpressionForExpressionWithTokenAtTheBeginning() {
         Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)-");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -101,7 +101,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveExpressionWithTokenAtTheEnd() {
+    public void testResolveExpressionForExpressionWithTokenAtTheEnd() {
         Rule rule = new StringRule("-%(YYYY)-%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 
@@ -133,7 +133,7 @@ class StringRuleTest {
     }
 
     @Test
-    public void resolveExpressionWithTokensAtBothEnds() {
+    public void testResolveExpressionForExpressionWithTokensAtBothEnds() {
         Rule rule = new StringRule("%(YYYY)-%(MM)%(/)%(DD)");
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
 

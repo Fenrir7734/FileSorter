@@ -14,7 +14,7 @@ class RuleElementContainerTest {
     }
 
     @Test
-    public void shouldAddRuleElement() {
+    public void addShouldAddRuleElement() {
         RuleElementContainer container = new RuleElementContainer();
         RuleElement element = new RuleElement("abc", false, null);
         container.add(element);

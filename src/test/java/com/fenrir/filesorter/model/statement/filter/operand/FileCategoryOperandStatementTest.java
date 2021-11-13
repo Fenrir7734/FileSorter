@@ -16,7 +16,7 @@ class FileCategoryOperandStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileCategoryForFileWithTextExtension() throws IOException {
+    public void executeShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
@@ -25,7 +25,7 @@ class FileCategoryOperandStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithAudioExtension() throws IOException {
+    public void executeShouldReturnAudioCategoryForFileWithAudioExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.mp3");
         FileData fileData = new FileData(path);
         FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
@@ -34,7 +34,7 @@ class FileCategoryOperandStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutExtension() throws IOException {
+    public void executeShouldReturnOtherCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
@@ -43,7 +43,7 @@ class FileCategoryOperandStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithOnlyExtension() throws IOException {
+    public void executeShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
@@ -52,7 +52,7 @@ class FileCategoryOperandStatementTest {
     }
 
     @Test
-    public void getFileCategoryForFileWithoutMatchingCategory() throws IOException {
+    public void executeShouldReturnOtherCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
         FilterOperandStatement<String> statement = new FileCategoryOperandStatement();

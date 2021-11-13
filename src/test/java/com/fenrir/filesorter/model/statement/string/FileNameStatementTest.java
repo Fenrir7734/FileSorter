@@ -16,7 +16,7 @@ class FileNameStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileNameForFileWithExtension() throws IOException {
+    public void executeShouldReturnFileNameWithoutExtensionForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileNameStatement(null);
@@ -25,7 +25,7 @@ class FileNameStatementTest {
     }
 
     @Test
-    public void getFileNameForFileWithoutExtension() throws IOException {
+    public void executeShouldReturnFileNameWithoutExtensionForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileNameStatement(null);
@@ -34,7 +34,7 @@ class FileNameStatementTest {
     }
 
     @Test
-    public void getFileNameForFileWithOnlyExtension() throws IOException {
+    public void executeShouldReturnEmptyStringForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         StringStatement statement = new FileNameStatement(null);

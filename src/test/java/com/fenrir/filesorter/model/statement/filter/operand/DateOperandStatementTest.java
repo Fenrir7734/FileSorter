@@ -22,7 +22,7 @@ class DateOperandStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileCreationTime() throws IOException {
+    public void executeShouldReturnFileCreationTime() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();

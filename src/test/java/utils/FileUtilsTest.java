@@ -13,7 +13,7 @@ public class FileUtilsTest {
     Path tempDir;
 
     @Test
-    public void createValidFile() {
+    public void createFileShouldReturnValidFile() {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
 
         assertNotNull(path);
@@ -27,7 +27,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void createDirectory() {
+    public void createDirectoryShouldReturnValidDirectory() {
         Path path = FileUtils.createDirectory(tempDir, "dir");
 
         assertNotNull(path);

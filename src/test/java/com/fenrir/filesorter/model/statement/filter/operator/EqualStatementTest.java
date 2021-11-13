@@ -28,7 +28,7 @@ class EqualStatementTest {
     }
 
     @Test
-    public void shouldReturnPredicate() {
+    public void executeShouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
         FilterOperatorStatement<String> operator = new EqualStatement<>(description);
         Predicate<FileData> predicate = operator.execute();

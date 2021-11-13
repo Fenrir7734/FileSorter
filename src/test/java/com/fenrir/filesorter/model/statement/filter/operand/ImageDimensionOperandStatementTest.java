@@ -22,7 +22,7 @@ class ImageDimensionOperandStatementTest {
     Path tempDir;
 
     @Test
-    public void getResolutionOfNonImageFile() throws IOException {
+    public void executeShouldReturnNullForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FilterOperandStatement<Dimension> statement = new ImageDimensionOperandStatement();
@@ -49,14 +49,14 @@ class ImageDimensionOperandStatementTest {
         }
 
         @Test
-        public void testTempImage() {
+        public void testTempImageShouldPassIfFileIsImage() {
             assertTrue(file.exists());
             assertTrue(file.isFile());
             assertTrue(file.getAbsolutePath().endsWith("testimg.png"));
         }
 
         @Test
-        public void getResolutionOfImage() throws IOException {
+        public void executeShouldReturnImageDimensionForImageFile() throws IOException {
             FileData fileData = new FileData(path);
             FilterOperandStatement<Dimension> statement = new ImageDimensionOperandStatement();
             Dimension actualDimension = statement.execute(fileData);

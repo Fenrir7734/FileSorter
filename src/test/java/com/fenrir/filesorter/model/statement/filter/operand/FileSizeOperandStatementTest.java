@@ -16,7 +16,7 @@ class FileSizeOperandStatementTest {
     Path tempDir;
 
     @Test
-    public void getFileSize() throws IOException {
+    public void executeShouldReturnFileSize() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FilterOperandStatement<Long> statement = new FileSizeOperandStatement();
