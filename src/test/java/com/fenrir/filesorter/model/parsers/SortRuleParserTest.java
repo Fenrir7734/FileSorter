@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import utils.FileUtils;
+import utils.StatementUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -64,8 +65,8 @@ class SortRuleParserTest {
                 new LiteralStatement(new StringStatementDescription(null, "-")),
                 new FileExtensionStatement(null)
         );
-        String actualResult = Utils.build(statementsFromParser, file);
-        String expectedResult = Utils.build(expectedStatements, file);
+        String actualResult = StatementUtils.build(statementsFromParser, file);
+        String expectedResult = StatementUtils.build(expectedStatements, file);
         assertEquals(expectedResult, actualResult);
     }
 }
