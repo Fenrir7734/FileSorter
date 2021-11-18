@@ -1,15 +1,14 @@
-package com.fenrir.filesorter.model.statement.filter.operator;
+package com.fenrir.filesorter.model.statement.operator;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class GreaterEqualStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
-    private final FilterOperandStatement<T> operandStatement;
+    private final Provider<T> operandStatement;
     private final T arg;
 
     public GreaterEqualStatement(FilterStatementDescription<T> description) {
@@ -23,7 +22,7 @@ public class GreaterEqualStatement<T extends Comparable<T>> implements FilterOpe
             @Override
             public boolean test(FileData fileData) {
                 try {
-                    T operand = operandStatement.execute(fileData);
+                    T operand = operandStatement.get(fileData);
                     return operand.compareTo(arg) >= 0;
                 } catch (IOException e) {
                     return false;

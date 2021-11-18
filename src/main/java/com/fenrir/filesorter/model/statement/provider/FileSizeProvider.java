@@ -1,10 +1,13 @@
 package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.IOException;
 
-public class FileSizeOperandStatement implements FilterOperandStatement<Long> {
+public class FileSizeProvider implements Provider<Long> {
+
+    public FileSizeProvider(ProviderDescription description) { }
 
     @Override
     public Long get(FileData fileData) throws IOException {

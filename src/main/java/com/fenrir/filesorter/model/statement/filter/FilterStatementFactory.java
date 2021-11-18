@@ -1,18 +1,12 @@
 package com.fenrir.filesorter.model.statement.filter;
 
-import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
-import com.fenrir.filesorter.model.utils.Converter;
-import com.fenrir.filesorter.model.statement.filter.operand.*;
-import com.fenrir.filesorter.model.statement.filter.operator.*;
-import com.fenrir.filesorter.model.file.utils.Dimension;
-import com.fenrir.filesorter.model.tokens.filter.FilterOperandTokenType;
-import com.fenrir.filesorter.model.tokens.filter.FilterOperatorTokenType;
-
-import java.nio.file.Path;
-import java.time.chrono.ChronoLocalDate;
-import java.util.List;
+import com.fenrir.filesorter.model.statement.operator.*;
 
 public class FilterStatementFactory {
+    public static FilterOperatorStatement<? extends Comparable<?>> get() {
+        return null;
+    }
+    /*
     public static FilterOperatorStatement<? extends Comparable<?>> get(
             FilterOperandTokenType operandType,
             FilterOperatorTokenType operatorType,
@@ -95,4 +89,5 @@ public class FilterStatementFactory {
             default -> null;
         };
     }
+     */
 }

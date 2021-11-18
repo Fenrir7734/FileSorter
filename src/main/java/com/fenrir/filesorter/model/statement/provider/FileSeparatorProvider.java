@@ -1,12 +1,14 @@
 package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.File;
 import java.io.IOException;
 
-public class FileSeparator implements FilterOperandStatement<String> {
+public class FileSeparatorProvider implements Provider<String> {
 
+    public FileSeparatorProvider(ProviderDescription description) { }
 
     @Override
     public String get(FileData fileData) throws IOException {

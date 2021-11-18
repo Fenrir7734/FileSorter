@@ -1,2 +1,7 @@
-package com.fenrir.filesorter.model.statement.types;public class Scope {
+package com.fenrir.filesorter.model.statement.types;
+
+public enum Scope {
+    RENAME,
+    SORT,
+    FILTER
 }

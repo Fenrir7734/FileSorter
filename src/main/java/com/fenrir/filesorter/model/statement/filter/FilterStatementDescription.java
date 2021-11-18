@@ -1,11 +1,11 @@
 package com.fenrir.filesorter.model.statement.filter;
 
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.util.List;
 
 public record FilterStatementDescription<T extends Comparable<T>>(
-        FilterOperandStatement<T> operand,
+        Provider<T> operand,
         List<T> args) { }
 
 

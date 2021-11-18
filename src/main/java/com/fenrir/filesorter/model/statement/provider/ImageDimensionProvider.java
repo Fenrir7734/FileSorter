@@ -3,10 +3,14 @@ package com.fenrir.filesorter.model.statement.provider;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.file.utils.ImageDimension;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.IOException;
 
-public class ImageDimensionOperandStatement implements FilterOperandStatement<Dimension> {
+public class ImageDimensionProvider implements Provider<Dimension> {
+
+    public ImageDimensionProvider(ProviderDescription description) { }
+
     @Override
     public Dimension get(FileData fileData) throws IOException {
         return fileData.isImage() ? fileData.getImageDimension() : null;

@@ -1,10 +1,14 @@
 package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.IOException;
 
-public class FileExtensionOperandStatement implements FilterOperandStatement<String> {
+public class FileExtensionProvider implements Provider<String> {
+
+    public FileExtensionProvider(ProviderDescription description) { }
+
     @Override
     public String get(FileData fileData) throws IOException {
         String extension = fileData.getFileExtension();

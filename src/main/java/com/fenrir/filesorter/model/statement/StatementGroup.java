@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.statement;
 
-import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
+import com.fenrir.filesorter.model.statement.operator.FilterOperatorStatement;
 import com.fenrir.filesorter.model.statement.string.StringStatement;
 
 import java.util.ArrayList;
