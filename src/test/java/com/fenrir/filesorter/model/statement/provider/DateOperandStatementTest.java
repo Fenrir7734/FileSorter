@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.filter.operand;
+package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import org.junit.jupiter.api.Test;
@@ -26,8 +26,8 @@ class DateOperandStatementTest {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
-        FilterOperandStatement<ChronoLocalDate> statement = new DateOperandStatement();
-        ChronoLocalDate actualDate = statement.execute(fileData);
+        Provider<ChronoLocalDate> statement = new DateProvider();
+        ChronoLocalDate actualDate = statement.get(fileData);
         ChronoLocalDate expectedDate = LocalDate.ofInstant(time.toInstant(), ZoneId.systemDefault());
         assertEquals(expectedDate, actualDate);
     }

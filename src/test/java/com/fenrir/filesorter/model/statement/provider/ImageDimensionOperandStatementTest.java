@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.filter.operand;
+package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.utils.Dimension;
@@ -25,8 +25,8 @@ class ImageDimensionOperandStatementTest {
     public void executeShouldReturnNullForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<Dimension> statement = new ImageDimensionOperandStatement();
-        Dimension actualDimension = statement.execute(fileData);
+        Provider<Dimension> statement = new ImageDimensionProvider();
+        Dimension actualDimension = statement.get(fileData);
         assertNull(actualDimension);
     }
 
@@ -58,8 +58,8 @@ class ImageDimensionOperandStatementTest {
         @Test
         public void executeShouldReturnImageDimensionForImageFile() throws IOException {
             FileData fileData = new FileData(path);
-            FilterOperandStatement<Dimension> statement = new ImageDimensionOperandStatement();
-            Dimension actualDimension = statement.execute(fileData);
+            Provider<Dimension> statement = new ImageDimensionProvider();
+            Dimension actualDimension = statement.get(fileData);
             Dimension expectedDimension = Dimension.of(320, 480);
             assertEquals(expectedDimension, actualDimension);
         }

@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.filter.operand;
+package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import org.junit.jupiter.api.Test;
@@ -19,8 +19,8 @@ class FileNameOperandStatementTest {
     public void executeShouldReturnFileNameWithoutExtensionForFileWithExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileNameOperandStatement();
-        String name = statement.execute(fileData);
+        Provider<String> statement = new FileNameProvider();
+        String name = statement.get(fileData);
         assertEquals("testfile", name);
     }
 
@@ -28,8 +28,8 @@ class FileNameOperandStatementTest {
     public void executeShouldReturnFileNameWithoutExtensionForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileNameOperandStatement();
-        String name = statement.execute(fileData);
+        Provider<String> statement = new FileNameProvider();
+        String name = statement.get(fileData);
         assertEquals("testfile", name);
     }
 
@@ -37,8 +37,8 @@ class FileNameOperandStatementTest {
     public void executeShouldReturnEmptyStringForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileNameOperandStatement();
-        String name = statement.execute(fileData);
+        Provider<String> statement = new FileNameProvider();
+        String name = statement.get(fileData);
         assertEquals("", name);
     }
 }

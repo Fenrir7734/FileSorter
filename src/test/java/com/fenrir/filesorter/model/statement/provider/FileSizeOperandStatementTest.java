@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.filter.operand;
+package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import org.junit.jupiter.api.Test;
@@ -10,18 +10,17 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PathOperandStatementTest {
+class FileSizeOperandStatementTest {
 
     @TempDir
     Path tempDir;
 
     @Test
-    public void executeShouldReturnFileSourcePath() throws IOException {
+    public void executeShouldReturnFileSize() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<Path> statement = new PathOperandStatement();
-        Path actualPath = statement.execute(fileData);
-        assertEquals(path, actualPath);
+        Provider<Long> statement = new FileSizeProvider();
+        long size = statement.get(fileData);
+        assertEquals(12L, size);
     }
-
 }

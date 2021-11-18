@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.filter.operand;
+package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import org.junit.jupiter.api.Test;
@@ -19,8 +19,8 @@ class FileCategoryOperandStatementTest {
     public void executeShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
-        String category = statement.execute(fileData);
+        Provider<String> statement = new FileCategoryProvider();
+        String category = statement.get(fileData);
         assertEquals("text", category);
     }
 
@@ -28,8 +28,8 @@ class FileCategoryOperandStatementTest {
     public void executeShouldReturnAudioCategoryForFileWithAudioExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.mp3");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
-        String category = statement.execute(fileData);
+        Provider<String> statement = new FileCategoryProvider();
+        String category = statement.get(fileData);
         assertEquals("audio", category);
     }
 
@@ -37,8 +37,8 @@ class FileCategoryOperandStatementTest {
     public void executeShouldReturnOtherCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
-        String category = statement.execute(fileData);
+        Provider<String> statement = new FileCategoryProvider();
+        String category = statement.get(fileData);
         assertEquals("others", category);
     }
 
@@ -46,8 +46,8 @@ class FileCategoryOperandStatementTest {
     public void executeShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
-        String category = statement.execute(fileData);
+        Provider<String> statement = new FileCategoryProvider();
+        String category = statement.get(fileData);
         assertEquals("text", category);
     }
 
@@ -55,8 +55,8 @@ class FileCategoryOperandStatementTest {
     public void executeShouldReturnOtherCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
-        FilterOperandStatement<String> statement = new FileCategoryOperandStatement();
-        String category = statement.execute(fileData);
+        Provider<String> statement = new FileCategoryProvider();
+        String category = statement.get(fileData);
         assertEquals("others", category);
     }
 }
