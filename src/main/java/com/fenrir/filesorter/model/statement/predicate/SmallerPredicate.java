@@ -1,20 +1,19 @@
-package com.fenrir.filesorter.model.statement.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Predicate;
 
-public class NotEqualStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
+public class SmallerStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
     private final Provider<T> operandStatement;
-    private final List<T> args;
+    private final T arg;
 
-    public NotEqualStatement(FilterStatementDescription<T> description) {
+    public SmallerStatement(FilterStatementDescription<T> description) {
         this.operandStatement = description.operand();
-        this.args = description.args();
+        this.arg = description.args().get(0);
     }
 
     @Override
@@ -24,12 +23,7 @@ public class NotEqualStatement<T extends Comparable<T>> implements FilterOperato
             public boolean test(FileData fileData) {
                 try {
                     T operand = operandStatement.get(fileData);
-                    for (T arg: args) {
-                        if (operand.compareTo(arg) == 0) {
-                            return false;
-                        }
-                    }
-                    return true;
+                    return operand.compareTo(arg) < 0;
                 } catch (IOException e) {
                     return false;
                 }

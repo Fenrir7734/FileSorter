@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
@@ -8,14 +8,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class EndsWithStatement implements FilterOperatorStatement<String> {
+public class ContainsStatement implements FilterOperatorStatement<String> {
     private final Provider<String> operandStatement;
     private final List<String> args;
 
-    public EndsWithStatement(FilterStatementDescription<String> description) {
+    public ContainsStatement(FilterStatementDescription<String> description) {
         this.operandStatement = description.operand();
         this.args = description.args();
     }
+
     @Override
     public Predicate<FileData> execute() {
         return new Predicate<FileData>() {
@@ -24,7 +25,7 @@ public class EndsWithStatement implements FilterOperatorStatement<String> {
                 try {
                     String operand = operandStatement.get(fileData);
                     for (String arg: args) {
-                        if (operand.endsWith(arg)) {
+                        if (operand.contains(arg)) {
                             return true;
                         }
                     }

@@ -1,9 +1,9 @@
-package com.fenrir.filesorter.model.statement.filter.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
-import com.fenrir.filesorter.model.statement.filter.operand.FileNameOperandStatement;
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
+import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -12,11 +12,10 @@ import utils.FileUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EndsWithStatementTest {
+class ContainsPredicateTest {
     @TempDir
     Path tempDir;
     FileData file;
@@ -30,28 +29,28 @@ class EndsWithStatementTest {
     @Test
     public void executeShouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> operator = new EndsWithStatement(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new ContainsPredicate(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
-    public void predicateShouldReturnTrueIfOperandValueEndsWithAtLeastOneArgumentValue() {
-        FilterOperandStatement<String> operand = new FileNameOperandStatement();
-        List<String> args = List.of("abc", "bcd", "file");
+    public void predicateShouldReturnTrueIfOperandValueContainsAtLeastOneArgumentValue() {
+        Provider<String> operand = new FileNameProvider(null);
+        List<String> args = List.of("abc", "bcd", "stfi");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        FilterOperatorStatement<String> operator = new EndsWithStatement(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new ContainsPredicate(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseIfOperandValueNotEndsWithAnyArgumentValue() {
-        FilterOperandStatement<String> operand = new FileNameOperandStatement();
+    public void predicateShouldReturnFalseIfOperandNotContainsAnyArgumentValue() {
+        Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        FilterOperatorStatement<String> operator = new EndsWithStatement(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new ContainsPredicate(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertFalse(predicate.test(file));
     }
 }

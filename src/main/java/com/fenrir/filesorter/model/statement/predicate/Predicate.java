@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 

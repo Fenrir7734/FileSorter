@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
@@ -7,11 +7,11 @@ import com.fenrir.filesorter.model.statement.provider.Provider;
 import java.io.IOException;
 import java.util.function.Predicate;
 
-public class SmallerStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
+public class SmallerEqualStatement<T extends Comparable<T>> implements FilterOperatorStatement<T> {
     private final Provider<T> operandStatement;
     private final T arg;
 
-    public SmallerStatement(FilterStatementDescription<T> description) {
+    public SmallerEqualStatement(FilterStatementDescription<T> description) {
         this.operandStatement = description.operand();
         this.arg = description.args().get(0);
     }
@@ -23,7 +23,7 @@ public class SmallerStatement<T extends Comparable<T>> implements FilterOperator
             public boolean test(FileData fileData) {
                 try {
                     T operand = operandStatement.get(fileData);
-                    return operand.compareTo(arg) < 0;
+                    return operand.compareTo(arg) <= 0;
                 } catch (IOException e) {
                     return false;
                 }

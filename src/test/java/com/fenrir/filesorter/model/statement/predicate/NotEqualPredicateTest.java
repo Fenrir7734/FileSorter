@@ -1,9 +1,9 @@
-package com.fenrir.filesorter.model.statement.filter.operator;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
-import com.fenrir.filesorter.model.statement.filter.operand.FileNameOperandStatement;
-import com.fenrir.filesorter.model.statement.filter.operand.FilterOperandStatement;
+import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -12,7 +12,6 @@ import utils.FileUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,28 +29,28 @@ class NotEqualStatementTest {
     @Test
     public void executeShouldReturnPredicate() {
         FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        FilterOperatorStatement<String> operator = new NotEqualStatement<>(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new NotEqualPredicate<>(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertNotNull(predicate);
     }
 
     @Test
     public void predicateShouldReturnTrueIfOperandValueNotEqualToAnyArgumentValue() {
-        FilterOperandStatement<String> operand = new FileNameOperandStatement();
+        Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "def");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        FilterOperatorStatement<String> operator = new NotEqualStatement<>(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new NotEqualPredicate<>(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertTrue(predicate.test(file));
     }
 
     @Test
     public void predicateShouldReturnFalseIfOperandValueEqualsToAtLeastOneArgumentValue() {
-        FilterOperandStatement<String> operand = new FileNameOperandStatement();
+        Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "testfile");
         FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        FilterOperatorStatement<String> operator = new NotEqualStatement<>(description);
-        Predicate<FileData> predicate = operator.execute();
+        Predicate<String> operator = new NotEqualPredicate<>(description);
+        java.util.function.Predicate predicate = operator.execute();
         assertFalse(predicate.test(file));
     }
 }
