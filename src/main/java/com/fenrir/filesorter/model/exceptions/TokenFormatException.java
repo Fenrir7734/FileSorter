@@ -18,6 +18,11 @@ public class TokenFormatException extends ExpressionFormatException {
         this.token = token;
     }
 
+    public TokenFormatException(String message, Throwable throwable, String token) {
+        super(message, throwable);
+        this.token = token;
+    }
+
     public TokenFormatException(String message, Rule rule, String token) {
         super(message, rule);
         this.token = token;

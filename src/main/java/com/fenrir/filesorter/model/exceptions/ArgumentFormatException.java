@@ -20,6 +20,11 @@ public class ArgumentFormatException extends TokenFormatException {
         this.arg = arg;
     }
 
+    public ArgumentFormatException(String message, Throwable cause, String token, String arg) {
+        super(message, cause, token);
+        this.arg = arg;
+    }
+
     public ArgumentFormatException(String message, Rule rule, String token, String arg) {
         super(message, rule, token);
         this.arg = arg;
