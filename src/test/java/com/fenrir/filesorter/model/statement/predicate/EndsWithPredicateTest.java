@@ -1,8 +1,11 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
+import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EndsWithStatementTest {
+class EndsWithPredicateTest {
     @TempDir
     Path tempDir;
     FileData file;
@@ -27,30 +30,32 @@ class EndsWithStatementTest {
     }
 
     @Test
-    public void executeShouldReturnPredicate() {
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        Predicate<String> operator = new EndsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
-        assertNotNull(predicate);
+    public void shouldThrowExpressionFormatExceptionWhenGivenNonStringOperands() {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(8L, 12L, 16L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        assertThrows(
+                ExpressionFormatException.class,
+                () -> new EndsWithPredicate<>(operands),
+                "Invalid type of operand for given operator"
+        );
     }
 
     @Test
-    public void predicateShouldReturnTrueIfOperandValueEndsWithAtLeastOneArgumentValue() {
+    public void testShouldReturnTrueIfOperandValueEndsWithAtLeastOneArgumentValue() throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "file");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new EndsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new EndsWithPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseIfOperandValueNotEndsWithAnyArgumentValue() {
+    public void testShouldReturnFalseIfOperandValueNotEndsWithAnyArgumentValue() throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new EndsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new EndsWithPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 }

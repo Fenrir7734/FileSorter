@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraterStatementTest {
+class GraterPredicateTest {
     @TempDir
     Path tempDir;
     FileData file;
@@ -27,50 +28,38 @@ class GraterStatementTest {
     }
 
     @Test
-    public void executeShouldReturnPredicate() {
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(null, List.of("abc"));
-        Predicate<String> operator = new GraterPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
-        assertNotNull(predicate);
-    }
-
-    @Test
-    public void shouldIgnoreMoreThanOneArgument() {
+    public void shouldIgnoreMoreThanOneArgument() throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L, 12L, 16L);
-        FilterStatementDescription<Long> description = new FilterStatementDescription<>(operand, args);
-        Predicate<Long> operator = new GraterPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GraterPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnTrueForOperandValueGreaterThanArgument() {
+    public void testShouldReturnTrueForOperandValueGreaterThanArgument() throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
-        FilterStatementDescription<Long> description = new FilterStatementDescription<>(operand, args);
-        Predicate<Long> operator = new GraterPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GraterPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseForOperandValueEqualArgument() {
+    public void testShouldReturnFalseForOperandValueEqualArgument() throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
-        FilterStatementDescription<Long> description = new FilterStatementDescription<>(operand, args);
-        Predicate<Long> operator = new GraterPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GraterPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseForOperandValueSmallerThanArgument() {
+    public void testShouldReturnFalseForOperandValueSmallerThanArgument() throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
-        FilterStatementDescription<Long> description = new FilterStatementDescription<>(operand, args);
-        Predicate<Long> operator = new GraterPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GraterPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 }

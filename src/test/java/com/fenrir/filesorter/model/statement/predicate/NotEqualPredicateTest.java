@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NotEqualStatementTest {
+class NotEqualPredicateTest {
     @TempDir
     Path tempDir;
     FileData file;
@@ -27,30 +28,20 @@ class NotEqualStatementTest {
     }
 
     @Test
-    public void executeShouldReturnPredicate() {
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        Predicate<String> operator = new NotEqualPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
-        assertNotNull(predicate);
-    }
-
-    @Test
-    public void predicateShouldReturnTrueIfOperandValueNotEqualToAnyArgumentValue() {
+    public void testShouldReturnTrueIfOperandValueNotEqualToAnyArgumentValue() throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "def");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new NotEqualPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new NotEqualPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseIfOperandValueEqualsToAtLeastOneArgumentValue() {
+    public void testShouldReturnFalseIfOperandValueEqualsToAtLeastOneArgumentValue() throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "testfile");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new NotEqualPredicate<>(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new NotEqualPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 }

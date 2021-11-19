@@ -1,8 +1,11 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
+import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,30 +30,32 @@ class StartsWithPredicateTest {
     }
 
     @Test
-    public void executeShouldReturnPredicate() {
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(null, null);
-        Predicate<String> operator = new StartsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
-        assertNotNull(predicate);
+    public void shouldThrowExpressionFormatExceptionWhenGivenNonStringOperands() {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(8L, 12L, 16L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        assertThrows(
+                ExpressionFormatException.class,
+                () -> new StartsWithPredicate<>(operands),
+                "Invalid type of operand for given operator"
+        );
     }
 
     @Test
-    public void predicateShouldReturnTrueIfOperandStartsWithAtLeastOneArgumentValue() {
+    public void testShouldReturnTrueIfOperandStartsWithAtLeastOneArgumentValue() throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "test");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new StartsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void predicateShouldReturnFalseIfOperandNotStartsWithAnyArgumentValue() {
+    public void testShouldReturnFalseIfOperandNotStartsWithAnyArgumentValue() throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        Predicate<String> operator = new StartsWithPredicate(description);
-        java.util.function.Predicate predicate = operator.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 }
