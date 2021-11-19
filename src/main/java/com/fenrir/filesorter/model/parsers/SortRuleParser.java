@@ -8,8 +8,8 @@ import com.fenrir.filesorter.model.statement.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.LiteralProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
-import com.fenrir.filesorter.enums.Scope;
-import com.fenrir.filesorter.enums.DateTokenType;
+import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.enums.DateTokenType;
 
 import java.util.ArrayList;
 import java.util.List;

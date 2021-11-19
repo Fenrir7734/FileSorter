@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.enums;
+package com.fenrir.filesorter.model.enums;
 
 public enum DateTokenType {
     YEAR("YYYY"), YEAR_TWO_DIGIT("YY"),

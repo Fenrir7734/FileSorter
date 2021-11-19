@@ -6,8 +6,8 @@ import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
-import com.fenrir.filesorter.enums.Scope;
-import com.fenrir.filesorter.enums.DateTokenType;
+import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.enums.DateTokenType;
 import com.fenrir.filesorter.model.utils.Converter;
 
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.fenrir.filesorter.enums.Scope.*;
+import static com.fenrir.filesorter.model.enums.Scope.*;
 
 public enum ProviderType {
     DIMENSION("DIM", new Scope[]{SORT, RENAME, FILTER}) {

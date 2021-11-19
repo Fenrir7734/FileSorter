@@ -3,10 +3,10 @@ package com.fenrir.filesorter.model.statement.types;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.*;
-import com.fenrir.filesorter.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.enums.ArgumentNumber;
 
-import static com.fenrir.filesorter.enums.ArgumentNumber.MULTIPLE;
-import static com.fenrir.filesorter.enums.ArgumentNumber.SINGLE;
+import static com.fenrir.filesorter.model.enums.ArgumentNumber.MULTIPLE;
+import static com.fenrir.filesorter.model.enums.ArgumentNumber.SINGLE;
 
 public enum PredicateType {
     EQUAL("==", MULTIPLE) {

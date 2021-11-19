@@ -10,8 +10,8 @@ import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
-import com.fenrir.filesorter.enums.Scope;
-import com.fenrir.filesorter.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.enums.ArgumentNumber;
 
 import java.util.List;
 
