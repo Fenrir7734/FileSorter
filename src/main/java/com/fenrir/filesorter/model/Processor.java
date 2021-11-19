@@ -6,14 +6,13 @@ import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
-import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
-import com.fenrir.filesorter.model.statement.string.StringStatement;
+import com.fenrir.filesorter.model.statement.predicate.Predicate;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Processor {
@@ -58,17 +57,20 @@ public class Processor {
         }
     }
 
-    private List<FileData> filter(List<FilterOperatorStatement<?>> filterStatements) {
-        List<Predicate<FileData>> predicates = filterStatements.stream()
-                .map(FilterOperatorStatement::execute)
-                .collect(Collectors.toList());
+    private List<FileData> filter(List<Predicate<? extends Comparable<?>>> filterStatements) {
         List<FileData> filteredFileStructure = fileStructure.stream()
                 .filter(f -> !f.isIncluded())
                 .collect(Collectors.toList());
-
-        for (Predicate<FileData> predicate: predicates) {
+        for (Predicate predicate: filterStatements) {
             filteredFileStructure = filteredFileStructure.stream()
-                    .filter(predicate)
+                    .filter(f -> {
+                        try {
+                            return predicate.test(f);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    })
                     .filter(f -> !f.isDirectory())
                     .collect(Collectors.toList());
         }
@@ -78,8 +80,8 @@ public class Processor {
 
     private void createTargetPaths(
             List<FileData> files,
-            List<StringStatement> sortStatements,
-            List<StringStatement> renameStatements)
+            List<Provider<?>> sortStatements,
+            List<Provider<?>> renameStatements)
             throws IOException {
 
         for (FileData file: files) {
@@ -91,21 +93,20 @@ public class Processor {
         }
     }
 
-    private Path buildPathForFile(FileData file, List<StringStatement> sortStatements) throws IOException {
+    private Path buildPathForFile(FileData file, List<Provider<?>> sortStatements) throws IOException {
         StringBuilder builder = new StringBuilder();
-        for (StringStatement statement: sortStatements) {
-            String s = statement.execute(file);
+        for (Provider<?> sortStatement : sortStatements) {
+            String s = sortStatement.getAsString(file);
             builder.append(s);
         }
         Path path = Path.of(builder.toString());
-        Path targetPath = targetRootDir.resolve(path);
-        return targetPath;
+        return targetRootDir.resolve(path);
     }
 
-    private Path buildFileName(FileData file, List<StringStatement> renameStatements) throws IOException {
+    private Path buildFileName(FileData file, List<Provider<?>> renameStatements) throws IOException {
         StringBuilder builder = new StringBuilder();
-        for (StringStatement statement: renameStatements) {
-            String s = statement.execute(file);
+        for (Provider<?>  statement: renameStatements) {
+            String s = statement.getAsString(file);
             builder.append(s);
         }
         return Path.of(builder.toString());

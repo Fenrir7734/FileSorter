@@ -5,10 +5,10 @@ import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.FilterRule;
-import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
-import com.fenrir.filesorter.model.statement.filter.operand.FileNameOperandStatement;
-import com.fenrir.filesorter.model.statement.filter.operator.EqualStatement;
-import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
+import com.fenrir.filesorter.model.statement.predicate.EqualPredicate;
+import com.fenrir.filesorter.model.statement.predicate.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -17,7 +17,6 @@ import utils.FileUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,6 +64,16 @@ class FilterRuleParserTest {
                 "Filter expression should contain only operand and operator token."
         );
         assertEquals(rule, exception.getRule());
+    }
+
+    @Test
+    public void shouldThrowExpressionFormatExceptionWhenGivenNonStringOperandToOnlyStringOperator() {
+        FilterRule rule = new FilterRule("%(DAT)%(CON:2021-02-02)");
+        ExpressionFormatException exception = assertThrows(
+                ExpressionFormatException.class,
+                () -> parser.resolveRule(rule),
+                "Invalid type of operand for given operator"
+        );
     }
 
     @Test
@@ -146,17 +155,15 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldReturnFilterOperatorStatementForValidInput() throws ExpressionFormatException {
+    public void shouldReturnFilterOperatorStatementForValidInput() throws IOException, ExpressionFormatException {
         FilterRule rule = new FilterRule("%(CUR)%(==:testfile)");
-        FilterOperatorStatement<?> statement = parser.resolveRule(rule);
-        assertTrue(statement instanceof EqualStatement<?>);
+        Predicate<? extends Comparable<?>> actualPredicate = parser.resolveRule(rule);
+        assertTrue(actualPredicate instanceof EqualPredicate<?>);
 
-        FileNameOperandStatement operand = new FileNameOperandStatement();
+        FileNameProvider operand = new FileNameProvider(null);
         List<String> args = List.of("testfile");
-        FilterStatementDescription<String> description = new FilterStatementDescription<>(operand, args);
-        EqualStatement<String> expectedStatement = new EqualStatement<>(description);
-        Predicate<FileData> actualPredicate = statement.execute();
-        Predicate<FileData> expectedPredicate = expectedStatement.execute();
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        EqualPredicate<String> expectedPredicate = new EqualPredicate<>(operands);
         assertEquals(expectedPredicate.test(file), actualPredicate.test(file));
     }
 }

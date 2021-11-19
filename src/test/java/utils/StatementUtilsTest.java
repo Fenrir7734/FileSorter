@@ -1,7 +1,8 @@
 package utils;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.statement.string.*;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.provider.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -25,13 +26,13 @@ class StatementUtilsTest {
 
     @Test
     public void shouldReturnCorrectStringForValidInput() throws IOException {
-        List<StringStatement> statements = List.of(
-                new FileNameStatement(null),
-                new FileSeparatorStatement(null),
-                new FileNameStatement(null),
-                new LiteralStatement(new StringStatementDescription(null, "ABC")),
-                new LiteralStatement(new StringStatementDescription(null, ".")),
-                new FileExtensionStatement(null)
+        List<Provider<?>> statements = List.of(
+                new FileNameProvider(null),
+                new FileSeparatorProvider(null),
+                new FileNameProvider(null),
+                new LiteralProvider(ProviderDescription.ofLiteral("ABC")),
+                new LiteralProvider(ProviderDescription.ofLiteral(".")),
+                new FileExtensionProvider(null)
         );
         String actualResult = StatementUtils.build(statements, file);
         String expectedResult = "testfile/testfileABC.txt";

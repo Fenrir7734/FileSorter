@@ -4,22 +4,25 @@ import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.rule.StringRule;
-import com.fenrir.filesorter.model.statement.string.*;
-import com.fenrir.filesorter.model.tokens.DateTokenType;
-import com.fenrir.filesorter.model.tokens.SortTokenType;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.provider.LiteralProvider;
+import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ProviderType;
+import com.fenrir.filesorter.enums.Scope;
+import com.fenrir.filesorter.enums.DateTokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SortRuleParser {
-    public List<StringStatement> resolveRule(StringRule rule) throws TokenFormatException {
+    public List<Provider<?>> resolveRule(StringRule rule) throws TokenFormatException {
         try {
-            List<StringStatement> statements = new ArrayList<>();
+            List<Provider<?>> statements = new ArrayList<>();
 
             Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
             while (iterator.hasNext()) {
                 RuleElement element = iterator.next();
-                StringStatement statement = parseElement(element);
+                Provider<?> statement = parseElement(element);
                 statements.add(statement);
             }
 
@@ -29,27 +32,25 @@ public class SortRuleParser {
         }
     }
 
-    private StringStatement parseElement(RuleElement element) throws TokenFormatException {
+    private Provider<?> parseElement(RuleElement element) throws TokenFormatException {
         if (!element.isToken()) {
-            StringStatementDescription description = new StringStatementDescription(null, element.element());
-            return new LiteralStatement(description);
+            ProviderDescription description = ProviderDescription.ofLiteral(element.element());
+            return new LiteralProvider(description);
         }
 
         String token = element.element();
-        DateTokenType dateTokenType = DateTokenType.get(token);
+        ProviderType providerType = ProviderType.get(token, Scope.SORT);
 
-        if (dateTokenType != null) {
-            StringStatementDescription description = new StringStatementDescription(dateTokenType.getPattern(), null);
-            return new DateStatement(description);
+        if (providerType == null) {
+            throw new TokenFormatException("Unknown token", token);
         }
 
-        SortTokenType sortTokenType = SortTokenType.get(token);
-
-        if (sortTokenType == null) {
-            throw new TokenFormatException("Unknown token.", element.element());
+        if (providerType == ProviderType.DATE) {
+            ProviderDescription description = ProviderDescription.ofDate(DateTokenType.get(token).getPattern());
+            return providerType.getAsProvider(description);
         }
 
-        return StringStatementFactory.get(null, sortTokenType);
+        return providerType.getAsProvider(null);
     }
 
 }

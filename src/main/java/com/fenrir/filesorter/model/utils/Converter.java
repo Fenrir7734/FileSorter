@@ -2,6 +2,7 @@ package com.fenrir.filesorter.model.utils;
 
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.file.utils.Dimension;
+import com.fenrir.filesorter.model.statement.types.ProviderType;
 
 import java.nio.file.Path;
 import java.text.CharacterIterator;
@@ -32,7 +33,12 @@ public class Converter {
         try {
             return LocalDate.parse(arg);
         } catch (DateTimeParseException e) {
-            throw new ArgumentFormatException("Incorrect date format.", e, arg);
+            throw new ArgumentFormatException(
+                    "Incorrect date format.",
+                    e,
+                    ProviderType.DATE.getToken(),
+                    arg
+            );
         }
     }
 
@@ -53,7 +59,12 @@ public class Converter {
         try {
             return Dimension.of(arg);
         } catch (IllegalArgumentException e) {
-            throw new ArgumentFormatException("Incorrect dimension format.", e, arg);
+            throw new ArgumentFormatException(
+                    "Incorrect dimension format.",
+                    e,
+                    ProviderType.DIMENSION.getToken(),
+                    arg
+            );
         }
     }
 
@@ -84,7 +95,11 @@ public class Converter {
         arg = arg.trim();
         char c = arg.charAt(arg.length() - 1);
         if (!checkPostfix(c)) {
-            throw new ArgumentFormatException("Incorrect size", arg);
+            throw new ArgumentFormatException(
+                    "Incorrect size",
+                    ProviderType.SIZE.getToken(),
+                    arg
+            );
         }
         return c;
     }

@@ -56,7 +56,7 @@ public class Main {
         args.add(LocalDate.now());
         //FilterStatementDescription<ChronoLocalDate> description = new FilterStatementDescription<ChronoLocalDate>(operandStatement, args);
         //FilterStatement statement = FilterStatementFactory.get(description, FilterOperatorTokenType.EQUAL);
-        //System.out.println(statement.execute(LocalDate.of(1999, 11, 2)).test(LocalDate.of(1922, 2, 2)));
+        //System.out.println(statement.get(LocalDate.of(1999, 11, 2)).test(LocalDate.of(1922, 2, 2)));
     }
 
     private static void test4() {

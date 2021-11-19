@@ -3,7 +3,8 @@ package com.fenrir.filesorter.model.parsers;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.StringRule;
-import com.fenrir.filesorter.model.statement.string.*;
+import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.provider.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -56,17 +57,17 @@ class RenameRuleParserTest {
     @Test
     public void shouldReturnListOfStringStatementForValidInput() throws TokenFormatException, IOException {
         StringRule stringRule = new StringRule("%(CUR)-%(YYYY)-%(MM)-%(DD).%(EXT)");
-        List<StringStatement> statementsFromParser = parser.resolveRule(stringRule);
-        List<StringStatement> expectedStatements = List.of(
-                new FileNameStatement(null),
-                new LiteralStatement(new StringStatementDescription(null, "-")),
-                new DateStatement(new StringStatementDescription("YYYY", null)),
-                new LiteralStatement(new StringStatementDescription(null, "-")),
-                new DateStatement(new StringStatementDescription("MMM", null)),
-                new LiteralStatement(new StringStatementDescription(null, "-")),
-                new DateStatement(new StringStatementDescription("DD", null)),
-                new LiteralStatement(new StringStatementDescription(null, ".")),
-                new FileExtensionStatement(null)
+        List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
+        List<Provider<?>> expectedStatements = List.of(
+                new FileNameProvider(null),
+                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new DateProvider(ProviderDescription.ofDate("YYYY")),
+                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new DateProvider(ProviderDescription.ofDate("MMM")),
+                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new DateProvider(ProviderDescription.ofDate("DD")),
+                new LiteralProvider(ProviderDescription.ofLiteral(".")),
+                new FileExtensionProvider(null)
         );
         String actualResult = StatementUtils.build(statementsFromParser, file);
         String expectedResult = StatementUtils.build(expectedStatements, file);

@@ -1,2 +1,24 @@
-package com.fenrir.filesorter.model.statement.utils;public class TypeChecker {
+package com.fenrir.filesorter.model.statement.utils;
+
+import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.provider.*;
+
+import java.util.List;
+
+public class TypeChecker {
+    public static <T extends Comparable<T>> boolean isInstanceOfString(PredicateOperands<T> operands) {
+        return checkProvider(operands.operand()) && checkArguments(operands.args());
+    }
+
+    private static <T extends Comparable<T>> boolean checkProvider(Provider<T> provider) {
+        return provider instanceof FileCategoryProvider
+                || provider instanceof FileExtensionProvider
+                || provider instanceof FileNameProvider
+                || provider instanceof FileSeparatorProvider
+                || provider instanceof LiteralProvider;
+    }
+
+    private static <T extends Comparable<T>> boolean checkArguments(List<T> args) {
+        return args.stream().allMatch(a -> a instanceof String);
+    }
 }

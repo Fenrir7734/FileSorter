@@ -2,8 +2,6 @@ package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.utils.Dimension;
-import com.fenrir.filesorter.model.statement.string.ImageDimensionStatement;
-import com.fenrir.filesorter.model.statement.string.StringStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

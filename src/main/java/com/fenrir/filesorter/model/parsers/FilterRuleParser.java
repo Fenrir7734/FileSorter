@@ -5,13 +5,13 @@ import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.Iterator;
-import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleElement;
-import com.fenrir.filesorter.model.statement.filter.operator.FilterOperatorStatement;
-import com.fenrir.filesorter.model.statement.filter.FilterStatementFactory;
-import com.fenrir.filesorter.model.tokens.filter.ArgumentNumber;
-import com.fenrir.filesorter.model.tokens.filter.FilterOperandTokenType;
-import com.fenrir.filesorter.model.tokens.filter.FilterOperatorTokenType;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.predicate.Predicate;
+import com.fenrir.filesorter.model.statement.types.PredicateType;
+import com.fenrir.filesorter.model.statement.types.ProviderType;
+import com.fenrir.filesorter.enums.Scope;
+import com.fenrir.filesorter.enums.ArgumentNumber;
 
 import java.util.List;
 
@@ -20,17 +20,16 @@ import java.util.List;
  */
 public class FilterRuleParser {
 
-    public FilterOperatorStatement<? extends Comparable<?>> resolveRule(FilterRule rule) throws ExpressionFormatException {
+    public Predicate<? extends Comparable<?>> resolveRule(FilterRule rule) throws ExpressionFormatException {
         try {
             validateRule(rule);
 
             Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
             RuleElement operand = iterator.next();
             RuleElement operator = iterator.next();
-            FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
-            FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
-
-            return FilterStatementFactory.get(operandTokenType, operatorTokenType, operator.args());
+            PredicateOperands<? extends Comparable<?>> operands = ProviderType.get(operand.element(), Scope.FILTER)
+                    .getAsOperands(operator.args());
+            return PredicateType.get(operator.element()).getPredicate(operands);
         } catch (ArgumentFormatException e) {
             throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
         }
@@ -59,9 +58,9 @@ public class FilterRuleParser {
                     rule
             );
         }
-        FilterOperandTokenType operandTokenType = FilterOperandTokenType.get(operand.element());
+        ProviderType type = ProviderType.get(operand.element(), Scope.FILTER);
 
-        if (operandTokenType == null) {
+        if (type == null) {
             throw new TokenFormatException("Unknown operand.", rule, operand.element());
         }
     }
@@ -73,9 +72,9 @@ public class FilterRuleParser {
                     rule
             );
         }
-        FilterOperatorTokenType operatorTokenType = FilterOperatorTokenType.get(operator.element());
+        PredicateType type = PredicateType.get(operator.element());
 
-        if (operatorTokenType == null) {
+        if (type == null) {
             throw new TokenFormatException("Unknown operator.", rule, operator.element());
         }
         validateArgumentNumber(rule, operator);
@@ -83,7 +82,7 @@ public class FilterRuleParser {
 
     private void validateArgumentNumber(FilterRule rule, RuleElement operator) throws TokenFormatException {
         List<String> args = operator.args();
-        ArgumentNumber argumentNumber = FilterOperatorTokenType.get(operator.element()).getArgumentNumber();
+        ArgumentNumber argumentNumber = PredicateType.get(operator.element()).getArgumentNumber();
 
         if (argumentNumber == ArgumentNumber.NONE && !checkIfArgsEmpty(args)) {
             throw new TokenFormatException("Expected zero arguments", rule, operator.element());

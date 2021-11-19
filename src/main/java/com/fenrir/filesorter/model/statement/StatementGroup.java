@@ -1,15 +1,15 @@
 package com.fenrir.filesorter.model.statement;
 
-import com.fenrir.filesorter.model.statement.operator.FilterOperatorStatement;
-import com.fenrir.filesorter.model.statement.string.StringStatement;
+import com.fenrir.filesorter.model.statement.predicate.Predicate;
+import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatementGroup {
-    private List<StringStatement> renameStatement;
-    private List<StringStatement> sortStatement;
-    private List<FilterOperatorStatement<? extends Comparable<?>>> filterStatements;
+    private List<Provider<?>> renameStatement;
+    private List<Provider<?>> sortStatement;
+    private List<Predicate<? extends Comparable<?>>> filterStatements;
 
     public StatementGroup() {
         this.renameStatement = new ArrayList<>();
@@ -17,27 +17,27 @@ public class StatementGroup {
         this.filterStatements = new ArrayList<>();
     }
 
-    public void setRenameStatement(List<StringStatement> renameStatement) {
+    public void setRenameStatement(List<Provider<?>> renameStatement) {
         this.renameStatement = renameStatement;
     }
 
-    public void setSortStatement(List<StringStatement> sortStatement) {
+    public void setSortStatement(List<Provider<?>> sortStatement) {
         this.sortStatement = sortStatement;
     }
 
-    public void addFilterStatement(FilterOperatorStatement<? extends Comparable<?>> filterStatement) {
+    public void addFilterStatement(Predicate<? extends Comparable<?>> filterStatement) {
         filterStatements.add(filterStatement);
     }
 
-    public List<StringStatement> getRenameStatement() {
+    public List<Provider<?>> getRenameStatement() {
         return renameStatement;
     }
 
-    public List<StringStatement> getSortStatement() {
+    public List<Provider<?>> getSortStatement() {
         return sortStatement;
     }
 
-    public List<FilterOperatorStatement<? extends Comparable<?>>> getFilterStatements() {
+    public List<Predicate<? extends Comparable<?>>> getFilterStatements() {
         return filterStatements;
     }
 }

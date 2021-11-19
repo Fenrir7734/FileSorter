@@ -6,6 +6,8 @@ import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
+import com.fenrir.filesorter.enums.Scope;
+import com.fenrir.filesorter.enums.DateTokenType;
 import com.fenrir.filesorter.model.utils.Converter;
 
 import java.nio.file.Path;
@@ -13,21 +15,9 @@ import java.time.chrono.ChronoLocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.fenrir.filesorter.model.statement.types.Scope.*;
+import static com.fenrir.filesorter.enums.Scope.*;
 
 public enum ProviderType {
-    CURRENT_FILE_NAME("CUR", new Scope[]{SORT, RENAME, FILTER}) {
-        @Override
-        public Provider<?> getAsProvider(ProviderDescription description) {
-            return new FileNameProvider(description);
-        }
-
-        @Override
-        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
-            Provider<String> operand = new FileNameProvider(null);
-            return new PredicateOperands<>(operand, args);
-        }
-    },
     DIMENSION("DIM", new Scope[]{SORT, RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
@@ -63,6 +53,18 @@ public enum ProviderType {
         @Override
         public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
             Provider<String> operand = new FileCategoryProvider(null);
+            return new PredicateOperands<>(operand, args);
+        }
+    },
+    CURRENT_FILE_NAME("CUR", new Scope[]{RENAME, FILTER}) {
+        @Override
+        public Provider<?> getAsProvider(ProviderDescription description) {
+            return new FileNameProvider(description);
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
+            Provider<String> operand = new FileNameProvider(null);
             return new PredicateOperands<>(operand, args);
         }
     },
@@ -137,11 +139,15 @@ public enum ProviderType {
                 return type;
             }
         }
-        return null;
+        return checkIfDate(token, scope) ? DATE : null;
     }
 
-    public static boolean checkScope(Scope scope, ProviderType type) {
+    private static boolean checkScope(Scope scope, ProviderType type) {
         return Arrays.asList(type.getScope()).contains(scope);
+    }
+
+    private static boolean checkIfDate(String token, Scope scope) {
+        return (scope == RENAME || scope == SORT) && DateTokenType.get(token) != null;
     }
 
     public String getToken() {
