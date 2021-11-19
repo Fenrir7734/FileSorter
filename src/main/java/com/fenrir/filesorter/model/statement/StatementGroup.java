@@ -9,7 +9,7 @@ import java.util.List;
 public class StatementGroup {
     private List<Provider<?>> renameStatement;
     private List<Provider<?>> sortStatement;
-    private List<Predicate<? extends Comparable<?>>> filterStatements;
+    private final List<Predicate<? extends Comparable<?>>> filterStatements;
 
     public StatementGroup() {
         this.renameStatement = new ArrayList<>();

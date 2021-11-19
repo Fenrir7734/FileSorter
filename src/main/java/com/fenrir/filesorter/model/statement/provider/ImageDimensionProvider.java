@@ -3,7 +3,6 @@ package com.fenrir.filesorter.model.statement.provider;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.file.utils.ImageDimension;
-import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.IOException;
 

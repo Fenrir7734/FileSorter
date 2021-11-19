@@ -1,4 +1,4 @@
-module com.example.filesortere {
+module com.fenrir.filesorter {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -24,4 +24,10 @@ module com.example.filesortere {
     opens com.fenrir.filesorter.model.file to javafx.fxml;
     exports com.fenrir.filesorter.model.enums;
     opens com.fenrir.filesorter.model.enums to javafx.fxml;
+    exports com.fenrir.filesorter.model.file.utils;
+    opens com.fenrir.filesorter.model.file.utils to javafx.fxml;
+    exports com.fenrir.filesorter.model.rule;
+    opens com.fenrir.filesorter.model.rule to javafx.fxml;
+    exports com.fenrir.filesorter.model.exceptions;
+    opens com.fenrir.filesorter.model.exceptions to javafx.fxml;
 }

@@ -3,7 +3,7 @@ package com.fenrir.filesorter.model.parsers;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.StringRule;
-import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.provider.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

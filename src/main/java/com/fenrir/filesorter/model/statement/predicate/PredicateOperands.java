@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement;
+package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.statement.provider.Provider;
 

@@ -1,11 +1,16 @@
 package com.fenrir.filesorter.model.statement.utils;
 
-import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.*;
 
 import java.util.List;
 
 public class TypeChecker {
+
+    private TypeChecker() {
+        throw new UnsupportedOperationException();
+    }
+
     public static <T extends Comparable<T>> boolean isInstanceOfString(PredicateOperands<T> operands) {
         return checkProvider(operands.operand()) && checkArguments(operands.args());
     }

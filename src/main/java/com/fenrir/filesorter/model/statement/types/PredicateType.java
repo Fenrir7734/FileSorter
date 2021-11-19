@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.model.statement.types;
 
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
-import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.*;
 import com.fenrir.filesorter.model.enums.ArgumentNumber;
 
@@ -78,7 +78,7 @@ public enum PredicateType {
     public abstract Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
             throws ExpressionFormatException;
 
-    public static PredicateType get(String token) {
+    public static PredicateType getType(String token) {
         PredicateType[] types = PredicateType.values();
         for (PredicateType type: types) {
             if (token.equals(type.getToken())) {

@@ -1,7 +1,6 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.io.IOException;

@@ -24,7 +24,7 @@ public enum DateTokenType {
         return pattern;
     }
 
-    public static DateTokenType get(String pattern) {
+    public static DateTokenType getType(String pattern) {
         return switch (pattern) {
             case "YYYY" -> YEAR;
             case "YY" -> YEAR_TWO_DIGIT;

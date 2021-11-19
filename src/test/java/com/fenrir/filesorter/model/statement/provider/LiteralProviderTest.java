@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.model.statement.provider;
 
-import com.fenrir.filesorter.model.statement.ProviderDescription;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

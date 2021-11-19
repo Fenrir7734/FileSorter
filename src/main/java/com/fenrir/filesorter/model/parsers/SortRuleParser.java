@@ -4,7 +4,7 @@ import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.rule.StringRule;
-import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.provider.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.LiteralProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
@@ -39,14 +39,14 @@ public class SortRuleParser {
         }
 
         String token = element.element();
-        ProviderType providerType = ProviderType.get(token, Scope.SORT);
+        ProviderType providerType = ProviderType.getType(token, Scope.SORT);
 
         if (providerType == null) {
             throw new TokenFormatException("Unknown token", token);
         }
 
         if (providerType == ProviderType.DATE) {
-            ProviderDescription description = ProviderDescription.ofDate(DateTokenType.get(token).getPattern());
+            ProviderDescription description = ProviderDescription.ofDate(DateTokenType.getType(token).getPattern());
             return providerType.getAsProvider(description);
         }
 

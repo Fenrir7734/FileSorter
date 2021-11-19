@@ -5,7 +5,7 @@ import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.FilterRule;
-import com.fenrir.filesorter.model.statement.PredicateOperands;
+import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.predicate.EqualPredicate;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;

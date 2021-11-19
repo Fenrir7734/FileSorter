@@ -3,8 +3,8 @@ package com.fenrir.filesorter.model.statement.types;
 
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.file.utils.Dimension;
-import com.fenrir.filesorter.model.statement.PredicateOperands;
-import com.fenrir.filesorter.model.statement.ProviderDescription;
+import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
+import com.fenrir.filesorter.model.statement.provider.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.enums.DateTokenType;
@@ -132,7 +132,7 @@ public enum ProviderType {
     public abstract Provider<?> getAsProvider(ProviderDescription description);
     public abstract PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) throws ArgumentFormatException;
 
-    public static ProviderType get(String token, Scope scope) {
+    public static ProviderType getType(String token, Scope scope) {
         ProviderType[] types = ProviderType.values();
         for (ProviderType type: types) {
             if (token.equals(type.getToken()) && checkScope(scope, type)) {
@@ -147,7 +147,7 @@ public enum ProviderType {
     }
 
     private static boolean checkIfDate(String token, Scope scope) {
-        return (scope == RENAME || scope == SORT) && DateTokenType.get(token) != null;
+        return (scope == RENAME || scope == SORT) && DateTokenType.getType(token) != null;
     }
 
     public String getToken() {

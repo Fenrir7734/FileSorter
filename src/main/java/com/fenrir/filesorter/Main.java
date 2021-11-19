@@ -50,13 +50,13 @@ public class Main {
     }
 
     private static void test3() throws IOException {
-        //FilterOperandStatement operandStatement = FilterOperandStatementFactory.get(FilterOperandTokenType.DATE);
+        //FilterOperandStatement operandStatement = FilterOperandStatementFactory.getType(FilterOperandTokenType.DATE);
         List<ChronoLocalDate> args = new ArrayList<>();
         args.add(LocalDate.of(1922, 2, 2));
         args.add(LocalDate.now());
         //FilterStatementDescription<ChronoLocalDate> description = new FilterStatementDescription<ChronoLocalDate>(operandStatement, args);
-        //FilterStatement statement = FilterStatementFactory.get(description, FilterOperatorTokenType.EQUAL);
-        //System.out.println(statement.get(LocalDate.of(1999, 11, 2)).test(LocalDate.of(1922, 2, 2)));
+        //FilterStatement statement = FilterStatementFactory.getType(description, FilterOperatorTokenType.EQUAL);
+        //System.out.println(statement.getType(LocalDate.of(1999, 11, 2)).test(LocalDate.of(1922, 2, 2)));
     }
 
     private static void test4() {

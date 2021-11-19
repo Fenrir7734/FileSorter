@@ -61,16 +61,9 @@ public class Processor {
         List<FileData> filteredFileStructure = fileStructure.stream()
                 .filter(f -> !f.isIncluded())
                 .collect(Collectors.toList());
-        for (Predicate predicate: filterStatements) {
+        for (Predicate<?> predicate: filterStatements) {
             filteredFileStructure = filteredFileStructure.stream()
-                    .filter(f -> {
-                        try {
-                            return predicate.test(f);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return false;
-                    })
+                    .filter(f -> test(predicate, f))
                     .filter(f -> !f.isDirectory())
                     .collect(Collectors.toList());
         }
@@ -78,35 +71,44 @@ public class Processor {
         return filteredFileStructure;
     }
 
+    private boolean test(Predicate<?> predicate, FileData file) {
+        try {
+            return predicate.test(file);
+        } catch (IOException e) {
+            // TODO: I will add logger here.
+        }
+        return false;
+    }
+
     private void createTargetPaths(
             List<FileData> files,
-            List<Provider<?>> sortStatements,
-            List<Provider<?>> renameStatements)
+            List<Provider<?>> sortStatement,
+            List<Provider<?>> renameStatement)
             throws IOException {
 
         for (FileData file: files) {
-            Path path = buildPathForFile(file, sortStatements);
-            Path name = buildFileName(file, renameStatements);
+            Path path = buildPathForFile(file, sortStatement);
+            Path name = buildFileName(file, renameStatement);
             Path targetPath = path.resolve(name);
             long duplicatesCount = countDuplicate(targetPath);
             file.setTargetPath(targetPath, duplicatesCount);
         }
     }
 
-    private Path buildPathForFile(FileData file, List<Provider<?>> sortStatements) throws IOException {
+    private Path buildPathForFile(FileData file, List<Provider<?>> sortStatement) throws IOException {
         StringBuilder builder = new StringBuilder();
-        for (Provider<?> sortStatement : sortStatements) {
-            String s = sortStatement.getAsString(file);
+        for (Provider<?> provider : sortStatement) {
+            String s = provider.getAsString(file);
             builder.append(s);
         }
         Path path = Path.of(builder.toString());
         return targetRootDir.resolve(path);
     }
 
-    private Path buildFileName(FileData file, List<Provider<?>> renameStatements) throws IOException {
+    private Path buildFileName(FileData file, List<Provider<?>> renameStatement) throws IOException {
         StringBuilder builder = new StringBuilder();
-        for (Provider<?>  statement: renameStatements) {
-            String s = statement.getAsString(file);
+        for (Provider<?> provider: renameStatement) {
+            String s = provider.getAsString(file);
             builder.append(s);
         }
         return Path.of(builder.toString());

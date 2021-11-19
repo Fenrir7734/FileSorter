@@ -1,12 +1,11 @@
 package com.fenrir.filesorter.model.statement.provider;
 
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.statement.ProviderDescription;
 
 import java.io.IOException;
 
 public class LiteralProvider implements Provider<String> {
-    private ProviderDescription description;
+    private final ProviderDescription description;
 
     public LiteralProvider(ProviderDescription description) {
         this.description = description;

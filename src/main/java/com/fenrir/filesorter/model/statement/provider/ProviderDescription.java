@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement;
+package com.fenrir.filesorter.model.statement.provider;
 
 public record ProviderDescription(String pattern, String literal) {
 
