@@ -1,38 +1,36 @@
 package com.fenrir.filesorter.model.statement.predicate;
 
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.statement.PredicateOperands;
 import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.utils.TypeChecker;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
 
-public class StartsWithStatement implements FilterOperatorStatement<String> {
+public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T> {
     private final Provider<String> operandStatement;
     private final List<String> args;
 
-    public StartsWithStatement(FilterStatementDescription<String> description) {
-        this.operandStatement = description.operand();
-        this.args = description.args();
+    public StartsWithPredicate(PredicateOperands<T> operands) throws ExpressionFormatException {
+        if (TypeChecker.isInstanceOfString(operands)) {
+            this.operandStatement = (Provider<String>) operands.operand();
+            this.args = (List<String>) operands.args();
+        } else {
+            throw new ExpressionFormatException("Invalid type of operand for given operator");
+        }
     }
+
     @Override
-    public Predicate<FileData> execute() {
-        return new Predicate<FileData>() {
-            @Override
-            public boolean test(FileData fileData) {
-                try {
-                    String operand = operandStatement.get(fileData);
-                    for (String arg: args) {
-                        if (operand.startsWith(arg)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                } catch (IOException e) {
-                    return false;
-                }
+    public boolean test(FileData fileData) throws IOException {
+        String operand = operandStatement.get(fileData);
+        for (String arg: args) {
+            if (operand.startsWith(arg)) {
+                return true;
             }
-        };
+        }
+        return false;
     }
 }
