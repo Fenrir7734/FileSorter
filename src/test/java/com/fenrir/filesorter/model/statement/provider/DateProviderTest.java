@@ -25,9 +25,14 @@ class DateProviderTest {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
-        Provider<LocalDate> statement = new DateProvider(null);
-        ChronoLocalDate actualDate = statement.get(fileData);
+        Provider<ChronoLocalDate> provider = new DateProvider(null);
+        ChronoLocalDate actualDate = provider.get(fileData);
         ChronoLocalDate expectedDate = LocalDate.ofInstant(time.toInstant(), ZoneId.systemDefault());
         assertEquals(expectedDate, actualDate);
+    }
+
+    @Test
+    public void getAsStringShouldReturnFileCreationTime() throws IOException {
+
     }
 }
