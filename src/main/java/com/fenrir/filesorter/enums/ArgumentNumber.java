@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.tokens.filter;
+package com.fenrir.filesorter.enums;
 
 public enum ArgumentNumber {
     NONE,

@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.statement.types;
+package com.fenrir.filesorter.enums;
 
 public enum Scope {
     RENAME,
