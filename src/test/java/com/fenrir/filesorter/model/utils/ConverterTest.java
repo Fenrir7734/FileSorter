@@ -41,7 +41,9 @@ class ConverterTest {
                 "Incorrect date format."
         );
         String expectedArgument = "2020:04:15";
+        String expectedToken = "DAT";
         assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
     }
 
     @Test
@@ -91,7 +93,9 @@ class ConverterTest {
                 "Incorrect dimension format."
         );
         String expectedArgument = "x720";
+        String expectedToken = "DIM";
         assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
     }
 
     @Test
@@ -122,7 +126,9 @@ class ConverterTest {
                 "Incorrect size"
         );
         String expectedArgument = "5K";
+        String expectedToken = "SIZ";
         assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
     }
     @Test
     public void convertToBytesShouldThrowExceptionForInvalidInputWithInvalidString() {
@@ -133,6 +139,8 @@ class ConverterTest {
                 "Incorrect size"
         );
         String expectedArgument = "abc";
+        String expectedToken = "SIZ";
         assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
     }
 }
