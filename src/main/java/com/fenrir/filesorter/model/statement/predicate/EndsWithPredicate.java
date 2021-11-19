@@ -3,7 +3,6 @@ package com.fenrir.filesorter.model.statement.predicate;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.PredicateOperands;
-import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import com.fenrir.filesorter.model.statement.utils.TypeChecker;
 

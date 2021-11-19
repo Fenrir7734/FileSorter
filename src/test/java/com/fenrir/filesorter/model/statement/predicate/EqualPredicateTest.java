@@ -2,7 +2,6 @@ package com.fenrir.filesorter.model.statement.predicate;
 
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.PredicateOperands;
-import com.fenrir.filesorter.model.statement.filter.FilterStatementDescription;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import org.junit.jupiter.api.BeforeEach;
