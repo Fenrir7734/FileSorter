@@ -9,7 +9,7 @@ import com.fenrir.filesorter.model.statement.provider.LiteralProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import com.fenrir.filesorter.model.enums.Scope;
-import com.fenrir.filesorter.model.enums.DateTokenType;
+import com.fenrir.filesorter.model.enums.DatePatternType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class SortRuleParser {
         }
 
         if (providerType == ProviderType.DATE) {
-            ProviderDescription description = ProviderDescription.ofDate(DateTokenType.getType(token).getPattern());
+            ProviderDescription description = ProviderDescription.ofDate(DatePatternType.getType(token).getPattern());
             return providerType.getAsProvider(description);
         }
 

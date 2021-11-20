@@ -75,9 +75,6 @@ public enum PredicateType {
         this.argumentNumber = argumentNumber;
     }
 
-    public abstract Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
-            throws ExpressionFormatException;
-
     public static PredicateType getType(String token) {
         PredicateType[] types = PredicateType.values();
         for (PredicateType type: types) {
@@ -87,6 +84,9 @@ public enum PredicateType {
         }
         return null;
     }
+
+    public abstract Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
+            throws ExpressionFormatException;
 
     public String getToken() {
         return token;

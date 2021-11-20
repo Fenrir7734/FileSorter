@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.enums;
 
-public enum DateTokenType {
+public enum DatePatternType {
     YEAR("YYYY"), YEAR_TWO_DIGIT("YY"),
 
     MONTH_IN_YEAR("M"), MONTH_IN_YEAR_0("MM"), MONTH_NAME_ABBREVIATION("MMM"),
@@ -16,15 +16,11 @@ public enum DateTokenType {
 
     private final String pattern;
 
-    DateTokenType(String pattern) {
+    DatePatternType(String pattern) {
         this.pattern = pattern;
     }
 
-    public String getPattern() {
-        return pattern;
-    }
-
-    public static DateTokenType getType(String token) {
+    public static DatePatternType getType(String token) {
         return switch (token) {
             case "YYYY" -> YEAR;
             case "YY" -> YEAR_TWO_DIGIT;
@@ -50,5 +46,9 @@ public enum DateTokenType {
             case "0ss" -> SECOND_0;
             default -> null;
         };
+    }
+
+    public String getPattern() {
+        return pattern;
     }
 }
