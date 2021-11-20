@@ -156,7 +156,7 @@ class FilterRuleParserTest {
 
     @Test
     public void shouldReturnFilterOperatorStatementForValidInput() throws IOException, ExpressionFormatException {
-        FilterRule rule = new FilterRule("%(CUR)%(==:testfile)");
+        FilterRule rule = new FilterRule("%(FIN)%(==:testfile)");
         Predicate<? extends Comparable<?>> actualPredicate = parser.resolveRule(rule);
         assertTrue(actualPredicate instanceof EqualPredicate<?>);
 

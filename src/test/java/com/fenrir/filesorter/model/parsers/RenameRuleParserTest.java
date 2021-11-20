@@ -56,7 +56,7 @@ class RenameRuleParserTest {
 
     @Test
     public void shouldReturnListOfStringStatementForValidInput() throws TokenFormatException, IOException {
-        StringRule stringRule = new StringRule("%(CUR)-%(YYYY)-%(MM)-%(DD).%(EXT)");
+        StringRule stringRule = new StringRule("%(FIN)-%(YYYY)-%(MM)-%(DD).%(EXT)");
         List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
         List<Provider<?>> expectedStatements = List.of(
                 new FileNameProvider(null),

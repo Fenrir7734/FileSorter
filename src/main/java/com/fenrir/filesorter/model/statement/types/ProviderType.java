@@ -7,7 +7,7 @@ import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
 import com.fenrir.filesorter.model.enums.Scope;
-import com.fenrir.filesorter.model.enums.DateTokenType;
+import com.fenrir.filesorter.model.enums.DatePatternType;
 import com.fenrir.filesorter.model.utils.Converter;
 
 import java.nio.file.Path;
@@ -56,7 +56,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    CURRENT_FILE_NAME("CUR", new Scope[]{RENAME, FILTER}) {
+    FILE_NAME("FIN", new Scope[]{RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileNameProvider(description);
@@ -129,9 +129,6 @@ public enum ProviderType {
         this.scope = scope;
     }
 
-    public abstract Provider<?> getAsProvider(ProviderDescription description);
-    public abstract PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) throws ArgumentFormatException;
-
     public static ProviderType getType(String token, Scope scope) {
         ProviderType[] types = ProviderType.values();
         for (ProviderType type: types) {
@@ -146,8 +143,11 @@ public enum ProviderType {
         return Arrays.asList(type.getScope()).contains(scope);
     }
 
+    public abstract Provider<?> getAsProvider(ProviderDescription description);
+    public abstract PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) throws ArgumentFormatException;
+
     private static boolean checkIfDate(String token, Scope scope) {
-        return (scope == RENAME || scope == SORT) && DateTokenType.getType(token) != null;
+        return (scope == RENAME || scope == SORT) && DatePatternType.getType(token) != null;
     }
 
     public String getToken() {
