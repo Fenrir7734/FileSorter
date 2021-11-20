@@ -24,7 +24,7 @@ public enum PredicateType {
     GREATER(">", SINGLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
-            return new GraterPredicate<>(operands);
+            return new GreaterPredicate<>(operands);
         }
     },
     GREATER_EQUAL(">=", SINGLE) {

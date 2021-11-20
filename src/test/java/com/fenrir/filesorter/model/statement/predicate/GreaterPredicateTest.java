@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraterPredicateTest {
+class GreaterPredicateTest {
     @TempDir
     Path tempDir;
     FileData file;
@@ -30,7 +30,7 @@ class GraterPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L, 12L, 16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GraterPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
@@ -39,7 +39,7 @@ class GraterPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GraterPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterPredicate<>(operands);
         assertTrue(predicate.test(file));
     }
 
@@ -48,7 +48,7 @@ class GraterPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GraterPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 
@@ -57,7 +57,7 @@ class GraterPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GraterPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterPredicate<>(operands);
         assertFalse(predicate.test(file));
     }
 }

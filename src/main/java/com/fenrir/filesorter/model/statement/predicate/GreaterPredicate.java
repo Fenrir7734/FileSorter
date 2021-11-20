@@ -5,11 +5,11 @@ import com.fenrir.filesorter.model.statement.provider.Provider;
 
 import java.io.IOException;
 
-public class GraterPredicate<T extends Comparable<T>> implements Predicate<T> {
+public class GreaterPredicate<T extends Comparable<T>> implements Predicate<T> {
     private final Provider<T> operandStatement;
     private final T arg;
 
-    public GraterPredicate(PredicateOperands<T> operands) {
+    public GreaterPredicate(PredicateOperands<T> operands) {
         this.operandStatement = operands.operand();
         this.arg = operands.args().get(0);
     }
