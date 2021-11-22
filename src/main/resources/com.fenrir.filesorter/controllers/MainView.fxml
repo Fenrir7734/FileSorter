@@ -1,67 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.fenrir.filesorter.controllers.MainView"
+            prefHeight="400.0" prefWidth="600.0" >
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
-   <children>
-      <HBox alignment="CENTER" layoutY="-1.0" prefHeight="30.0" prefWidth="900.0" spacing="20.0">
-         <children>
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Add Path" />
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Remove Path" />
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Sort" />
-         </children>
-      </HBox>
-      <ListView layoutY="29.0" prefHeight="300.0" prefWidth="900.0" />
-      <TabPane layoutX="300.0" layoutY="329.0" prefHeight="240.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Rename">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="172.0" prefWidth="600.0">
-                     <children>
-                        <ListView layoutY="-1.0" prefHeight="209.0" prefWidth="600.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Sort">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView prefHeight="209.0" prefWidth="600.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-            <Tab text="Filter">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView prefHeight="209.0" prefWidth="600.0" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-      <HBox alignment="CENTER" layoutY="572.0" prefHeight="30.0" prefWidth="300.0" spacing="20.0">
-         <children>
-            <Button mnemonicParsing="false" prefWidth="120.0" text="New Group" />
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Remove Group" />
-         </children>
-      </HBox>
-      <ListView layoutY="329.0" prefHeight="240.0" prefWidth="300.0" />
-      <HBox alignment="CENTER" layoutX="300.0" layoutY="572.0" prefHeight="30.0" prefWidth="600.0" spacing="20.0">
-         <children>
-            <Button mnemonicParsing="false" prefWidth="120.0" text="New Rule" />
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Edit Rule" />
-            <Button mnemonicParsing="false" prefWidth="120.0" text="Remove Rule" />
-         </children>
-      </HBox>
-   </children>
 </AnchorPane>
