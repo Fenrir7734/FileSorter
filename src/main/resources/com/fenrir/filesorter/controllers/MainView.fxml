@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="../../../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
   <tabs>
     <Tab text="Sort">
           <content>
