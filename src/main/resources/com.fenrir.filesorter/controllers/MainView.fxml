@@ -3,11 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +17,52 @@
   <tabs>
     <Tab text="Sort">
           <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <top>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <TitledPane collapsible="false" prefHeight="75.0" prefWidth="200.0" text="Target" VBox.vgrow="ALWAYS">
+                           <content>
+                              <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0" spacing="20.0">
+                                 <children>
+                                    <TextField HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" text="Choose" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                           </content>
+                        </TitledPane>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </top>
+               <bottom>
+                  <VBox alignment="CENTER" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </BorderPane.margin>
+                     <children>
+                        <TextArea prefHeight="200.0" prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </TextArea>
+                        <ProgressBar prefWidth="860.0" progress="0.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </ProgressBar>
+                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Sort" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" />
+                     </padding>
+                  </VBox>
+               </bottom></BorderPane>
           </content>
     </Tab>
       <Tab text="Source">
