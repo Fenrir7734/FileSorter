@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.controllers;
 
-import com.fenrir.filesorter.model.rule.FilterRule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,11 +9,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MainController {
 
@@ -43,11 +40,9 @@ public class MainController {
 
         ruleGroupListView.setCellFactory(TextFieldListCell.forListView());
         ruleGroupListView.setItems(ruleGroupItems);
-        ruleGroupListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         filterListView.setCellFactory(TextFieldListCell.forListView());
         filterListView.setItems(filterItems);
-        ruleGroupListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     @FXML
@@ -105,18 +100,18 @@ public class MainController {
 
     @FXML
     public void removeRuleGroup() {
-        ObservableList<String> toRemove = ruleGroupListView.getSelectionModel().getSelectedItems();
-        ruleGroupItems.removeAll(toRemove);
+        String toRemove = ruleGroupListView.getSelectionModel().getSelectedItem();
+        ruleGroupItems.remove(toRemove);
     }
 
     @FXML
     public void moveRuleGroupUp() {
-
+        moveSelectedItem(ruleGroupListView, ruleGroupItems, MoveDirection.UP);
     }
 
     @FXML
     public void moveRuleGroupDown() {
-
+        moveSelectedItem(ruleGroupListView, ruleGroupItems, MoveDirection.DOWN);
     }
 
     @FXML
@@ -131,7 +126,7 @@ public class MainController {
 
     @FXML
     public void addFilterRule() {
-        filterItems.add("");
+        //TODO: Filter rule editor window
     }
 
     @FXML
@@ -147,11 +142,38 @@ public class MainController {
 
     @FXML
     public void moveFilterRuleUp() {
-
+        moveSelectedItem(filterListView, filterItems, MoveDirection.UP);
     }
 
     @FXML
     public void moveFilterRuleDown() {
+        moveSelectedItem(filterListView, filterItems, MoveDirection.DOWN);
+    }
 
+    private void moveSelectedItem(ListView<String> listView, ObservableList<String> itemList, MoveDirection direction) {
+        String toMove = listView.getSelectionModel().getSelectedItem();
+        int indexOfItemToMove = itemList.indexOf(toMove);
+        int indexOfItemAfterMoving = direction.move(indexOfItemToMove, itemList.size() - 1);
+
+        if (indexOfItemToMove != indexOfItemAfterMoving) {
+            Collections.swap(itemList, indexOfItemToMove, indexOfItemAfterMoving);
+            listView.getSelectionModel().clearSelection(indexOfItemToMove);
+            listView.getSelectionModel().select(indexOfItemAfterMoving);
+        }
+    }
+
+    enum MoveDirection {
+        UP {
+            public int move(int index, int upperBound) {
+                return index > 0 ? index - 1 : index;
+            }
+        },
+        DOWN {
+            public int move(int index, int upperBound) {
+                return index < upperBound ? index + 1 : index;
+            }
+        };
+
+        public abstract int move(int index, int upperBound);
     }
 }
