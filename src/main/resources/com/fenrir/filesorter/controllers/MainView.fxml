@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -87,12 +88,12 @@
           </content>
       </Tab>
       <Tab text="Rule">
-          <content>
-              <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <left>
-                  <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <content>
+          <SplitPane dividerPositions="0.25" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <items>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                        <VBox alignment="TOP_CENTER" maxWidth="56.0" minWidth="56.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#addRuleGroup" prefHeight="30.0" prefWidth="30.0" text="+" />
                               <Button mnemonicParsing="false" onAction="#removeRuleGroup" prefHeight="30.0" prefWidth="30.0" text="-" />
@@ -100,17 +101,15 @@
                               <Button mnemonicParsing="false" onAction="#moveRuleGroupDown" prefHeight="30.0" prefWidth="30.0" text="D" />
                            </children>
                         </VBox>
-                        <ListView fx:id="ruleGroupListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="ruleGroupListView" editable="true" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                      </children>
-                     <BorderPane.margin>
-                        <Insets bottom="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
                   </HBox>
-               </left>
-               <center>
-                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                  <VBox prefHeight="569.0" prefWidth="476.0">
                      <children>
-                        <TitledPane alignment="CENTER" collapsible="false" prefHeight="543.0" prefWidth="660.0" text="Rule 1">
+                        <TitledPane alignment="CENTER" collapsible="false" minWidth="400.0" prefHeight="543.0" prefWidth="660.0" text="Rule 1">
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -151,7 +150,7 @@
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
                                                 <ListView fx:id="filterListView" editable="true" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                                <VBox alignment="CENTER" prefWidth="50.0" spacing="17.0">
+                                                <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" spacing="17.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" onAction="#addFilterRule" prefHeight="30.0" prefWidth="30.0" text="+" />
                                                       <Button mnemonicParsing="false" onAction="#editFilterRule" prefHeight="30.0" prefWidth="30.0" text="E" />
@@ -161,11 +160,13 @@
                                                    </children>
                                                    <HBox.margin>
                                                       <Insets right="10.0" />
-                                                   </HBox.margin></VBox>
+                                                   </HBox.margin>
+                                                </VBox>
                                              </children>
                                              <padding>
                                                 <Insets bottom="20.0" left="20.0" top="20.0" />
-                                             </padding></HBox>
+                                             </padding>
+                                          </HBox>
                                        </content>
                                     </TitledPane>
                                  </children>
@@ -173,12 +174,15 @@
                            </content>
                         </TitledPane>
                      </children>
-                     <BorderPane.margin>
-                        <Insets bottom="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
                   </VBox>
-               </center></BorderPane>
-          </content>
+               </items>
+               <padding>
+                  <Insets bottom="20.0" right="20.0" top="20.0" />
+               </padding></SplitPane>
+        </content>
       </Tab>
   </tabs>
 </TabPane>
