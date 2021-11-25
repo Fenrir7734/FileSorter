@@ -15,6 +15,7 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter to javafx.fxml;
     exports com.fenrir.filesorter;
     exports com.fenrir.filesorter.controllers;
+    opens com.fenrir.filesorter.controllers to javafx.fxml;
     exports com.fenrir.filesorter.model;
     opens com.fenrir.filesorter.model to javafx.fxml;
     exports com.fenrir.filesorter.model.parsers;
