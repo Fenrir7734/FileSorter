@@ -123,7 +123,7 @@ public class MainController {
     public void editRenameRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("RenameView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("RenameEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
@@ -139,7 +139,7 @@ public class MainController {
     public void editSortRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("SortView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("SortEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
@@ -155,7 +155,7 @@ public class MainController {
     public void addFilterRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("FilterView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("FilterEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
