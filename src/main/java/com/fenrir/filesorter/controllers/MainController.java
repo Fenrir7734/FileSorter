@@ -3,14 +3,20 @@ package com.fenrir.filesorter.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -41,7 +47,6 @@ public class MainController {
         ruleGroupListView.setCellFactory(TextFieldListCell.forListView());
         ruleGroupListView.setItems(ruleGroupItems);
 
-        filterListView.setCellFactory(TextFieldListCell.forListView());
         filterListView.setItems(filterItems);
     }
 
@@ -116,17 +121,50 @@ public class MainController {
 
     @FXML
     public void editRenameRule() {
-        //TODO: Rename rule editor window
+        try {
+            Parent parent = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getResource("RenameView.fxml"))
+            );
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
     public void editSortRule() {
-        //TODO: Sort rule editor window
+        try {
+            Parent parent = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getResource("SortView.fxml"))
+            );
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
     public void addFilterRule() {
-        //TODO: Filter rule editor window
+        try {
+            Parent parent = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getResource("FilterView.fxml"))
+            );
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
