@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="../../../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="../../../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
   <tabs>
     <Tab text="Sort">
           <content>
@@ -25,8 +25,8 @@
                            <content>
                               <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <TextField HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false" text="Choose" />
+                                    <TextField fx:id="targetPathTextField" editable="false" HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" onAction="#choiceTargetDirectory" text="Choose" />
                                  </children>
                                  <padding>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -46,17 +46,17 @@
                         <Insets left="20.0" right="20.0" top="20.0" />
                      </BorderPane.margin>
                      <children>
-                        <TextArea prefHeight="200.0" prefWidth="200.0">
+                        <TextArea fx:id="logTextArea" editable="false" prefHeight="200.0" prefWidth="200.0">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </TextArea>
-                        <ProgressBar prefWidth="860.0" progress="0.0" VBox.vgrow="ALWAYS">
+                        <ProgressBar fx:id="progressBar" prefWidth="860.0" progress="0.0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </ProgressBar>
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Sort" />
+                        <Button mnemonicParsing="false" onAction="#sort" prefHeight="30.0" prefWidth="100.0" text="Sort" />
                      </children>
                      <padding>
                         <Insets bottom="20.0" />
@@ -69,7 +69,7 @@
           <content>
               <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <center>
-                  <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                  <ListView fx:id="sourcesListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets left="20.0" right="20.0" top="20.0" />
                      </BorderPane.margin>
@@ -78,9 +78,9 @@
                <bottom>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Add FIle" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Add Folder" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Remove" />
+                        <Button mnemonicParsing="false" onAction="#addFileToSource" prefHeight="30.0" prefWidth="100.0" text="Add FIle" />
+                        <Button mnemonicParsing="false" onAction="#addDirectoryToSource" prefHeight="30.0" prefWidth="100.0" text="Add Folder" />
+                        <Button mnemonicParsing="false" onAction="#removeFromSource" prefHeight="30.0" prefWidth="100.0" text="Remove" />
                      </children>
                   </HBox>
                </bottom></BorderPane>
@@ -94,13 +94,13 @@
                      <children>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="+" />
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="-" />
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="U" />
-                              <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="D" />
+                              <Button mnemonicParsing="false" onAction="#addRuleGroup" prefHeight="30.0" prefWidth="30.0" text="+" />
+                              <Button mnemonicParsing="false" onAction="#removeRuleGroup" prefHeight="30.0" prefWidth="30.0" text="-" />
+                              <Button mnemonicParsing="false" onAction="#moveRuleGroupUp" prefHeight="30.0" prefWidth="30.0" text="U" />
+                              <Button mnemonicParsing="false" onAction="#moveRuleGroupDown" prefHeight="30.0" prefWidth="30.0" text="D" />
                            </children>
                         </VBox>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="ruleGroupListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="20.0" right="20.0" top="20.0" />
@@ -118,8 +118,8 @@
                                        <content>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                              <children>
-                                                <TextField maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                                <Button mnemonicParsing="false" text="Edit" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="renameRuleTextField" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#editRenameRule" text="Edit" HBox.hgrow="ALWAYS" />
                                              </children>
                                              <padding>
                                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -134,8 +134,8 @@
                                        <content>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                              <children>
-                                                <TextField maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                                <Button mnemonicParsing="false" text="Edit" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="sortRuleTextField" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <Button mnemonicParsing="false" onAction="#editSortRule" text="Edit" HBox.hgrow="ALWAYS" />
                                              </children>
                                              <padding>
                                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -150,14 +150,14 @@
                                        <content>
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <ListView maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <ListView fx:id="filterListView" editable="true" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                                 <VBox alignment="CENTER" prefWidth="50.0" spacing="17.0">
                                                    <children>
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="+" />
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="E" />
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="-" />
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="U" />
-                                                      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="D" />
+                                                      <Button mnemonicParsing="false" onAction="#addFilterRule" prefHeight="30.0" prefWidth="30.0" text="+" />
+                                                      <Button mnemonicParsing="false" onAction="#editFilterRule" prefHeight="30.0" prefWidth="30.0" text="E" />
+                                                      <Button mnemonicParsing="false" onAction="#removeFilterRule" prefHeight="30.0" prefWidth="30.0" text="-" />
+                                                      <Button mnemonicParsing="false" onAction="#moveFilterRuleUp" prefHeight="30.0" prefWidth="30.0" text="U" />
+                                                      <Button mnemonicParsing="false" onAction="#moveFilterRuleDown" prefHeight="30.0" prefWidth="30.0" text="D" />
                                                    </children>
                                                    <HBox.margin>
                                                       <Insets right="10.0" />
