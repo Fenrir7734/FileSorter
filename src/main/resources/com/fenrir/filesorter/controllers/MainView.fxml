@@ -117,7 +117,7 @@
                                        <content>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                              <children>
-                                                <TextField fx:id="renameRuleTextField" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="renameRuleTextField" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                                 <Button mnemonicParsing="false" onAction="#editRenameRule" text="Edit" HBox.hgrow="ALWAYS" />
                                              </children>
                                              <padding>
@@ -133,7 +133,7 @@
                                        <content>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                              <children>
-                                                <TextField fx:id="sortRuleTextField" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="sortRuleTextField" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                                 <Button mnemonicParsing="false" onAction="#editSortRule" text="Edit" HBox.hgrow="ALWAYS" />
                                              </children>
                                              <padding>
@@ -149,7 +149,7 @@
                                        <content>
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <ListView fx:id="filterListView" editable="true" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                                <ListView fx:id="filterListView" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                                 <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" spacing="17.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" onAction="#addFilterRule" prefHeight="30.0" prefWidth="30.0" text="+" />
