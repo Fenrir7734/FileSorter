@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainController {
-
     @FXML private TabPane tabPane;
 
     @FXML private TextField targetPathTextField;
@@ -123,7 +122,7 @@ public class MainController {
     public void editRenameRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("RenameEditorView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("RenameRuleEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
@@ -139,7 +138,7 @@ public class MainController {
     public void editSortRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("SortEditorView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("SortRuleEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
@@ -155,7 +154,7 @@ public class MainController {
     public void addFilterRule() {
         try {
             Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("FilterEditorView.fxml"))
+                    Objects.requireNonNull(getClass().getResource("FilterRuleEditorView.fxml"))
             );
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
