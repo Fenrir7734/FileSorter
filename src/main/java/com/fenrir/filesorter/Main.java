@@ -41,9 +41,11 @@ public class Main extends Application {
         StringRule sortRule = new StringRule(sortExpression);
         StringRule renameRule = new StringRule(renameExpression);
         FilterRule filterRule = new FilterRule(filterExpression);
-        List<FilterRule> filterRules = List.of(filterRule);
 
-        RuleGroup group = new RuleGroup(renameRule, sortRule, filterRules);
+        RuleGroup group = new RuleGroup();
+        group.setRenameRule(renameRule);
+        group.setSortRule(sortRule);
+        group.addFilterRule(filterRule);
         List<RuleGroup> ruleGroups = List.of(group);
         Processor processor = new Processor(Path.of(source), Path.of(target), ruleGroups);
         processor.process();
