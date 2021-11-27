@@ -32,6 +32,8 @@ public class FilterRuleEditorController implements Controller {
     }
 
     public void receiveRule(FilterRule filterRule) {
-        ruleTextField.setText(filterRule.getExpression());
+        if (filterRule != null) {
+            ruleTextField.setText(filterRule.getExpression());
+        }
     }
 }

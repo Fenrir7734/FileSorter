@@ -1,5 +1,9 @@
 package com.fenrir.filesorter.controllers;
 
+import com.fenrir.filesorter.model.Configuration;
+import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.model.rule.RuleGroup;
+import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,22 +15,22 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class MainController {
+public class MainController implements Controller {
     @FXML private TabPane tabPane;
 
     @FXML private TextField targetPathTextField;
 
-    @FXML private ListView<String> sourcesListView;
-    @FXML private ListView<String> ruleGroupListView;
-    @FXML private ListView<String> filterListView;
+    @FXML private ListView<Path> sourcesListView;
+    @FXML private ListView<Pair<String, RuleGroup>> ruleGroupListView;
+    @FXML private ListView<FilterRule> filterListView;
 
     @FXML private TextField renameRuleTextField;
     @FXML private TextField sortRuleTextField;
@@ -34,19 +38,80 @@ public class MainController {
     @FXML private TextArea logTextArea;
     @FXML private ProgressBar progressBar;
 
-    private final ObservableList<String> sourceItems = FXCollections.observableArrayList();
-    private final ObservableList<String> ruleGroupItems = FXCollections.observableArrayList();
-    private final ObservableList<String> filterItems = FXCollections.observableArrayList();;
+    private final Configuration configuration = new Configuration();
 
     @FXML
     public void initialize() {
-        sourcesListView.setItems(sourceItems);
+        ControllerMediator.getInstance().registerController(this);
+
+        sourcesListView.setItems(configuration.getSourcePaths());
         sourcesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        ruleGroupListView.setCellFactory(TextFieldListCell.forListView());
-        ruleGroupListView.setItems(ruleGroupItems);
+        //ruleGroupListView.setCellFactory(TextFieldListCell.forListView());
+        ruleGroupListView.setItems(configuration.getNamedRuleGroups());
+        ruleGroupListView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observableValue, oldValue, newValue) -> changeRuleGroup(newValue));
+        ruleGroupListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Pair<String, RuleGroup> rule, boolean empty) {
+                super.updateItem(rule, empty);
 
-        filterListView.setItems(filterItems);
+                if (empty || rule == null) {
+                    setText(null);
+                } else {
+                    setText(rule.getKey());
+                }
+            }
+        });
+
+        filterListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(FilterRule rule, boolean empty) {
+                super.updateItem(rule, empty);
+
+                if (empty || rule == null) {
+                    setText(null);
+                } else {
+                    setText(rule.toString());
+                }
+            }
+        });
+    }
+
+    private void changeRuleGroup(Pair<String, RuleGroup> namedRuleGroup) {
+        if (namedRuleGroup != null) {
+            RuleGroup group = namedRuleGroup.getValue();
+            updateRenameRuleTextFieldContent(group.getRenameRule());
+            updateSortRuleTextFieldContent(group.getSortRule());
+            filterListView.setItems(group.getFilterRules());
+        } else {
+            disableButtonsWhenRuleGroupNotSelected();
+        }
+    }
+
+    private void updateRenameRuleTextFieldContent(StringRule rule) {
+        if (rule != null) {
+            renameRuleTextField.setText(rule.getExpression());
+        } else {
+            renameRuleTextField.setText(null);
+        }
+    }
+
+    private void updateSortRuleTextFieldContent(StringRule rule) {
+        if (rule != null) {
+            sortRuleTextField.setText(rule.getExpression());
+        } else {
+            sortRuleTextField.setText(null);
+        }
+    }
+
+    private void disableButtonsWhenRuleGroupNotSelected() {
+
+    }
+
+    private void disableButtonsWhenFilterRuleNotSelected() {
+
     }
 
     @FXML
@@ -61,6 +126,7 @@ public class MainController {
         File selectedDirectory = directoryChooser.showDialog(tabPane.getScene().getWindow());
 
         if (selectedDirectory != null) {
+            configuration.setTargetPath(selectedDirectory.toPath());
             targetPathTextField.setText(selectedDirectory.getAbsolutePath());
         }
     }
@@ -72,10 +138,7 @@ public class MainController {
         List<File> selectedFile = fileChooser.showOpenMultipleDialog(tabPane.getScene().getWindow());
 
         if (selectedFile != null) {
-            List<String> selectedFilePaths = selectedFile.stream()
-                    .map(File::getAbsolutePath)
-                    .collect(Collectors.toList());
-            sourceItems.addAll(selectedFilePaths);
+            addPathToSource(selectedFile.toArray(new File[0]));
         }
     }
 
@@ -86,49 +149,67 @@ public class MainController {
         File selectedDirectory = directoryChooser.showDialog(tabPane.getScene().getWindow());
 
         if (selectedDirectory != null) {
-            sourceItems.add(selectedDirectory.getAbsolutePath());
+            addPathToSource(selectedDirectory);
         }
+    }
+
+    private void addPathToSource(File... files) {
+        List<Path> toAdd = Arrays.stream(files)
+                .map(File::toPath)
+                .collect(Collectors.toList());
+        configuration.addSourcePaths(toAdd);
     }
 
     @FXML
     public void removeFromSource() {
-        ObservableList<String> toRemove = sourcesListView.getSelectionModel().getSelectedItems();
-        sourceItems.removeAll(toRemove);
+        List<Path> toRemove = sourcesListView.getSelectionModel()
+                .getSelectedItems();
+        configuration.removeSourcePaths(toRemove);
     }
 
     @FXML
     public void addRuleGroup() {
-        String ruleGroupName = "Rule Group " + (ruleGroupItems.size() + 1);
-        ruleGroupItems.add(ruleGroupName);
+        String name = generateUniqName();
+        RuleGroup group = new RuleGroup();
+        configuration.addNamedRuleGroup(name, group);
+    }
+
+    private String generateUniqName() {
+        List<String> ruleGroupNames = configuration.getRuleGroupsNames();
+        String ruleGroupName;
+
+        int i = 1;
+        do {
+            ruleGroupName = "Rule Group " + (ruleGroupNames.size() + i++);
+        } while (ruleGroupNames.contains(ruleGroupName));
+
+        return ruleGroupName;
     }
 
     @FXML
     public void removeRuleGroup() {
-        String toRemove = ruleGroupListView.getSelectionModel().getSelectedItem();
-        ruleGroupItems.remove(toRemove);
+        Pair<String, RuleGroup> namedRuleGroup = ruleGroupListView.getSelectionModel()
+                .getSelectedItem();
+        configuration.removeRuleGroup(namedRuleGroup);
     }
 
     @FXML
     public void moveRuleGroupUp() {
-        moveSelectedItem(ruleGroupListView, ruleGroupItems, MoveDirection.UP);
+        moveSelectedItem(ruleGroupListView, configuration.getNamedRuleGroups(), MoveDirection.UP);
     }
 
     @FXML
     public void moveRuleGroupDown() {
-        moveSelectedItem(ruleGroupListView, ruleGroupItems, MoveDirection.DOWN);
+        moveSelectedItem(ruleGroupListView, configuration.getNamedRuleGroups(), MoveDirection.DOWN);
     }
 
     @FXML
     public void editRenameRule() {
         try {
-            Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("RenameRuleEditorView.fxml"))
-            );
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
+            loadEditorView("RenameRuleEditorView.fxml");
+            RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+            ControllerMediator.getInstance()
+                    .sendRenameRuleToEdit(selectedRuleGroup.getRenameRule());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -137,14 +218,10 @@ public class MainController {
     @FXML
     public void editSortRule() {
         try {
-            Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("SortRuleEditorView.fxml"))
-            );
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
+            loadEditorView("SortRuleEditorView.fxml");
+            RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+            ControllerMediator.getInstance()
+                    .sendSortRuleToEdit(selectedRuleGroup.getSortRule());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -153,14 +230,7 @@ public class MainController {
     @FXML
     public void addFilterRule() {
         try {
-            Parent parent = FXMLLoader.load(
-                    Objects.requireNonNull(getClass().getResource("FilterRuleEditorView.fxml"))
-            );
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.show();
+            loadEditorView("FilterRuleEditorView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -168,27 +238,85 @@ public class MainController {
 
     @FXML
     public void editFilterRule() {
-        //TODO: Filter rule editor window
+        try {
+            FilterRule selectedFilterRule = filterListView.getSelectionModel().getSelectedItem();
+            if (selectedFilterRule != null) {
+                loadEditorView("FilterRuleEditorView.fxml");
+                ControllerMediator.getInstance().sendFilterRuleToEdit(selectedFilterRule);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void loadEditorView(String name) throws IOException {
+        Parent parent = FXMLLoader.load(
+                Objects.requireNonNull(getClass().getResource(name))
+        );
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
     public void removeFilterRule() {
-        List<String> toRemove = filterListView.getSelectionModel().getSelectedItems();
-        filterItems.removeAll(toRemove);
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        FilterRule selectedFilterRule = getSelectedFilterRule();
+        selectedRuleGroup.removeFilterRule(selectedFilterRule);
     }
 
     @FXML
     public void moveFilterRuleUp() {
-        moveSelectedItem(filterListView, filterItems, MoveDirection.UP);
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        moveSelectedItem(filterListView, selectedRuleGroup.getFilterRules(), MoveDirection.UP);
     }
 
     @FXML
     public void moveFilterRuleDown() {
-        moveSelectedItem(filterListView, filterItems, MoveDirection.DOWN);
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        moveSelectedItem(filterListView, selectedRuleGroup.getFilterRules(), MoveDirection.DOWN);
     }
 
-    private void moveSelectedItem(ListView<String> listView, ObservableList<String> itemList, MoveDirection direction) {
-        String toMove = listView.getSelectionModel().getSelectedItem();
+    public void receiveRenameRule(StringRule rule) {
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        selectedRuleGroup.setRenameRule(rule);
+        renameRuleTextField.setText(rule.getExpression());
+    }
+
+    public void receiveSortRule(StringRule rule) {
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        selectedRuleGroup.setSortRule(rule);
+        sortRuleTextField.setText(rule.getExpression());
+    }
+
+    public void receiveFilterRule(FilterRule rule) {
+        RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+        FilterRule selectedFilterRule = getSelectedFilterRule();
+        List<FilterRule> filterRules = selectedRuleGroup.getFilterRules();
+        int indexOfOldFilterRule = filterRules.indexOf(selectedFilterRule);
+
+        if (indexOfOldFilterRule == -1) {
+            filterRules.add(rule);
+        } else {
+            filterRules.set(indexOfOldFilterRule, rule);
+        }
+    }
+
+    private RuleGroup getSelectedRuleGroup() {
+        return ruleGroupListView.getSelectionModel()
+                .getSelectedItem()
+                .getValue();
+    }
+
+    private FilterRule getSelectedFilterRule() {
+        return filterListView.getSelectionModel()
+                .getSelectedItem();
+    }
+
+    private <T> void moveSelectedItem(ListView<T> listView, ObservableList<T> itemList, MoveDirection direction) {
+        T toMove = listView.getSelectionModel().getSelectedItem();
         int indexOfItemToMove = itemList.indexOf(toMove);
         int indexOfItemAfterMoving = direction.move(indexOfItemToMove, itemList.size() - 1);
 

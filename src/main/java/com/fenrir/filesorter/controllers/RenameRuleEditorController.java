@@ -32,6 +32,8 @@ public class RenameRuleEditorController implements Controller {
     }
 
     public void receiveRule(StringRule renameRule) {
-        ruleTextField.setText(renameRule.getExpression());
+        if (renameRule != null) {
+            ruleTextField.setText(renameRule.getExpression());
+        }
     }
 }

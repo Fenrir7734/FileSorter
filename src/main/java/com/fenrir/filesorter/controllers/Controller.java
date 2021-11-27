@@ -1,2 +1,4 @@
-package com.fenrir.filesorter.controllers;public class Controller {
+package com.fenrir.filesorter.controllers;
+
+public interface Controller {
 }

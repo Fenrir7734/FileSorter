@@ -32,6 +32,8 @@ public class SortRuleEditorController implements Controller {
     }
 
     public void receiveRule(StringRule sortRule) {
-        ruleTextField.setText(sortRule.getExpression());
+        if (sortRule != null) {
+            ruleTextField.setText(sortRule.getExpression());
+        }
     }
 }
