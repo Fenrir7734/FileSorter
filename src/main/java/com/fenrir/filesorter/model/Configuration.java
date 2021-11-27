@@ -1,6 +1,8 @@
 package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.rule.RuleGroup;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.nio.file.Path;
@@ -9,46 +11,62 @@ import java.util.stream.Collectors;
 
 public class Configuration {
     private Path targetPath;
-    private final Set<Path> sourcePaths = new HashSet<>();
-    private final Map<String, RuleGroup> namedRuleGroup = new HashMap<>();
+    private final ObservableList<Path> sourcePaths = FXCollections.observableArrayList();
+    private final ObservableList<Pair<String, RuleGroup>> namedRuleGroup = FXCollections.observableArrayList();
 
     public void setTargetPath(Path targetPath) {
         this.targetPath = targetPath;
     }
 
-    public List<Path> addSourcePaths(List<Path> paths) {
-        return paths.stream()
-                .filter(sourcePaths::add)
-                .collect(Collectors.toList());
+    public void addSourcePaths(List<Path> paths) {
+        paths.stream()
+                .filter(p -> !sourcePaths.contains(p))
+                .forEach(sourcePaths::add);
     }
 
-    public List<Path> removeSourcePaths(List<Path> paths) {
-        return paths.stream()
-                .filter(sourcePaths::remove)
-                .collect(Collectors.toList());
+    public void removeSourcePaths(List<Path> paths) {
+        sourcePaths.removeAll(paths);
     }
 
     public void addNamedRuleGroup(String name, RuleGroup group) {
-        namedRuleGroup.put(name, group);
+        if (!getRuleGroupsNames().contains(name)) {
+            namedRuleGroup.add(new Pair<>(name, group));
+        }
     }
 
-    public void removeRuleGroup(String name) {
-
+    public void removeRuleGroup(Pair<String, RuleGroup> value) {
+        namedRuleGroup.remove(value);
     }
 
     public Path getTargetPath() {
         return targetPath;
     }
 
-    public Set<Path> getSourcePaths() {
+    public ObservableList<Path> getSourcePaths() {
         return sourcePaths;
     }
 
-    public Map<String, RuleGroup> getNamedRuleGroups() {
+    public ObservableList<Pair<String, RuleGroup>> getNamedRuleGroups() {
         return namedRuleGroup;
     }
 
     public List<RuleGroup> getRuleGroups() {
-        return new ArrayList<>(namedRuleGroup.values());
+        return namedRuleGroup.stream()
+                .map(Pair::getValue)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getRuleGroupsNames() {
+        return namedRuleGroup.stream()
+                .map(Pair::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public RuleGroup getRuleGroup(String name) {
+        return namedRuleGroup.stream()
+                .filter(v -> v.getKey().equals(name))
+                .map(Pair::getValue)
+                .findFirst()
+                .get();
     }
 }

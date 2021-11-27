@@ -1,12 +1,14 @@
 package com.fenrir.filesorter.model.rule;
 
-import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.List;
 
 public class RuleGroup {
     private StringRule renameRule;
     private StringRule sortRule;
-    private final List<FilterRule> filterRules = new ArrayList<>();
+    private final ObservableList<FilterRule> filterRules = FXCollections.observableArrayList();
 
     public void setRenameRule(StringRule rule) {
         renameRule = rule;
@@ -32,7 +34,7 @@ public class RuleGroup {
         return sortRule;
     }
 
-    public List<FilterRule> getFilterRules() {
+    public ObservableList<FilterRule> getFilterRules() {
         return filterRules;
     }
 }
