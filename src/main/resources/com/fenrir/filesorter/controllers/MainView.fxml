@@ -14,17 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane fx:id="tabPane"
-         maxHeight="-Infinity"
-         maxWidth="-Infinity"
-         minHeight="-Infinity"
-         minWidth="-Infinity"
-         prefHeight="600.0"
-         prefWidth="900.0"
-         tabClosingPolicy="UNAVAILABLE"
-         xmlns="http://javafx.com/javafx/16"
-         xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="com.fenrir.filesorter.controllers.MainController">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
   <tabs>
     <Tab text="Sort">
           <content>
@@ -106,9 +96,9 @@
                         <VBox alignment="TOP_CENTER" maxWidth="56.0" minWidth="56.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#addRuleGroup" prefHeight="30.0" prefWidth="30.0" text="+" />
-                              <Button mnemonicParsing="false" onAction="#removeRuleGroup" prefHeight="30.0" prefWidth="30.0" text="-" />
-                              <Button mnemonicParsing="false" onAction="#moveRuleGroupUp" prefHeight="30.0" prefWidth="30.0" text="U" />
-                              <Button mnemonicParsing="false" onAction="#moveRuleGroupDown" prefHeight="30.0" prefWidth="30.0" text="D" />
+                              <Button fx:id="removeRuleGroupButton" mnemonicParsing="false" onAction="#removeRuleGroup" prefHeight="30.0" prefWidth="30.0" text="-" />
+                              <Button fx:id="moveUpRuleGroupButton" mnemonicParsing="false" onAction="#moveRuleGroupUp" prefHeight="30.0" prefWidth="30.0" text="U" />
+                              <Button fx:id="moveDownRuleGroupButton" mnemonicParsing="false" onAction="#moveRuleGroupDown" prefHeight="30.0" prefWidth="30.0" text="D" />
                            </children>
                         </VBox>
                         <ListView fx:id="ruleGroupListView" editable="true" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -119,7 +109,7 @@
                   </HBox>
                   <VBox prefHeight="569.0" prefWidth="476.0">
                      <children>
-                        <TitledPane alignment="CENTER" collapsible="false" minWidth="400.0" prefHeight="543.0" prefWidth="660.0" text="Rule 1">
+                        <TitledPane fx:id="ruleEditorPane" alignment="CENTER" collapsible="false" minWidth="400.0" prefHeight="543.0" prefWidth="660.0" text="Rule 1">
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -163,10 +153,10 @@
                                                 <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" spacing="17.0">
                                                    <children>
                                                       <Button mnemonicParsing="false" onAction="#addFilterRule" prefHeight="30.0" prefWidth="30.0" text="+" />
-                                                      <Button mnemonicParsing="false" onAction="#editFilterRule" prefHeight="30.0" prefWidth="30.0" text="E" />
-                                                      <Button mnemonicParsing="false" onAction="#removeFilterRule" prefHeight="30.0" prefWidth="30.0" text="-" />
-                                                      <Button mnemonicParsing="false" onAction="#moveFilterRuleUp" prefHeight="30.0" prefWidth="30.0" text="U" />
-                                                      <Button mnemonicParsing="false" onAction="#moveFilterRuleDown" prefHeight="30.0" prefWidth="30.0" text="D" />
+                                                      <Button fx:id="editFilterRuleButton" mnemonicParsing="false" onAction="#editFilterRule" prefHeight="30.0" prefWidth="30.0" text="E" />
+                                                      <Button fx:id="removeFilterRuleButton" mnemonicParsing="false" onAction="#removeFilterRule" prefHeight="30.0" prefWidth="30.0" text="-" />
+                                                      <Button fx:id="moveUpFilterRuleButton" mnemonicParsing="false" onAction="#moveFilterRuleUp" prefHeight="30.0" prefWidth="30.0" text="U" />
+                                                      <Button fx:id="moveDownFilterRuleButton" mnemonicParsing="false" onAction="#moveFilterRuleDown" prefHeight="30.0" prefWidth="30.0" text="D" />
                                                    </children>
                                                    <HBox.margin>
                                                       <Insets right="10.0" />

@@ -4,14 +4,12 @@ import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.StringRule;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class MainController implements Controller {
     @FXML private TabPane tabPane;
+    @FXML private TitledPane ruleEditorPane;
 
     @FXML private TextField targetPathTextField;
 
@@ -35,6 +34,14 @@ public class MainController implements Controller {
     @FXML private TextField renameRuleTextField;
     @FXML private TextField sortRuleTextField;
 
+    @FXML private Button removeRuleGroupButton;
+    @FXML private Button moveUpRuleGroupButton;
+    @FXML private Button moveDownRuleGroupButton;
+    @FXML private Button editFilterRuleButton;
+    @FXML private Button removeFilterRuleButton;
+    @FXML private Button moveUpFilterRuleButton;
+    @FXML private Button moveDownFilterRuleButton;
+
     @FXML private TextArea logTextArea;
     @FXML private ProgressBar progressBar;
 
@@ -44,14 +51,16 @@ public class MainController implements Controller {
     public void initialize() {
         ControllerMediator.getInstance().registerController(this);
 
+        hideRuleEditorPane();
+        disableFilterRuleButtons();
+
         sourcesListView.setItems(configuration.getSourcePaths());
         sourcesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        //ruleGroupListView.setCellFactory(TextFieldListCell.forListView());
         ruleGroupListView.setItems(configuration.getNamedRuleGroups());
         ruleGroupListView.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((observableValue, oldValue, newValue) -> changeRuleGroup(newValue));
+                .addListener((observableValue, oldValue, newValue) -> onSelectedRuleGroup(oldValue, newValue));
         ruleGroupListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Pair<String, RuleGroup> rule, boolean empty) {
@@ -65,6 +74,9 @@ public class MainController implements Controller {
             }
         });
 
+        filterListView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observableValue, oldValue, newValue) -> onSelectedFilterRule(oldValue, newValue));
         filterListView.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(FilterRule rule, boolean empty) {
@@ -79,14 +91,19 @@ public class MainController implements Controller {
         });
     }
 
-    private void changeRuleGroup(Pair<String, RuleGroup> namedRuleGroup) {
-        if (namedRuleGroup != null) {
-            RuleGroup group = namedRuleGroup.getValue();
+    private void onSelectedRuleGroup(Pair<String, RuleGroup> oldValue, Pair<String, RuleGroup> newValue) {
+        if (oldValue == null && newValue != null) {
+            showRuleEditorPane();
+        }
+        if (oldValue != null && newValue == null) {
+            hideRuleEditorPane();
+        }
+        if (newValue != null) {
+            ruleEditorPane.setText(newValue.getKey());
+            RuleGroup group = newValue.getValue();
             updateRenameRuleTextFieldContent(group.getRenameRule());
             updateSortRuleTextFieldContent(group.getSortRule());
             filterListView.setItems(group.getFilterRules());
-        } else {
-            disableButtonsWhenRuleGroupNotSelected();
         }
     }
 
@@ -106,12 +123,41 @@ public class MainController implements Controller {
         }
     }
 
-    private void disableButtonsWhenRuleGroupNotSelected() {
-
+    private void showRuleEditorPane() {
+        ruleEditorPane.setVisible(true);
+        removeRuleGroupButton.setDisable(false);
+        moveUpRuleGroupButton.setDisable(false);
+        moveDownRuleGroupButton.setDisable(false);
     }
 
-    private void disableButtonsWhenFilterRuleNotSelected() {
+    private void hideRuleEditorPane() {
+        ruleEditorPane.setVisible(false);
+        removeRuleGroupButton.setDisable(true);
+        moveUpRuleGroupButton.setDisable(true);
+        moveDownRuleGroupButton.setDisable(true);
+    }
 
+    private void onSelectedFilterRule(FilterRule oldValue, FilterRule newValue) {
+        if (oldValue == null && newValue != null) {
+            enableFilterRuleButtons();
+        }
+        if (oldValue != null && newValue == null) {
+            disableFilterRuleButtons();
+        }
+    }
+
+    private void disableFilterRuleButtons() {
+        editFilterRuleButton.setDisable(true);
+        removeFilterRuleButton.setDisable(true);
+        moveUpFilterRuleButton.setDisable(true);
+        moveDownFilterRuleButton.setDisable(true);
+    }
+
+    private void enableFilterRuleButtons() {
+        editFilterRuleButton.setDisable(false);
+        removeFilterRuleButton.setDisable(false);
+        moveUpFilterRuleButton.setDisable(false);
+        moveDownFilterRuleButton.setDisable(false);
     }
 
     @FXML
