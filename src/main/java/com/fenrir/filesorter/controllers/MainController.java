@@ -1,6 +1,9 @@
 package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.Configuration;
+import com.fenrir.filesorter.model.Processor;
+import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.StringRule;
@@ -162,7 +165,17 @@ public class MainController implements Controller {
 
     @FXML
     public void sort() {
-
+        try {
+            Processor processor = new Processor(configuration);
+            //Sorter sorter = new Sorter(processor);
+            //sorter.sort();
+            processor.process();
+            System.out.println(processor.getFileStructure());
+        } catch (TokenFormatException e) {
+            System.out.println(e.getMessage() + " " + e.getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -172,7 +185,7 @@ public class MainController implements Controller {
         File selectedDirectory = directoryChooser.showDialog(tabPane.getScene().getWindow());
 
         if (selectedDirectory != null) {
-            configuration.setTargetPath(selectedDirectory.toPath());
+            configuration.setTargetRootDir(selectedDirectory.toPath());
             targetPathTextField.setText(selectedDirectory.getAbsolutePath());
         }
     }

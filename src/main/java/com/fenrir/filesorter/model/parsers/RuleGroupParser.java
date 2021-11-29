@@ -32,16 +32,22 @@ public class RuleGroupParser {
     }
 
     private void createRenameStatement(StringRule rule) throws TokenFormatException {
-        statementGroup.setRenameStatement(renameRuleParser.resolveRule(rule));
+        if (rule != null) {
+            statementGroup.setRenameStatement(renameRuleParser.resolveRule(rule));
+        }
     }
 
     private void createSortStatement(StringRule rule) throws TokenFormatException {
-        statementGroup.setSortStatement(sortRuleParser.resolveRule(rule));
+        if (rule != null) {
+            statementGroup.setSortStatement(sortRuleParser.resolveRule(rule));
+        }
     }
 
     private void createFilterStatement(List<FilterRule> rules) throws ExpressionFormatException {
-        for (FilterRule rule: rules) {
-            statementGroup.addFilterStatement(filterRuleParser.resolveRule(rule));
+        if (rules != null) {
+            for (FilterRule rule: rules) {
+                statementGroup.addFilterStatement(filterRuleParser.resolveRule(rule));
+            }
         }
     }
 
