@@ -11,6 +11,9 @@ module com.fenrir.filesorter {
     requires eu.hansolo.tilesfx;
     requires org.json;
     requires java.desktop;
+    requires logback.core;
+    requires logback.classic;
+    requires org.slf4j;
 
     opens com.fenrir.filesorter to javafx.fxml;
     exports com.fenrir.filesorter;
@@ -32,4 +35,5 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.model.rule to javafx.fxml;
     exports com.fenrir.filesorter.model.exceptions;
     opens com.fenrir.filesorter.model.exceptions to javafx.fxml;
+    exports com.fenrir.filesorter.model.log;
 }

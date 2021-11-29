@@ -8,6 +8,8 @@ import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Processor {
+    private static final Logger logger = LoggerFactory.getLogger(Processor.class);
+
     private final RuleGroupParser ruleParser;
     private final Configuration configuration;
     private List<StatementGroup> statementGroups;
@@ -30,6 +34,7 @@ public class Processor {
     }
 
     private void parseRuleGroups() throws ExpressionFormatException {
+        logger.info("Parsing provided rule groups...");
         List<RuleGroup> ruleGroups = configuration.getRuleGroups();
         statementGroups = new ArrayList<>();
         for (RuleGroup ruleGroup: ruleGroups) {
@@ -39,6 +44,7 @@ public class Processor {
     }
 
     private void mapFileStructure() throws IOException {
+        logger.info("Mapping file structure...");
         List<Path> sourceRootDir = configuration.getSourcePaths();
         for (Path path: sourceRootDir) {
             FileStructureMapper mapper = new FileStructureMapper(path);
@@ -47,6 +53,7 @@ public class Processor {
     }
 
     public void process() throws IOException {
+        logger.info("Processing source files against provided rules...");
         fileStructure.forEach(f -> f.setIncluded(false));
         processStatementGroups();
     }
@@ -76,7 +83,7 @@ public class Processor {
         try {
             return predicate.test(file);
         } catch (IOException e) {
-            // TODO: I will add logger here.
+            logger.error("File could not be accessed: {}", e.getMessage());
         }
         return false;
     }

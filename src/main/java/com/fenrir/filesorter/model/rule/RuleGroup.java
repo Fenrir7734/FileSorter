@@ -3,8 +3,6 @@ package com.fenrir.filesorter.model.rule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.List;
-
 public class RuleGroup {
     private StringRule renameRule;
     private StringRule sortRule;
