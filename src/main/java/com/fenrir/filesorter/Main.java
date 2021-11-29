@@ -21,7 +21,7 @@ public class Main extends Application {
                 Objects.requireNonNull(getClass().getResource("controllers/MainView.fxml"))
         );
         Scene scene = new Scene(root);
-        stage.setMinWidth(600);
+        stage.setMinWidth(650);
         stage.setMinHeight(600);
         stage.setScene(scene);
         stage.show();
@@ -47,8 +47,8 @@ public class Main extends Application {
         group.setSortRule(sortRule);
         group.addFilterRule(filterRule);
         List<RuleGroup> ruleGroups = List.of(group);
-        Processor processor = new Processor(Path.of(source), Path.of(target), ruleGroups);
-        processor.process();
-        processor.getFileStructure().stream().map(FileData::resolveTargetPath).forEach(System.out::println);
+        //Processor processor = new Processor(Path.of(source), Path.of(target), ruleGroups);
+        //processor.process();
+        //processor.getFileStructure().stream().map(FileData::resolveTargetPath).forEach(System.out::println);
     }
 }
