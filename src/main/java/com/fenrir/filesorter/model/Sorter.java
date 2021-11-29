@@ -11,13 +11,16 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class Sorter {
-    private final List<FileData> filesToSort;
+    private final Processor processor;
 
-    public Sorter(List<FileData> filesToSort) {
-        this.filesToSort = filesToSort;
+    public Sorter(Processor processor) {
+        this.processor = processor;
     }
 
     public void sort() throws IOException {
+        processor.process();
+        List<FileData> filesToSort = processor.getFileStructure();
+
         for(FileData file: filesToSort) {
             if (file.getTargetPath() != null) {
                 copyFile(file);

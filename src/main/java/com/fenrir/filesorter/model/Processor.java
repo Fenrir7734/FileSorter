@@ -17,22 +17,20 @@ import java.util.stream.Collectors;
 
 public class Processor {
     private final RuleGroupParser ruleParser;
-    private Path sourceRootDir;
-    private Path targetRootDir;
-    private List<RuleGroup> ruleGroups;
+    private final Configuration configuration;
     private List<StatementGroup> statementGroups;
     private List<FileData> fileStructure;
 
-    public Processor(Path sourceRootDir, Path targetRootDir, List<RuleGroup> ruleGroup) throws ExpressionFormatException, IOException {
+    public Processor(Configuration configuration) throws ExpressionFormatException, IOException {
         this.ruleParser = new RuleGroupParser();
-        this.sourceRootDir = sourceRootDir;
-        this.targetRootDir = targetRootDir;
-        this.ruleGroups = ruleGroup;
+        this.configuration = configuration;
+        this.fileStructure = new ArrayList<>();
         parseRuleGroups();
         mapFileStructure();
     }
 
     private void parseRuleGroups() throws ExpressionFormatException {
+        List<RuleGroup> ruleGroups = configuration.getRuleGroups();
         statementGroups = new ArrayList<>();
         for (RuleGroup ruleGroup: ruleGroups) {
             StatementGroup statementGroup = ruleParser.parse(ruleGroup);
@@ -41,8 +39,11 @@ public class Processor {
     }
 
     private void mapFileStructure() throws IOException {
-        FileStructureMapper mapper = new FileStructureMapper(sourceRootDir);
-        fileStructure = mapper.map();
+        List<Path> sourceRootDir = configuration.getSourcePaths();
+        for (Path path: sourceRootDir) {
+            FileStructureMapper mapper = new FileStructureMapper(path);
+            fileStructure.addAll(mapper.map());
+        }
     }
 
     public void process() throws IOException {
@@ -102,7 +103,7 @@ public class Processor {
             builder.append(s);
         }
         Path path = Path.of(builder.toString());
-        return targetRootDir.resolve(path);
+        return configuration.getTargetRootDir().resolve(path);
     }
 
     private Path buildFileName(FileData file, List<Provider<?>> renameStatement) throws IOException {

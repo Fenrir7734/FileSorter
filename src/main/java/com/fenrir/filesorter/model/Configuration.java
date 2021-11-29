@@ -10,12 +10,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Configuration {
-    private Path targetPath;
+    private Path targetRootDir;
     private final ObservableList<Path> sourcePaths = FXCollections.observableArrayList();
     private final ObservableList<Pair<String, RuleGroup>> namedRuleGroup = FXCollections.observableArrayList();
 
-    public void setTargetPath(Path targetPath) {
-        this.targetPath = targetPath;
+    public void setTargetRootDir(Path targetRootDir) {
+        this.targetRootDir = targetRootDir;
     }
 
     public void addSourcePaths(List<Path> paths) {
@@ -38,8 +38,8 @@ public class Configuration {
         namedRuleGroup.remove(value);
     }
 
-    public Path getTargetPath() {
-        return targetPath;
+    public Path getTargetRootDir() {
+        return targetRootDir;
     }
 
     public ObservableList<Path> getSourcePaths() {
