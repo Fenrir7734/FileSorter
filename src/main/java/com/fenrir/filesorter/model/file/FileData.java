@@ -99,7 +99,8 @@ public class FileData {
 
     public boolean isImage() throws IOException {
         File file = sourcePath.toFile();
-        Image image = ImageIO.read(file);
+        System.out.println(sourcePath);
+        Image image = file.isDirectory() ? null : ImageIO.read(file);
         return image != null;
     }
 

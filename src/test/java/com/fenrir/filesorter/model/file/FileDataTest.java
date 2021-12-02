@@ -164,6 +164,13 @@ class FileDataTest {
     }
 
     @Test
+    public void isImageShouldReturnFalseForDirectory() throws IOException {
+        FileData fileData = new FileData(tempDir);
+        boolean isImage = fileData.isImage();
+        assertFalse(isImage);
+    }
+
+    @Test
     public void getImageDimensionShouldReturnNullForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
