@@ -3,6 +3,8 @@ package com.fenrir.filesorter.model.file;
 import com.fenrir.filesorter.model.file.utils.Category;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.file.utils.FilesCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -20,6 +22,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 public class FileData {
+    private static Logger logger = LoggerFactory.getLogger(FileData.class);
+
     private final Path sourcePath;
     private Path targetPath;
     private long count;
@@ -97,11 +101,15 @@ public class FileData {
         return file.length();
     }
 
-    public boolean isImage() throws IOException {
-        File file = sourcePath.toFile();
-        System.out.println(sourcePath);
-        Image image = file.isDirectory() ? null : ImageIO.read(file);
-        return image != null;
+    public boolean isImage() {
+        try {
+            File file = sourcePath.toFile();
+            Image image = file.isDirectory() ? null : ImageIO.read(file);
+            return image != null;
+        } catch (IOException e) {
+            logger.warn("{}: {}", e.getMessage(), sourcePath);
+        }
+        return false;
     }
 
     public Dimension getImageDimension() throws IOException {

@@ -2,12 +2,16 @@ package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.Processor;
+import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
+import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.log.LogAppender;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -170,17 +174,25 @@ public class MainController implements Controller {
 
     @FXML
     public void sort() {
-        try {
-            Processor processor = new Processor(configuration);
-            //Sorter sorter = new Sorter(processor);
-            //sorter.sort();
-            processor.process();
-            System.out.println(processor.getFileStructure());
-        } catch (TokenFormatException e) {
-            System.out.println(e.getMessage() + " " + e.getToken());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    configuration.validate();
+                    Processor processor = new Processor(configuration);
+                    Sorter sorter = new Sorter(processor);
+                    sorter.sort();
+                } catch (TokenFormatException e) {
+                    logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
+                } catch (ExpressionFormatException e) {
+                    logger.error("{} Rule: {}", e.getMessage(), e.getRule());
+                } catch (SortConfigurationException | IOException e) {
+                    logger.error("{}", e.getMessage());
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
     }
 
     @FXML

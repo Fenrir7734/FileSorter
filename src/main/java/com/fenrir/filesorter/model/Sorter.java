@@ -26,10 +26,13 @@ public class Sorter {
         List<FileData> filesToSort = processor.getFileStructure();
 
         for(FileData file: filesToSort) {
-            if (file.getTargetPath() != null) {
+            if (file.getTargetPath() != null
+                    && !file.isDirectory()
+                    && file.isIncluded()) {
                 copyFile(file);
             }
         }
+        logger.info("Sort complete");
     }
 
     private void copyFile(FileData file) throws IOException {

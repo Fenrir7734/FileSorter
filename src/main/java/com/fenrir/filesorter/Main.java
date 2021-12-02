@@ -1,7 +1,5 @@
 package com.fenrir.filesorter;
 
-import com.fenrir.filesorter.model.Processor;
-import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

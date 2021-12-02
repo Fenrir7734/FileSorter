@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.log.LogPrinter;
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
@@ -13,6 +14,6 @@ public class GUILogPrinter implements LogPrinter {
     }
 
     public void print(String text) {
-        console.appendText(text);
+        Platform.runLater(() -> console.appendText(text));
     }
 }
