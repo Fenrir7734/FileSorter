@@ -12,7 +12,7 @@ public class LogAppender extends AppenderBase<ILoggingEvent> {
     public void start() {
         patternLayout = new PatternLayout();
         patternLayout.setContext(getContext());
-        patternLayout.setPattern("%level\t| %msg");
+        patternLayout.setPattern("%level\t| %msg%n");
         patternLayout.start();
         super.start();
     }

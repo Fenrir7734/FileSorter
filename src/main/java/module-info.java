@@ -36,6 +36,4 @@ module com.fenrir.filesorter {
     exports com.fenrir.filesorter.model.exceptions;
     opens com.fenrir.filesorter.model.exceptions to javafx.fxml;
     exports com.fenrir.filesorter.model.log;
-    exports com.fenrir.filesorter.model.log.old;
-    opens com.fenrir.filesorter.model.log.old to javafx.fxml;
 }
