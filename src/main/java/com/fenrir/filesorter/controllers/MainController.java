@@ -2,8 +2,8 @@ package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.Processor;
-import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
+import com.fenrir.filesorter.model.log.LogAppender;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.StringRule;
@@ -17,6 +17,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainController implements Controller {
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+
     @FXML private TabPane tabPane;
     @FXML private TitledPane ruleEditorPane;
 
@@ -53,6 +57,7 @@ public class MainController implements Controller {
     @FXML
     public void initialize() {
         ControllerMediator.getInstance().registerController(this);
+        LogAppender.setPrinter(new GUILogPrinter(logTextArea));
 
         hideRuleEditorPane();
         disableFilterRuleButtons();

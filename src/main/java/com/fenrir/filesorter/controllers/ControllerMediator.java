@@ -49,7 +49,7 @@ public class ControllerMediator {
 
     private ControllerMediator() { }
 
-    static ControllerMediator getInstance() {
+    public static ControllerMediator getInstance() {
         if (instance == null) {
             instance = new ControllerMediator();
         }

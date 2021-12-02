@@ -4,15 +4,15 @@ import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 
-public class GUIAppender extends AppenderBase<ILoggingEvent> {
+public class LogAppender extends AppenderBase<ILoggingEvent> {
     private static LogPrinter out = null;
-    private static PatternLayout patternLayout;
+    private PatternLayout patternLayout;
 
     @Override
     public void start() {
         patternLayout = new PatternLayout();
         patternLayout.setContext(getContext());
-        patternLayout.setPattern("%msg");
+        patternLayout.setPattern("%level\t| %msg");
         patternLayout.start();
         super.start();
     }
@@ -20,16 +20,12 @@ public class GUIAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent iLoggingEvent) {
         if (out != null) {
-            String message = patternLayout.doLayout(iLoggingEvent);
-            out.highlight(iLoggingEvent);
-            out.print(message);
+            String msg = patternLayout.doLayout(iLoggingEvent);
+            out.print(msg);
         }
     }
 
     public static void setPrinter(LogPrinter out) {
-        GUIAppender.out = out;
-        patternLayout.stop();
-        patternLayout.setPattern(out.pattern());
-        patternLayout.start();
+        LogAppender.out = out;
     }
 }

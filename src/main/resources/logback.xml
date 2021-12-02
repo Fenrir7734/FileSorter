@@ -15,10 +15,13 @@
             <pattern>%d{dd-MM-yyyy HH:mm:ss} | %level [%thread] [%logger{30}]: %msg%n</pattern>
         </encoder>
     </appender>
+    <appender name="GUI" class="com.fenrir.filesorter.model.log.LogAppender"/>
+
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="GUI"/>
     </root>
 
 </configuration>
