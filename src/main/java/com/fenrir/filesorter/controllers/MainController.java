@@ -101,6 +101,23 @@ public class MainController implements Controller {
                 }
             }
         });
+        initForTest();
+    }
+
+    private void initForTest() {
+        configuration.setTargetRootDir(Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test"));
+        //configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wall")));
+        configuration.addSourcePaths(List.of(
+                Path.of("/home/fenrir/Documents/Test_environment/wall/"),
+                Path.of("/home/fenrir/Documents/Test_environment/wall2"),
+                Path.of("/home/fenrir/Documents/Test_environment/wall3"),
+                Path.of("/home/fenrir/Documents/Test_environment/wallpapers")
+        ));
+        RuleGroup group = new RuleGroup();
+        group.setRenameRule(new StringRule("%(FIN)"));
+        group.setSortRule(new StringRule("%(DIM)"));
+        configuration.addNamedRuleGroup("1", group);
+
     }
 
     private void onSelectedRuleGroup(Pair<String, RuleGroup> oldValue, Pair<String, RuleGroup> newValue) {

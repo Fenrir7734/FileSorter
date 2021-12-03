@@ -108,6 +108,38 @@ class FileDataTest {
     }
 
     @Test
+    public void getFileExtensionShouldReturnExtensionForFileWithExtension() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile.txt");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getFileExtension();
+        assertEquals("txt", extension);
+    }
+
+    @Test
+    public void getFileExtensionShouldReturnExtensionForFileWithMultipleDots() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "test.file.txt");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getFileExtension();
+        assertEquals("txt", extension);
+    }
+
+    @Test
+    public void getFileExtensionShouldReturnNullForFileWithoutExtension() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getFileExtension();
+        assertNull(extension);
+    }
+
+    @Test
+    public void getFileExtensionShouldReturnNullForDirectory() throws IOException {
+        Path path = FileUtils.createDirectory(tempDir, "dir.test");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getFileExtension();
+        assertNull(extension);
+    }
+
+    @Test
     public void getFileCategoryShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
@@ -171,6 +203,12 @@ class FileDataTest {
     }
 
     @Test
+    public void isImageTest() throws IOException {
+        FileData fileData = new FileData(Path.of("/home/fenrir/Documents/Test_environment/wall/HD wallpaper person leaning on tree illustration, landscape, digital art, coast.jpeg"));
+        assertTrue(fileData.isImage());
+    }
+
+    @Test
     public void getImageDimensionShouldReturnNullForNonImageFile() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
@@ -221,7 +259,7 @@ class FileDataTest {
     }
 
     @Nested
-    class TestImageFile {
+    class TestImageFileWithExtension {
         Path path;
         File file;
 
@@ -254,6 +292,47 @@ class FileDataTest {
 
         @Test
         public void getImageDimensionShouldReturnImageDimensionForImageFile() throws IOException {
+            FileData fileData = new FileData(path);
+            Dimension actualDimension = fileData.getImageDimension();
+            Dimension expectedDimension = Dimension.of(320, 480);
+            assertEquals(expectedDimension, actualDimension);
+        }
+    }
+
+    @Nested
+    class TestImageFileWithoutExtension {
+        Path path;
+        File file;
+
+        @BeforeEach
+        public void init() {
+            path = tempDir.resolve("testimg");
+            file = path.toFile();
+
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                BufferedImage image = new BufferedImage(320, 480, BufferedImage.TYPE_BYTE_GRAY);
+                ImageIO.write(image, "png", out);
+            } catch (IOException e) {
+                System.err.println("Error creating image: " + e);
+            }
+        }
+
+        @Test
+        public void testTempImageShouldPassIfFileIsImage() {
+            assertTrue(file.exists());
+            assertTrue(file.isFile());
+            assertTrue(file.getAbsolutePath().endsWith("testimg"));
+        }
+
+        @Test
+        public void isImageShouldReturnTrueForImageWithoutExtensionInFilename() throws IOException {
+            FileData fileData = new FileData(path);
+            boolean isImage = fileData.isImage();
+            assertTrue(isImage);
+        }
+
+        @Test
+        public void getImageDimensionShouldReturnImageDimensionForImageWithoutExtensionInFilename() throws IOException {
             FileData fileData = new FileData(path);
             Dimension actualDimension = fileData.getImageDimension();
             Dimension expectedDimension = Dimension.of(320, 480);

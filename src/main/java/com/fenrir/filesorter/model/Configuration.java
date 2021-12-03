@@ -5,6 +5,7 @@ import com.fenrir.filesorter.model.rule.RuleGroup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
+import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -46,7 +47,7 @@ public class Configuration {
         if (targetRootDir == null) {
             throw new SortConfigurationException("Target directory has not been specified.");
         }
-        if (!isTargetDirectoryEmpty()) {
+        if (!FileUtils.isEmptyDirectory(targetRootDir.toFile())) {
             throw new SortConfigurationException("Target directory should be empty.");
         }
         if (sourcePaths.isEmpty()) {
@@ -54,12 +55,6 @@ public class Configuration {
         }
         if (!isAtLeastOneRuleSpecified()) {
             throw new SortConfigurationException("Not a single rule has been specified.");
-        }
-    }
-
-    private boolean isTargetDirectoryEmpty() throws IOException {
-        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(targetRootDir)) {
-            return !directoryStream.iterator().hasNext();
         }
     }
 

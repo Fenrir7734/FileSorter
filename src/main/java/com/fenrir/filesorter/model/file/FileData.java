@@ -3,6 +3,12 @@ package com.fenrir.filesorter.model.file;
 import com.fenrir.filesorter.model.file.utils.Category;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.file.utils.FilesCategory;
+import org.apache.commons.imaging.ImageInfo;
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.common.ImageMetadata;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +36,7 @@ public class FileData {
     private final BasicFileAttributes attributes;
     private final boolean isDirectory;
     private boolean isIncluded;
+    private Dimension dimension;
 
     public FileData(Path path) throws IOException {
         this.isDirectory = Files.isDirectory(path);
@@ -37,6 +44,7 @@ public class FileData {
         this.targetPath = null;
         this.attributes = Files.readAttributes(path, BasicFileAttributes.class);
         this.isIncluded = false;
+        this.dimension = null;
     }
 
     public Calendar creationTime() {
@@ -101,15 +109,33 @@ public class FileData {
         return file.length();
     }
 
-    public boolean isImage() {
-        try {
-            File file = sourcePath.toFile();
-            Image image = file.isDirectory() ? null : ImageIO.read(file);
-            return image != null;
-        } catch (IOException e) {
-            logger.warn("{}: {}", e.getMessage(), sourcePath);
+    public boolean isImage() throws IOException {
+        if (!isDirectory) {
+            Tika tika = new Tika();
+            String mimeType = tika.detect(sourcePath.toString());
+            return mimeType.startsWith("image");
         }
         return false;
+    }
+
+    public Dimension getImageDimension1() throws IOException {
+        //System.out.println("dimension");
+        if (isImage() && dimension == null) {
+            extractDimensionFromImage();
+        }
+        return dimension;
+    }
+
+    private void extractDimensionFromImage() {
+        try {
+            ImageInfo info = Imaging.getImageInfo(sourcePath.toFile());
+            int width = info.getWidth();
+            int height = info.getHeight();
+            dimension = Dimension.of(width, height);
+            //System.out.println(dimension);
+        } catch (IOException | ImageReadException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public Dimension getImageDimension() throws IOException {

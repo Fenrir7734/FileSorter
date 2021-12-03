@@ -14,6 +14,9 @@ module com.fenrir.filesorter {
     requires logback.core;
     requires logback.classic;
     requires org.slf4j;
+    requires org.apache.commons.io;
+    requires org.apache.commons.imaging;
+    requires tika.core;
 
     opens com.fenrir.filesorter to javafx.fxml;
     exports com.fenrir.filesorter;
