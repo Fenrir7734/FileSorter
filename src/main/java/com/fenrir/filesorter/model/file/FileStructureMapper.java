@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileStructureMapper {
     private Path source;
@@ -15,7 +14,7 @@ public class FileStructureMapper {
     }
 
     public List<FileData> map() throws IOException {
-        List<Path> fileStructure = Files.walk(source).collect(Collectors.toList());
+        List<Path> fileStructure = Files.walk(source).toList();
         List<FileData> fileDataList = new ArrayList<>();
         for (Path path: fileStructure) {
             FileData fileData = new FileData(path);
