@@ -9,57 +9,57 @@ import static com.fenrir.filesorter.model.enums.ArgumentNumber.MULTIPLE;
 import static com.fenrir.filesorter.model.enums.ArgumentNumber.SINGLE;
 
 public enum PredicateType {
-    EQUAL("==", MULTIPLE) {
+    EQUAL("==", "equal",  MULTIPLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new EqualPredicate<>(operands);
         }
     },
-    NOT_EQUAL("!=", MULTIPLE) {
+    NOT_EQUAL("!=", "not equal", MULTIPLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new NotEqualPredicate<>(operands);
         }
     },
-    GREATER(">", SINGLE) {
+    GREATER(">", "greater than", SINGLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new GreaterPredicate<>(operands);
         }
     },
-    GREATER_EQUAL(">=", SINGLE) {
+    GREATER_EQUAL(">=", "greater or equal than", SINGLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new GreaterEqualPredicate<>(operands);
         }
     },
-    SMALLER("<", SINGLE) {
+    SMALLER("<", "smaller than", SINGLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new SmallerPredicate<>(operands);
         }
     },
-    SMALLER_EQUAL("<=", SINGLE) {
+    SMALLER_EQUAL("<=", "smaller or equal than", SINGLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new SmallerEqualPredicate<>(operands);
         }
     },
-    CONTAINS("CON", MULTIPLE) {
+    CONTAINS("CON", "contains", MULTIPLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
             return new ContainsPredicate<>(operands);
         }
     },
-    STARTS_WITH("SW", MULTIPLE) {
+    STARTS_WITH("SW", "starts with", MULTIPLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
             return new StartsWithPredicate<>(operands);
         }
     },
-    ENDS_WITH("EW", MULTIPLE) {
+    ENDS_WITH("EW", "ends with", MULTIPLE) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
@@ -68,10 +68,12 @@ public enum PredicateType {
     };
 
     private final String token;
+    private final String name;
     private final ArgumentNumber argumentNumber;
 
-    PredicateType(String token, ArgumentNumber argumentNumber) {
+    PredicateType(String token, String name, ArgumentNumber argumentNumber) {
         this.token = token;
+        this.name = name;
         this.argumentNumber = argumentNumber;
     }
 
@@ -90,6 +92,10 @@ public enum PredicateType {
 
     public String getToken() {
         return token;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public ArgumentNumber getArgumentNumber() {

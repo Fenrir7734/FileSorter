@@ -18,7 +18,7 @@ import java.util.List;
 import static com.fenrir.filesorter.model.enums.Scope.*;
 
 public enum ProviderType {
-    DIMENSION("DIM", new Scope[]{SORT, RENAME, FILTER}) {
+    DIMENSION("DIM", "dimension", new Scope[]{SORT, RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new ImageDimensionProvider(description);
@@ -32,7 +32,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dimensions);
         }
     },
-    FILE_EXTENSION("EXT", new Scope[]{SORT, RENAME, FILTER}) {
+    FILE_EXTENSION("EXT", "extension", new Scope[]{SORT, RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileExtensionProvider(description);
@@ -44,7 +44,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_CATEGORY("CAT", new Scope[]{SORT, RENAME, FILTER}) {
+    FILE_CATEGORY("CAT", "category", new Scope[]{SORT, RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileCategoryProvider(description);
@@ -56,7 +56,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_NAME("FIN", new Scope[]{RENAME, FILTER}) {
+    FILE_NAME("FIN", "file name", new Scope[]{RENAME, FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileNameProvider(description);
@@ -68,7 +68,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    SEPARATOR("/", new Scope[]{SORT}) {
+    SEPARATOR("/", "/", new Scope[]{SORT}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileSeparatorProvider(description);
@@ -79,7 +79,7 @@ public enum ProviderType {
             throw new UnsupportedOperationException();
         }
     },
-    PATH("PAT", new Scope[]{FILTER}) {
+    PATH("PAT", "path", new Scope[]{FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FilePathProvider(description);
@@ -92,7 +92,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, paths);
         }
     },
-    DATE("DAT", new Scope[]{FILTER}) {
+    DATE("DAT", "creation date", new Scope[]{FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new DateProvider(description);
@@ -106,7 +106,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dates);
         }
     },
-    SIZE("SIZ", new Scope[]{FILTER}) {
+    SIZE("SIZ", "size", new Scope[]{FILTER}) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileSizeProvider(description);
@@ -122,10 +122,12 @@ public enum ProviderType {
     };
 
     private final String token;
+    private final String name;
     private final Scope[] scope;
 
-    ProviderType(String token, Scope[] scope) {
+    ProviderType(String token, String name, Scope[] scope) {
         this.token = token;
+        this.name = name;
         this.scope = scope;
     }
 
@@ -152,6 +154,10 @@ public enum ProviderType {
 
     public String getToken() {
         return token;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Scope[] getScope() {
