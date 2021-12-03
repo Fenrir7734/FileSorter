@@ -2,19 +2,19 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.MainController">
   <tabs>
     <Tab text="Sort">
           <content>
@@ -42,27 +42,16 @@
                   </VBox>
                </top>
                <bottom>
-                  <VBox alignment="CENTER" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets left="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <TextArea fx:id="logTextArea" editable="false" prefHeight="200.0" prefWidth="200.0">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </TextArea>
-                        <ProgressBar fx:id="progressBar" prefWidth="860.0" progress="0.0" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </ProgressBar>
                         <Button mnemonicParsing="false" onAction="#sort" prefHeight="30.0" prefWidth="100.0" text="Sort" />
+                        <ProgressIndicator fx:id="progressIndicator" maxHeight="-Infinity" prefHeight="30.0" prefWidth="30.0" progress="1.0" />
+                        <Label fx:id="progressLabel" maxWidth="-Infinity" prefHeight="30.0" prefWidth="715.0" />
                      </children>
                      <padding>
-                        <Insets bottom="20.0" />
+                        <Insets left="20.0" />
                      </padding>
-                  </VBox>
+                  </HBox>
                </bottom></BorderPane>
           </content>
     </Tab>

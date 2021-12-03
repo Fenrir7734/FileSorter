@@ -14,3 +14,7 @@
 .bordered-titled-content {
     -fx-padding: 26 10 10 10;
 }
+
+.progress-indicator .percentage {
+    -fx-fill: null;
+}

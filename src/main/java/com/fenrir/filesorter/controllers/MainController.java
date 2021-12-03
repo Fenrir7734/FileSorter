@@ -10,6 +10,7 @@ import com.fenrir.filesorter.model.log.LogAppender;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.StringRule;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -53,18 +54,19 @@ public class MainController implements Controller {
     @FXML private Button moveUpFilterRuleButton;
     @FXML private Button moveDownFilterRuleButton;
 
-    @FXML private TextArea logTextArea;
-    @FXML private ProgressBar progressBar;
+    @FXML private ProgressIndicator progressIndicator;
+    @FXML private Label progressLabel;
 
     private final Configuration configuration = new Configuration();
 
     @FXML
     public void initialize() {
         ControllerMediator.getInstance().registerController(this);
-        LogAppender.setPrinter(new GUILogPrinter(logTextArea));
+        LogAppender.setPrinter(new GUILogPrinter(progressLabel));
 
         hideRuleEditorPane();
         disableFilterRuleButtons();
+        setProgressIndicatorTo0();
 
         sourcesListView.setItems(configuration.getSourcePaths());
         sourcesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -118,6 +120,30 @@ public class MainController implements Controller {
         group.setSortRule(new StringRule("%(DIM)"));
         configuration.addNamedRuleGroup("1", group);
 
+    }
+
+    private void setProgressIndicatorToIndeterminate() {
+        if (progressIndicator.isDisabled()) {
+            progressIndicator.setDisable(false);
+        }
+        progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        progressIndicator.setStyle("-fx-padding: 0 0 0 0");
+    }
+
+    private void setProgressIndicatorToDone() {
+        if (progressIndicator.isDisabled()) {
+            progressIndicator.setDisable(false);
+        }
+        progressIndicator.setProgress(100);
+        progressIndicator.setStyle("-fx-padding: 0 0 -16 0");
+    }
+
+    private void setProgressIndicatorTo0() {
+        if (!progressIndicator.isDisabled()) {
+            progressIndicator.setDisable(true);
+        }
+        progressIndicator.setProgress(0);
+        progressIndicator.setStyle("-fx-padding: 0 0 -16 0");
     }
 
     private void onSelectedRuleGroup(Pair<String, RuleGroup> oldValue, Pair<String, RuleGroup> newValue) {
@@ -196,14 +222,19 @@ public class MainController implements Controller {
             protected Void call() throws Exception {
                 try {
                     configuration.validate();
+                    Platform.runLater(() -> setProgressIndicatorToIndeterminate());
                     Processor processor = new Processor(configuration);
                     Sorter sorter = new Sorter(processor);
                     sorter.sort();
+                    Platform.runLater(() -> setProgressIndicatorToDone());
                 } catch (TokenFormatException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
                     logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
                 } catch (ExpressionFormatException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
                     logger.error("{} Rule: {}", e.getMessage(), e.getRule());
                 } catch (SortConfigurationException | IOException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
                     logger.error("{}", e.getMessage());
                 }
                 return null;
