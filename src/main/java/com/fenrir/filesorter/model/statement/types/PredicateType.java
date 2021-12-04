@@ -122,7 +122,7 @@ public enum PredicateType {
         return argumentNumber;
     }
 
-    public Category[] getCategory() {
+    public Category[] getCategories() {
         return forCategory;
     }
 }

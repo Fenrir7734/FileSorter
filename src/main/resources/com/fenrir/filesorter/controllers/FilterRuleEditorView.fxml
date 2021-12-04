@@ -14,7 +14,7 @@
             <ComboBox fx:id="actionComboBox" prefWidth="150.0" />
             <ComboBox fx:id="providerComboBox" prefWidth="150.0" />
             <ComboBox fx:id="predicateComboBox" prefWidth="150.0" />
-            <TextField fx:id="argumentComboBox" />
+            <TextField fx:id="argumentTextFiled" />
          </children>
       </HBox>
       <TextField fx:id="ruleTextField" prefWidth="360.0" />

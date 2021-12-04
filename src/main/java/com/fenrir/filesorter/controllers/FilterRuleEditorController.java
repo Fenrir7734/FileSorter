@@ -1,8 +1,10 @@
 package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.rule.FilterRule;
-import com.fenrir.filesorter.model.rule.RuleGroup;
+import com.fenrir.filesorter.model.rule.Iterator;
+import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
@@ -15,16 +17,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Pair;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class FilterRuleEditorController implements Controller {
-    @FXML private TextField ruleTextField;
     @FXML private ComboBox<ActionType> actionComboBox;
     @FXML private ComboBox<ProviderType> providerComboBox;
     @FXML private ComboBox<PredicateType> predicateComboBox;
-    @FXML private TextField argumentComboBox;
+    @FXML private TextField argumentTextFiled;
 
     private final ObservableList<ActionType> actionTypeItems = FXCollections.observableArrayList();
     private final ObservableList<ProviderType> providerTypeItems = FXCollections.observableArrayList();
@@ -53,10 +54,13 @@ public class FilterRuleEditorController implements Controller {
         providerComboBox.setCellFactory(providerCallback);
         providerComboBox.getSelectionModel()
                 .selectedItemProperty()
-                .addListener(((observableValue, type, t1) -> populatePredicateList()));
+                .addListener(((observable, oldValue, newValue) -> {
+                    populatePredicateList();
+                }));
 
         actionComboBox.getSelectionModel().select(0);
         providerComboBox.getSelectionModel().select(0);
+        buildExpression();
     }
 
     private void populateProviderList() {
@@ -71,9 +75,10 @@ public class FilterRuleEditorController implements Controller {
 
     private void populatePredicateList() {
         predicateTypeItems.clear();
-        ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
-        PredicateType[] types = PredicateType.values();
-        predicateTypeItems.addAll(types);
+        ProviderType selectedProvider = providerComboBox.getSelectionModel().getSelectedItem();
+        Category typeOfSelectedProvider = selectedProvider.getCategory();
+        List<PredicateType> predicateTypes = PredicateType.getPredicatesForCategory(typeOfSelectedProvider);
+        predicateTypeItems.addAll(predicateTypes);
         predicateComboBox.getSelectionModel().select(0);
     }
 
@@ -83,10 +88,17 @@ public class FilterRuleEditorController implements Controller {
 
     @FXML
     public void confirm() {
-        String expression = ruleTextField.getText();
+        String expression = buildExpression();
         FilterRule filterRule = new FilterRule(expression);
         ControllerMediator.getInstance().sendReadyFilterRule(filterRule);
         close();
+    }
+
+    private String buildExpression() {
+        ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
+        PredicateType predicateType = predicateComboBox.getSelectionModel().getSelectedItem();
+        String args = argumentTextFiled.getText();
+        return String.format("%s(%s)%s(%s:%s)", "%", providerType.getToken(), "%", predicateType.getToken(), args);
     }
 
     @FXML
@@ -95,13 +107,21 @@ public class FilterRuleEditorController implements Controller {
     }
 
     private void close() {
-        Stage stage = (Stage) ruleTextField.getScene().getWindow();
+        Stage stage = (Stage) actionComboBox.getScene().getWindow();
         stage.close();
     }
 
     public void receiveRule(FilterRule filterRule) {
         if (filterRule != null) {
-            ruleTextField.setText(filterRule.getExpression());
+            Iterator<RuleElement> iter = filterRule.getRuleElementsIterator();
+            RuleElement provider = iter.next();
+            RuleElement predicate = iter.next();
+            ProviderType providerTypeToSelect = ProviderType.getType(provider.element(), Scope.FILTER);
+            PredicateType predicateTypeToSelect = PredicateType.getType(predicate.element());
+            String args = String.join(",", predicate.args());
+            providerComboBox.getSelectionModel().select(providerTypeToSelect);
+            predicateComboBox.getSelectionModel().select(predicateTypeToSelect);
+            argumentTextFiled.setText(args);
         }
     }
 
