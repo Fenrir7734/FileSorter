@@ -1,65 +1,71 @@
 package com.fenrir.filesorter.model.statement.types;
 
+import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.*;
 import com.fenrir.filesorter.model.enums.ArgumentNumber;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.fenrir.filesorter.model.enums.ArgumentNumber.MULTIPLE;
 import static com.fenrir.filesorter.model.enums.ArgumentNumber.SINGLE;
+import static com.fenrir.filesorter.model.enums.Category.*;
 
 public enum PredicateType {
-    EQUAL("==", "equal",  MULTIPLE) {
+    EQUAL("==", "equal",  MULTIPLE, new Category[]{NUMBER, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new EqualPredicate<>(operands);
         }
     },
-    NOT_EQUAL("!=", "not equal", MULTIPLE) {
+    NOT_EQUAL("!=", "not equal", MULTIPLE, new Category[]{NUMBER, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new NotEqualPredicate<>(operands);
         }
     },
-    GREATER(">", "greater than", SINGLE) {
+    GREATER(">", "greater than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new GreaterPredicate<>(operands);
         }
     },
-    GREATER_EQUAL(">=", "greater or equal than", SINGLE) {
+    GREATER_EQUAL(">=", "greater or equal than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new GreaterEqualPredicate<>(operands);
         }
     },
-    SMALLER("<", "smaller than", SINGLE) {
+    SMALLER("<", "smaller than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new SmallerPredicate<>(operands);
         }
     },
-    SMALLER_EQUAL("<=", "smaller or equal than", SINGLE) {
+    SMALLER_EQUAL("<=", "smaller or equal than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands) {
             return new SmallerEqualPredicate<>(operands);
         }
     },
-    CONTAINS("CON", "contains", MULTIPLE) {
+    CONTAINS("CON", "contains", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
             return new ContainsPredicate<>(operands);
         }
     },
-    STARTS_WITH("SW", "starts with", MULTIPLE) {
+    STARTS_WITH("SW", "starts with", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
             return new StartsWithPredicate<>(operands);
         }
     },
-    ENDS_WITH("EW", "ends with", MULTIPLE) {
+    ENDS_WITH("EW", "ends with", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
                 throws ExpressionFormatException {
@@ -70,11 +76,13 @@ public enum PredicateType {
     private final String token;
     private final String name;
     private final ArgumentNumber argumentNumber;
+    private final Category[] forCategory;
 
-    PredicateType(String token, String name, ArgumentNumber argumentNumber) {
+    PredicateType(String token, String name, ArgumentNumber argumentNumber, Category[] forCategory) {
         this.token = token;
         this.name = name;
         this.argumentNumber = argumentNumber;
+        this.forCategory = forCategory;
     }
 
     public static PredicateType getType(String token) {
@@ -85,6 +93,18 @@ public enum PredicateType {
             }
         }
         return null;
+    }
+
+    public static List<PredicateType> getPredicatesForCategory(Category category) {
+        PredicateType[] predicateTypes = PredicateType.values();
+        List<PredicateType> predicatesTypesForCategory = new ArrayList<>();
+        for (PredicateType predicateType: predicateTypes) {
+            List<Category> categories = Arrays.asList(predicateType.forCategory);
+            if (categories.contains(category)) {
+                predicatesTypesForCategory.add(predicateType);
+            }
+        }
+        return predicatesTypesForCategory;
     }
 
     public abstract Predicate<? extends Comparable<?>> getPredicate(PredicateOperands<? extends Comparable<?>> operands)
@@ -100,5 +120,9 @@ public enum PredicateType {
 
     public ArgumentNumber getArgumentNumber() {
         return argumentNumber;
+    }
+
+    public Category[] getCategory() {
+        return forCategory;
     }
 }
