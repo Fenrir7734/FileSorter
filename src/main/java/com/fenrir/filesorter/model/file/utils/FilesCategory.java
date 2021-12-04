@@ -15,7 +15,7 @@ public class FilesCategory {
     private static FilesCategory instance;
 
     private final String path = "src/main/resources/extensions.json";
-    private final Map<Category, List<String>> extensions = new HashMap<>();
+    private final Map<FileCategoryType, List<String>> extensions = new HashMap<>();
 
     private FilesCategory() throws IOException {
         readExtensionsFromFile();
@@ -25,7 +25,7 @@ public class FilesCategory {
         String content = new String(Files.readAllBytes(Path.of(path)));
         JSONObject object = new JSONObject(content);
 
-        for (Category category: Category.values()) {
+        for (FileCategoryType category: FileCategoryType.values()) {
             JSONArray array = object.getJSONArray(category.getName());
             List<String> extensionsList = getExtensionsFromJSONArray(array);
             extensions.put(category, extensionsList);
@@ -41,8 +41,8 @@ public class FilesCategory {
         return extensions;
     }
 
-    public Category matchCategory(String extension) {
-        for (Category category: extensions.keySet()) {
+    public FileCategoryType matchCategory(String extension) {
+        for (FileCategoryType category: extensions.keySet()) {
             List<String> fileCategoryExtensions = extensions.get(category);
             if (fileCategoryExtensions.contains(extension)) {
                 return category;

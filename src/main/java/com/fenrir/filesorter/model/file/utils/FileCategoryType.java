@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.file.utils;
 
-public enum Category {
+public enum FileCategoryType {
     TEXT("text"),
     EBOOK("ebook"),
     AUDIO("audio"),
@@ -16,7 +16,7 @@ public enum Category {
 
     private String name;
 
-    Category(String name) {
+    FileCategoryType(String name) {
         this.name = name;
     }
 

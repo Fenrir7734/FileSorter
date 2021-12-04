@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.file;
 
-import com.fenrir.filesorter.model.file.utils.Category;
+import com.fenrir.filesorter.model.file.utils.FileCategoryType;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -143,31 +143,31 @@ class FileDataTest {
     public void getFileCategoryShouldReturnTextCategoryForFileWithTextExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
-        Category category = fileData.getFileCategory();
-        assertEquals(Category.TEXT, category);
+        FileCategoryType category = fileData.getFileCategory();
+        assertEquals(FileCategoryType.TEXT, category);
     }
 
     @Test
     public void getFileCategoryShouldReturnOtherCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
-        Category category = fileData.getFileCategory();
-        assertEquals(Category.OTHERS, category);
+        FileCategoryType category = fileData.getFileCategory();
+        assertEquals(FileCategoryType.OTHERS, category);
     }
 
     @Test
     public void getFileCategoryShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, ".mp3");
         FileData fileData = new FileData(path);
-        Category category = fileData.getFileCategory();
-        assertEquals(Category.AUDIO, category);
+        FileCategoryType category = fileData.getFileCategory();
+        assertEquals(FileCategoryType.AUDIO, category);
     }
 
     @Test
     public void getFileCategoryShouldReturnNullForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
-        Category category = fileData.getFileCategory();
+        FileCategoryType category = fileData.getFileCategory();
         assertNull(category);
     }
 
@@ -175,8 +175,8 @@ class FileDataTest {
     public void getFileCategoryShouldReturnOtherCategoryForFileWithoutMatchingCategory() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile.xyz");
         FileData fileData = new FileData(path);
-        Category category = fileData.getFileCategory();
-        assertEquals(Category.OTHERS, category);
+        FileCategoryType category = fileData.getFileCategory();
+        assertEquals(FileCategoryType.OTHERS, category);
     }
 
     @Test

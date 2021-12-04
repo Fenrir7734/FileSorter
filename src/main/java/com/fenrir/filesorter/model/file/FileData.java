@@ -1,13 +1,11 @@
 package com.fenrir.filesorter.model.file;
 
-import com.fenrir.filesorter.model.file.utils.Category;
+import com.fenrir.filesorter.model.file.utils.FileCategoryType;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.file.utils.FilesCategory;
 import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
-import org.apache.commons.imaging.common.ImageMetadata;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,17 +88,17 @@ public class FileData {
         return null;
     }
 
-    public Category getFileCategory() throws IOException {
+    public FileCategoryType getFileCategory() throws IOException {
         if (isDirectory) {
             return null;
         }
         if (!hasExtension()) {
-            return Category.OTHERS;
+            return FileCategoryType.OTHERS;
         }
         String extension = getFileExtension();
         FilesCategory filesCategory = FilesCategory.getInstance();
-        Category category = filesCategory.matchCategory(extension);
-        return category != null ? category : Category.OTHERS;
+        FileCategoryType category = filesCategory.matchCategory(extension);
+        return category != null ? category : FileCategoryType.OTHERS;
     }
 
     public long getFileSize() {
