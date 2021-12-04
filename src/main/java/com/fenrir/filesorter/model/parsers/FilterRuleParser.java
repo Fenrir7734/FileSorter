@@ -35,7 +35,7 @@ public class FilterRuleParser {
         }
     }
 
-    private void validateRule(FilterRule rule) throws ExpressionFormatException {
+    public void validateRule(FilterRule rule) throws ExpressionFormatException {
         Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
         RuleElement operand = iterator.next();
         RuleElement operator = iterator.next();
