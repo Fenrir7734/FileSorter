@@ -104,6 +104,13 @@ public class MainController implements Controller {
             }
         });
         initForTest();
+        test();
+    }
+
+    private void test() {
+        sortRuleTextField.setText("%(YYYY)%(/)%(CAT)");
+        renameRuleTextField.setText("%(YYYY)-%(MM)%(0D)-%(FIN)%(EXT)");
+
     }
 
     private void initForTest() {
@@ -116,8 +123,8 @@ public class MainController implements Controller {
                 Path.of("/home/fenrir/Documents/Test_environment/wallpapers")
         ));
         RuleGroup group = new RuleGroup();
-        group.setRenameRule(new StringRule("%(FIN)"));
-        group.setSortRule(new StringRule("%(DIM)"));
+        group.setRenameRule(new StringRule("%(YYYY)-%(MM)%(0D)-%(FIN)%(EXT)"));
+        group.setSortRule(new StringRule("%(YYYY)%(/)%(CAT)"));
         configuration.addNamedRuleGroup("1", group);
 
     }

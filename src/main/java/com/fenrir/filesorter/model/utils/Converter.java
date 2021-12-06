@@ -82,7 +82,6 @@ public class Converter {
 
     private static long getSize(long size, char postfix) {
         switch (postfix) {
-            case 'P': size *= 1000;
             case 'T': size *= 1000;
             case 'G': size *= 1000;
             case 'M': size *= 1000;

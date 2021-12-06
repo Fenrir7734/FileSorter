@@ -10,8 +10,6 @@ import com.fenrir.filesorter.model.rule.RuleElement;
 import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class FilterRuleEditorController implements Controller {
@@ -41,9 +40,19 @@ public class FilterRuleEditorController implements Controller {
     private final Callback<ListView<ProviderType>, ListCell<ProviderType>> providerCallback = createProviderCellFactory();
     private final Callback<ListView<PredicateType>, ListCell<PredicateType>> predicateCallback = createPredicateCellFactory();
 
+    private final HashMap<ProviderType, String> argumentPromptText = new HashMap<>();
+
     @FXML
     public void initialize() {
         ControllerMediator.getInstance().registerController(this);
+
+        argumentPromptText.put(ProviderType.DIMENSION, "1920x1080");
+        argumentPromptText.put(ProviderType.FILE_EXTENSION, "txt");
+        argumentPromptText.put(ProviderType.FILE_CATEGORY, "text");
+        argumentPromptText.put(ProviderType.FILE_NAME, "xyz");
+        argumentPromptText.put(ProviderType.PATH, "xyz");
+        argumentPromptText.put(ProviderType.DATE, "2019-02-22");
+        argumentPromptText.put(ProviderType.SIZE, "100MB");
 
         actionTypeItems.addAll(ActionType.values());
         actionComboBox.setItems(actionTypeItems);
@@ -60,17 +69,22 @@ public class FilterRuleEditorController implements Controller {
         providerComboBox.setCellFactory(providerCallback);
         providerComboBox.getSelectionModel()
                 .selectedItemProperty()
-                .addListener(((observable, oldValue, newValue) -> populatePredicateList()));
+                .addListener(((observable, oldValue, newValue) -> {
+                    populatePredicateList();
+                    refreshPromptText(argumentTextFiled.getText());
+                }));
 
+        argumentTextFiled.textProperty().addListener((observable, newValue, oldValue) -> refreshPromptText(newValue));
         ruleEditorTabPane.getSelectionModel()
                 .selectedItemProperty()
-                .addListener(((observable, oldValue, newValue)  -> onTabChange(newValue)));
+                .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
         editExpressionCheckBox.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> onEditExpression(newValue));
 
         actionComboBox.getSelectionModel().select(0);
         providerComboBox.getSelectionModel().select(0);
         buildExpression();
+        refreshPromptText(null);
     }
 
     private void onTabChange(Tab newValue) {
@@ -88,6 +102,14 @@ public class FilterRuleEditorController implements Controller {
             expressionTextField.setText(expression);
             expressionTextField.setDisable(true);
             ruleBuilderTab.setDisable(false);
+        }
+    }
+
+    private void refreshPromptText(String newValue) {
+        if (newValue == null || newValue.isBlank()) {
+            ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
+            String promptText = argumentPromptText.getOrDefault(providerType, "prompt");
+            argumentTextFiled.setPromptText(promptText);
         }
     }
 
