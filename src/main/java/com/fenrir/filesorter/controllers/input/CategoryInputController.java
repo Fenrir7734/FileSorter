@@ -1,13 +1,10 @@
 package com.fenrir.filesorter.controllers.input;
 
-import com.fenrir.filesorter.controllers.InputControllerMediator;
 import com.fenrir.filesorter.model.file.utils.FileCategoryType;
-import com.fenrir.filesorter.model.file.utils.FilesCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.HBox;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.controllers.input;
 
-import com.fenrir.filesorter.controllers.InputControllerMediator;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
