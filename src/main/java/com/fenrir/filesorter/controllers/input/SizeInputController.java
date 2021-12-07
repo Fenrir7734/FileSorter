@@ -30,6 +30,6 @@ public class SizeInputController extends ArgumentInputController {
     @Override
     public String readArguments() {
         String postfix = postfixChoiceBox.getSelectionModel().getSelectedItem();
-        return inputTextField.getText() + postfix.replace("B", "");
+        return String.format("%s%s", inputTextField.getText(), postfix.replace("B", ""));
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ArgumentInputFactory {
-    public static HBox getInputContainer(ProviderType providerType) throws IOException {
+    public static ArgumentInputController getInputContainer(ProviderType providerType) throws IOException {
         return switch (providerType) {
             case FILE_NAME, FILE_EXTENSION -> loadInput("StringInput.fxml");
             case PATH -> loadInput("PathInput.fxml");
@@ -20,7 +20,9 @@ public class ArgumentInputFactory {
         };
     }
 
-    private static HBox loadInput(String name) throws IOException {
-        return FXMLLoader.load(Objects.requireNonNull(ArgumentInputFactory.class.getResource(name)));
+    private static ArgumentInputController loadInput(String name) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(ArgumentInputFactory.class.getResource(name)));
+        loader.load();
+        return loader.getController();
     }
 }

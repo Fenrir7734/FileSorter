@@ -1,5 +1,7 @@
 package com.fenrir.filesorter.controllers;
 
+import com.fenrir.filesorter.controllers.input.ArgumentInputController;
+import com.fenrir.filesorter.controllers.input.ArgumentInputFactory;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
@@ -13,23 +15,30 @@ import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class FilterRuleEditorController implements Controller {
+    private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
+
     @FXML private TabPane ruleEditorTabPane;
     @FXML private Tab ruleBuilderTab;
     @FXML private Tab expressionEditorTab;
+    @FXML private VBox inputContainer;
     @FXML private CheckBox editExpressionCheckBox;
     @FXML private ComboBox<ActionType> actionComboBox;
     @FXML private ComboBox<ProviderType> providerComboBox;
     @FXML private ComboBox<PredicateType> predicateComboBox;
-    @FXML private TextField argumentTextFiled;
     @FXML private TextField expressionTextField;
 
     private final ObservableList<ActionType> actionTypeItems = FXCollections.observableArrayList();
@@ -40,19 +49,12 @@ public class FilterRuleEditorController implements Controller {
     private final Callback<ListView<ProviderType>, ListCell<ProviderType>> providerCallback = createProviderCellFactory();
     private final Callback<ListView<PredicateType>, ListCell<PredicateType>> predicateCallback = createPredicateCellFactory();
 
-    private final HashMap<ProviderType, String> argumentPromptText = new HashMap<>();
+    private InputControllerMediator inputControllerMediator = new InputControllerMediator();
 
     @FXML
     public void initialize() {
         ControllerMediator.getInstance().registerController(this);
-
-        argumentPromptText.put(ProviderType.DIMENSION, "1920x1080");
-        argumentPromptText.put(ProviderType.FILE_EXTENSION, "txt");
-        argumentPromptText.put(ProviderType.FILE_CATEGORY, "text");
-        argumentPromptText.put(ProviderType.FILE_NAME, "xyz");
-        argumentPromptText.put(ProviderType.PATH, "xyz");
-        argumentPromptText.put(ProviderType.DATE, "2019-02-22");
-        argumentPromptText.put(ProviderType.SIZE, "100MB");
+        inputControllerMediator.registerFilterRuleEditorController(this);
 
         actionTypeItems.addAll(ActionType.values());
         actionComboBox.setItems(actionTypeItems);
@@ -71,10 +73,9 @@ public class FilterRuleEditorController implements Controller {
                 .selectedItemProperty()
                 .addListener(((observable, oldValue, newValue) -> {
                     populatePredicateList();
-                    refreshPromptText(argumentTextFiled.getText());
+                    changeInputFields();
                 }));
 
-        argumentTextFiled.textProperty().addListener((observable, newValue, oldValue) -> refreshPromptText(newValue));
         ruleEditorTabPane.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
@@ -84,7 +85,7 @@ public class FilterRuleEditorController implements Controller {
         actionComboBox.getSelectionModel().select(0);
         providerComboBox.getSelectionModel().select(0);
         buildExpression();
-        refreshPromptText(null);
+        changeInputFields();
     }
 
     private void onTabChange(Tab newValue) {
@@ -102,14 +103,6 @@ public class FilterRuleEditorController implements Controller {
             expressionTextField.setText(expression);
             expressionTextField.setDisable(true);
             ruleBuilderTab.setDisable(false);
-        }
-    }
-
-    private void refreshPromptText(String newValue) {
-        if (newValue == null || newValue.isBlank()) {
-            ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
-            String promptText = argumentPromptText.getOrDefault(providerType, "prompt");
-            argumentTextFiled.setPromptText(promptText);
         }
     }
 
@@ -132,6 +125,36 @@ public class FilterRuleEditorController implements Controller {
         predicateComboBox.getSelectionModel().select(0);
     }
 
+    private void changeInputFields() {
+        try {
+            inputContainer.getChildren().clear();
+            inputControllerMediator = new InputControllerMediator();
+            ProviderType selectedProvider = providerComboBox.getSelectionModel().getSelectedItem();
+            ArgumentInputController argumentInputController = ArgumentInputFactory.getInputContainer(selectedProvider);
+            argumentInputController.setInputControllerMediator(inputControllerMediator);
+            inputContainer.getChildren().add(argumentInputController.getInputContainer());
+        } catch (IOException e) {
+            logger.error("Error during changing input controller: {}", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void addInputField() {
+        try {
+            ProviderType selectedProvider = providerComboBox.getSelectionModel().getSelectedItem();
+            ArgumentInputController argumentInputController = ArgumentInputFactory.getInputContainer(selectedProvider);
+            argumentInputController.setInputControllerMediator(inputControllerMediator);
+            inputContainer.getChildren().add(argumentInputController.getInputContainer());
+        } catch (IOException e) {
+            logger.error("Error during adding input controller: {}", e.getMessage());
+        }
+    }
+
+    public void deleteInputField(HBox containerToDelete) {
+        inputContainer.getChildren().remove(containerToDelete);
+    }
+
     private boolean isProviderInFilterScope(ProviderType type) {
         return Arrays.asList(type.getScope()).contains(Scope.FILTER);
     }
@@ -140,6 +163,7 @@ public class FilterRuleEditorController implements Controller {
     public void confirm() {
         try {
             String expression = getExpression();
+            System.out.println(expression);
             FilterRule filterRule = new FilterRule(expression);
             FilterRuleParser parser = new FilterRuleParser();
             parser.validateRule(filterRule);
@@ -162,7 +186,8 @@ public class FilterRuleEditorController implements Controller {
     private String buildExpression() {
         ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
         PredicateType predicateType = predicateComboBox.getSelectionModel().getSelectedItem();
-        String args = argumentTextFiled.getText();
+        List<String> listOfArguments = inputControllerMediator.receiveArguments();
+        String args = String.join(",", listOfArguments);
         return String.format("%s(%s)%s(%s:%s)", "%", providerType.getToken(), "%", predicateType.getToken(), args);
     }
 
@@ -177,18 +202,7 @@ public class FilterRuleEditorController implements Controller {
     }
 
     public void receiveRule(FilterRule filterRule) {
-        if (filterRule != null) {
-            Iterator<RuleElement> iter = filterRule.getRuleElementsIterator();
-            RuleElement provider = iter.next();
-            RuleElement predicate = iter.next();
-            ProviderType providerTypeToSelect = ProviderType.getType(provider.element(), Scope.FILTER);
-            PredicateType predicateTypeToSelect = PredicateType.getType(predicate.element());
-            String args = predicate.args() != null ? String.join(",", predicate.args()) : "";
-            providerComboBox.getSelectionModel().select(providerTypeToSelect);
-            predicateComboBox.getSelectionModel().select(predicateTypeToSelect);
-            argumentTextFiled.setText(args);
-            expressionTextField.setText(buildExpression());
-        }
+
     }
 
     private Callback<ListView<ActionType>, ListCell<ActionType>> createActionCellFactory() {
