@@ -1,5 +1,8 @@
-package com.fenrir.filesorter.controllers;
+package com.fenrir.filesorter.controllers.main;
 
+import com.fenrir.filesorter.controllers.Controller;
+import com.fenrir.filesorter.controllers.ControllerMediator;
+import com.fenrir.filesorter.controllers.GUILogPrinter;
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.Processor;
 import com.fenrir.filesorter.model.Sorter;
@@ -361,7 +364,7 @@ public class MainController implements Controller {
     @FXML
     public void addFilterRule() {
         try {
-            loadEditorView("FilterRuleEditorView.fxml");
+            loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -372,7 +375,7 @@ public class MainController implements Controller {
         try {
             FilterRule selectedFilterRule = filterListView.getSelectionModel().getSelectedItem();
             if (selectedFilterRule != null) {
-                loadEditorView("FilterRuleEditorView.fxml");
+                loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
                 ControllerMediator.getInstance().sendFilterRuleToEdit(selectedFilterRule);
             }
         } catch (IOException e) {

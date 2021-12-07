@@ -1,18 +1,16 @@
-package com.fenrir.filesorter.controllers;
+package com.fenrir.filesorter.controllers.editor.filter;
 
-import com.fenrir.filesorter.controllers.input.ArgumentInputController;
+import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InputControllerMediator {
-    private static InputControllerMediator instance;
-
-    private FilterRuleEditorController filterRuleEditorController;
+    private FilterRuleBuilderController filterRuleBuilderController;
     private final List<ArgumentInputController> inputControllers = new ArrayList<>();
 
-    public void registerFilterRuleEditorController(FilterRuleEditorController controller) {
-        filterRuleEditorController = controller;
+    public void registerFilterRuleBuilderController(FilterRuleBuilderController controller) {
+        filterRuleBuilderController = controller;
     }
 
     public void registerInputController(ArgumentInputController controller) {
@@ -20,12 +18,8 @@ public class InputControllerMediator {
     }
 
     public void unregisterInputController(ArgumentInputController controller) {
-        filterRuleEditorController.deleteInputField(controller.getInputContainer());
+        filterRuleBuilderController.deleteInputField(controller.getInputContainer());
         inputControllers.remove(controller);
-    }
-
-    public void unregisterAllInputControllers() {
-        inputControllers.clear();
     }
 
     public List<String> receiveArguments() {
@@ -34,6 +28,13 @@ public class InputControllerMediator {
             args.add(controller.readArguments());
         }
         return args;
+    }
+
+    public void sendArguments(List<String> args) {
+        for (int i = 0; i < args.size(); i++) {
+            String arg = args.get(i);
+            inputControllers.get(i).setArguments(arg);
+        }
     }
 
     public InputControllerMediator() { }

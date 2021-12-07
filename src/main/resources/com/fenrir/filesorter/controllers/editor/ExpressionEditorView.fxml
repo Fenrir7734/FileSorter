@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" fx:controller="com.fenrir.filesorter.controllers.editor.ExpressionEditorController">
+    <CheckBox fx:id="editExpressionCheckBox" mnemonicParsing="false" />
+    <TextField fx:id="expressionTextField" disable="true" prefWidth="500.0">
+        <HBox.margin>
+            <Insets right="18.0" />
+        </HBox.margin></TextField>
+</HBox>

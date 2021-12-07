@@ -19,7 +19,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         logger.info("Starting");
         Parent root = FXMLLoader.load(
-                Objects.requireNonNull(getClass().getResource("controllers/MainView.fxml"))
+                Objects.requireNonNull(getClass().getResource("controllers/main/MainView.fxml"))
         );
         Scene scene = new Scene(root);
         stage.setMinWidth(650);

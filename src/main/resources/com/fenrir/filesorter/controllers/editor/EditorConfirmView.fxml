@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fenrir.filesorter.controllers.editor.EditorConfirmController" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="40.0">
+    <children>
+        <Button mnemonicParsing="false" onAction="#confirm" prefHeight="30.0" prefWidth="100.0" text="Confirm" />
+        <Button mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
+    </children>
+    <VBox.margin>
+        <Insets bottom="10.0" />
+    </VBox.margin>
+</HBox>

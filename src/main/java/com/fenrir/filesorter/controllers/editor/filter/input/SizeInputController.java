@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.controllers.input;
+package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +29,17 @@ public class SizeInputController extends ArgumentInputController {
 
     @Override
     public String readArguments() {
+        String size = inputTextField.getText();
         String postfix = postfixChoiceBox.getSelectionModel().getSelectedItem();
-        return String.format("%s%s", inputTextField.getText(), postfix.replace("B", ""));
+        return !size.isEmpty() ? String.format("%s%s", size, postfix.replace("B", "")) : "";
+    }
+
+    @Override
+    public void setArguments(String arg) {
+        String postfix = Character.isDigit(arg.charAt(arg.length() - 1)) ? "" : arg.substring(arg.length() - 1);
+        postfix += "B";
+        String size = arg.replace(postfix, "");
+        postfixChoiceBox.getSelectionModel().select(postfix);
+        inputTextField.setText(size);
     }
 }

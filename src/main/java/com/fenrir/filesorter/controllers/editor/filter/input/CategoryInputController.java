@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.controllers.input;
+package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import com.fenrir.filesorter.model.file.utils.FileCategoryType;
 import javafx.collections.FXCollections;
@@ -26,5 +26,10 @@ public class CategoryInputController extends ArgumentInputController {
     @Override
     public String readArguments() {
         return categoryChoiceBox.getSelectionModel().getSelectedItem();
+    }
+
+    @Override
+    public void setArguments(String arg) {
+        categoryChoiceBox.getSelectionModel().select(arg);
     }
 }

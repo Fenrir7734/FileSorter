@@ -1,5 +1,7 @@
-package com.fenrir.filesorter.controllers;
+package com.fenrir.filesorter.controllers.editor;
 
+import com.fenrir.filesorter.controllers.Controller;
+import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

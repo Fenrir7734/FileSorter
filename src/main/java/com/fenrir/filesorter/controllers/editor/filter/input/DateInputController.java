@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.controllers.input;
+package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -35,6 +35,12 @@ public class DateInputController extends ArgumentInputController {
 
     @Override
     public String readArguments() {
-        return datePicker.toString();
+        LocalDate date = datePicker.getValue();
+        return date != null ? date.toString() : "";
+    }
+
+    @Override
+    public void setArguments(String arg) {
+        datePicker.setValue(LocalDate.parse(arg));
     }
 }

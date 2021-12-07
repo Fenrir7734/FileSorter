@@ -1,5 +1,9 @@
 package com.fenrir.filesorter.controllers;
 
+import com.fenrir.filesorter.controllers.editor.RenameRuleEditorController;
+import com.fenrir.filesorter.controllers.editor.SortRuleEditorController;
+import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
+import com.fenrir.filesorter.controllers.main.MainController;
 import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.StringRule;
 

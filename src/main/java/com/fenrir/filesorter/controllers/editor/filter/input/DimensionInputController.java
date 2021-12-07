@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.controllers.input;
+package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -24,6 +24,15 @@ public class DimensionInputController extends ArgumentInputController {
 
     @Override
     public String readArguments() {
-        return String.format("%sx%s", widthInputField.getText(), heightInputField.getText());
+        String width = widthInputField.getText();
+        String height = heightInputField.getText();
+        return !width.isEmpty() && !height.isEmpty() ? String.format("%sx%s", width, height) : "";
+    }
+
+    @Override
+    public void setArguments(String arg) {
+        String[] dimension = arg.split("x");
+        widthInputField.setText(dimension[0]);
+        heightInputField.setText(dimension[1]);
     }
 }

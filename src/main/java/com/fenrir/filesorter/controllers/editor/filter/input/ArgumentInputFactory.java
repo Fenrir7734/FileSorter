@@ -1,8 +1,7 @@
-package com.fenrir.filesorter.controllers.input;
+package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.util.Objects;

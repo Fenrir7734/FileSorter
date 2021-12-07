@@ -6,10 +6,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="inputHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.input.PathInputController">
+<HBox fx:id="inputHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.filter.input.StringInputController">
    <children>
       <TextField fx:id="inputTextField" prefHeight="30.0" promptText="xyz" HBox.hgrow="ALWAYS" />
-      <Button mnemonicParsing="false" onAction="#selectPath" prefHeight="30.0" prefWidth="30.0" text="..." />
       <Button mnemonicParsing="false" onAction="#deleteInputContainer" prefHeight="30.0" prefWidth="30.0" text="✕">
          <font>
             <Font size="18.0" />

@@ -3,14 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="inputHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.input.SizeInputController">
+<HBox fx:id="inputHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.filter.input.CategoryInputController">
    <children>
-      <TextField fx:id="inputTextField" prefHeight="30.0" promptText="100" HBox.hgrow="ALWAYS" />
-      <ChoiceBox fx:id="postfixChoiceBox" prefHeight="30.0" prefWidth="50.0" />
+      <ChoiceBox fx:id="categoryChoiceBox" prefHeight="30.0" prefWidth="260.0" />
       <Button mnemonicParsing="false" onAction="#deleteInputContainer" prefHeight="30.0" prefWidth="30.0" text="✕">
          <font>
             <Font size="18.0" />
