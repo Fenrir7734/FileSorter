@@ -11,30 +11,26 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.FilterRuleEditorController">
+<VBox prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.FilterRuleEditorController">
    <children>
-      <TabPane fx:id="ruleEditorTabPane" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="ruleEditorTabPane" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
             <Tab fx:id="ruleBuilderTab" text="Rule builder">
                 <content>
                     <VBox spacing="20.0">
                         <HBox fx:id="ruleBuilderHBox" alignment="CENTER" prefHeight="40.0" spacing="10.0">
                             <children>
-                                <ComboBox fx:id="actionComboBox" prefWidth="173.0" visibleRowCount="20" />
+                                <ComboBox fx:id="actionComboBox" prefHeight="30.0" prefWidth="173.0" visibleRowCount="20" />
                                 <Label text="if" />
-                                <ComboBox fx:id="providerComboBox" prefWidth="173.0" visibleRowCount="20" />
-                                <ComboBox fx:id="predicateComboBox" prefWidth="173.0" visibleRowCount="20" />
+                                <ComboBox fx:id="providerComboBox" prefHeight="30.0" prefWidth="173.0" visibleRowCount="20" />
+                                <ComboBox fx:id="predicateComboBox" prefHeight="30.0" prefWidth="173.0" visibleRowCount="20" />
                             </children>
                         <VBox.margin>
                            <Insets top="20.0" />
                         </VBox.margin>
                         </HBox>
-                          <HBox alignment="CENTER">
-                              <children>
-                                  <TextField fx:id="argumentTextFiled" HBox.hgrow="ALWAYS" />
-                              </children>
-                          </HBox>
-                     <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="+" />
+                     <VBox fx:id="inputContainer" alignment="CENTER" spacing="10.0" />
+                     <Button mnemonicParsing="false" onAction="#addInputField" prefHeight="30.0" prefWidth="30.0" text="+" />
                      <padding>
                         <Insets left="20.0" right="20.0" />
                      </padding>
