@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fenrir.filesorter.controllers.main.SourceTabController" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+    <center>
+        <ListView fx:id="sourcesListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets left="20.0" right="20.0" top="20.0" />
+            </BorderPane.margin>
+        </ListView>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#addFileToSource" prefHeight="30.0" prefWidth="100.0" text="Add FIle" />
+                <Button mnemonicParsing="false" onAction="#addDirectoryToSource" prefHeight="30.0" prefWidth="100.0" text="Add Folder" />
+                <Button mnemonicParsing="false" onAction="#removeFromSource" prefHeight="30.0" prefWidth="100.0" text="Remove" />
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

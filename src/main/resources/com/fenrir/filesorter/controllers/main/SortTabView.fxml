@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fenrir.filesorter.controllers.main.SortTabController" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <TitledPane collapsible="false" prefHeight="75.0" prefWidth="200.0" text="Target" VBox.vgrow="ALWAYS">
+                    <content>
+                        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0" spacing="20.0">
+                            <children>
+                                <TextField fx:id="targetPathTextField" editable="false" HBox.hgrow="ALWAYS" />
+                                <Button mnemonicParsing="false" onAction="#choiceTargetDirectory" text="Choose" />
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </HBox>
+                    </content>
+                </TitledPane>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </BorderPane.margin>
+        </VBox>
+    </top>
+    <bottom>
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#sort" prefHeight="30.0" prefWidth="100.0" text="Sort" />
+                <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="30.0" progress="0.0" />
+                <Label fx:id="progressLabel" prefHeight="30.0" prefWidth="710.0" />
+            </children>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+            <padding>
+                <Insets left="20.0" right="20.0" />
+            </padding>
+        </HBox>
+    </bottom>
+</BorderPane>
