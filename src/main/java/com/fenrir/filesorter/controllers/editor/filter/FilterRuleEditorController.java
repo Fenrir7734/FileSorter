@@ -41,6 +41,7 @@ public class FilterRuleEditorController implements Controller, EditorController 
     }
 
     private void onTabChange(Tab newValue) {
+        System.out.println("TabPane: " + ruleEditorTabPane.getHeight());
         if (newValue.equals(expressionEditorTab)) {
             String expression = getExpression();
             expressionEditorController.setExpression(expression);

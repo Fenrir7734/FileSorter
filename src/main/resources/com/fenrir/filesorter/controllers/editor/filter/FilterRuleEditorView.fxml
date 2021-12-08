@@ -4,13 +4,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController">
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController">
    <children>
-      <TabPane fx:id="ruleEditorTabPane" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+      <TabPane fx:id="ruleEditorTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
             <Tab fx:id="ruleBuilderTab" text="Rule builder">
                 <content>
-                    <fx:include fx:id="filterRuleBuilder" source="FilterRuleBuilderView.fxml"/>
+                    <fx:include fx:id="filterRuleBuilder" source="FilterRuleBuilderView.fxml" />
                 </content>
             </Tab>
             <Tab fx:id="expressionEditorTab" closable="false" text="Expression editor">
@@ -20,6 +20,6 @@
             </Tab>
         </tabs>
       </TabPane>
-       <fx:include fx:id="editorConfirm" source="../EditorConfirmView.fxml"/>
+       <fx:include fx:id="editorConfirm" source="../EditorConfirmView.fxml" />
    </children>
 </VBox>
