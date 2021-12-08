@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.controllers.editor;
+package com.fenrir.filesorter.controllers.editor.sort;
 
 import com.fenrir.filesorter.controllers.Controller;
 import com.fenrir.filesorter.controllers.ControllerMediator;
@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class RenameRuleEditorController implements Controller {
+public class SortRuleEditorController implements Controller {
     @FXML private TextField ruleTextField;
 
     @FXML
@@ -18,8 +18,8 @@ public class RenameRuleEditorController implements Controller {
     @FXML
     public void confirm() {
         String expression = ruleTextField.getText();
-        StringRule renameRule = new StringRule(expression);
-        ControllerMediator.getInstance().sendReadyRenameRule(renameRule);
+        StringRule sortRule = new StringRule(expression);
+        ControllerMediator.getInstance().sendReadySortRule(sortRule);
         close();
     }
 
@@ -33,9 +33,9 @@ public class RenameRuleEditorController implements Controller {
         stage.close();
     }
 
-    public void receiveRule(StringRule renameRule) {
-        if (renameRule != null) {
-            ruleTextField.setText(renameRule.getExpression());
+    public void receiveRule(StringRule sortRule) {
+        if (sortRule != null) {
+            ruleTextField.setText(sortRule.getExpression());
         }
     }
 }

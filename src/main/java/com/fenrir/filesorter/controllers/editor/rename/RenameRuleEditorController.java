@@ -1,21 +1,21 @@
-package com.fenrir.filesorter.controllers.editor.filter;
+package com.fenrir.filesorter.controllers.editor.rename;
 
 import com.fenrir.filesorter.controllers.Controller;
 import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.controllers.editor.EditorConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
-import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
-import com.fenrir.filesorter.model.parsers.FilterRuleParser;
-import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.controllers.editor.filter.FilterRuleBuilderController;
+import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
+import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class FilterRuleEditorController implements Controller, EditorController {
+public class RenameRuleEditorController implements Controller, EditorController {
     private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
 
     @FXML private ExpressionEditorController expressionEditorController;
@@ -34,9 +34,9 @@ public class FilterRuleEditorController implements Controller, EditorController 
             editorConfirmController.setParent(this);
             ruleEditorTabPane.getSelectionModel()
                     .selectedItemProperty()
-                    .addListener((observable, oldValue, newValue) -> onTabChange(newValue));
+                    .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
         } catch (Exception e) {
-            logger.error("Error during initializing FilterRuleEditor: {}", e.getMessage());
+            logger.error("Error during initializing RenameRuleEditor: {}", e.getMessage());
         }
     }
 
@@ -47,13 +47,13 @@ public class FilterRuleEditorController implements Controller, EditorController 
         }
     }
 
-    public void receiveRule(FilterRule rule) {
-        filterRuleBuilderController.receiveRule(rule);
+    public void receiveRule(StringRule renameRule) {
+
     }
 
     @Override
     public String getExpression() {
-        return filterRuleBuilderController.buildExpression();
+        return null;
     }
 
     @Override
@@ -66,24 +66,13 @@ public class FilterRuleEditorController implements Controller, EditorController 
         ruleBuilderTab.setDisable(false);
     }
 
-    @Override
+    @FXML
     public void confirm() {
-        try {
-            String expression = filterRuleBuilderController.buildExpression();
-            FilterRule rule = new FilterRule(expression);
-            FilterRuleParser parser = new FilterRuleParser();
-            parser.validateRule(rule);
-            ControllerMediator.getInstance().sendReadyFilterRule(rule);
-            close();
-        } catch (ExpressionFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            alert.showAndWait();
-        }
+
     }
 
     @Override
     public void close() {
-        Stage stage = (Stage) ruleEditorTabPane.getScene().getWindow();
-        stage.close();
+
     }
 }

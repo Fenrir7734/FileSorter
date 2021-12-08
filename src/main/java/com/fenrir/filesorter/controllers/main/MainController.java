@@ -340,7 +340,7 @@ public class MainController implements Controller {
     @FXML
     public void editRenameRule() {
         try {
-            loadEditorView("RenameRuleEditorView.fxml");
+            loadEditorView("/com/fenrir/filesorter/controllers/editor/rename/RenameRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendRenameRuleToEdit(selectedRuleGroup.getRenameRule());
@@ -352,7 +352,7 @@ public class MainController implements Controller {
     @FXML
     public void editSortRule() {
         try {
-            loadEditorView("SortRuleEditorView.fxml");
+            loadEditorView("/com/fenrir/filesorter/controllers/editor/sort/SortRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendSortRuleToEdit(selectedRuleGroup.getSortRule());

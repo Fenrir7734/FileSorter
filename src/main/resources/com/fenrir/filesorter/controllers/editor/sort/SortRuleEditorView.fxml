@@ -13,7 +13,7 @@
       minWidth="-Infinity"
       xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fenrir.filesorter.controllers.editor.SortRuleEditorController">
+      fx:controller="com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController">
    <children>
       <TextField fx:id="ruleTextField" prefWidth="360.0" />
       <HBox alignment="CENTER" spacing="40.0">
