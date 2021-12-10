@@ -7,12 +7,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SortRuleEditorController implements Controller {
+public class SortRuleEditorController {
     @FXML private TextField ruleTextField;
 
     @FXML
     public void initialize() {
-        ControllerMediator.getInstance().registerController(this);
+        ControllerMediator.getInstance().registerSortRuleEditorController(this);
     }
 
     @FXML

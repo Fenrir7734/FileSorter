@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class FilterRuleEditorController implements Controller, EditorController {
+public class FilterRuleEditorController implements EditorController {
     private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
 
     @FXML private ExpressionEditorController expressionEditorController;
@@ -29,7 +29,7 @@ public class FilterRuleEditorController implements Controller, EditorController 
     @FXML
     public void initialize() {
         try {
-            ControllerMediator.getInstance().registerController(this);
+            ControllerMediator.getInstance().registerFilterRuleEditorController(this);
             expressionEditorController.setParent(this);
             editorConfirmController.setParent(this);
             ruleEditorTabPane.getSelectionModel()
