@@ -2,6 +2,7 @@ package com.fenrir.filesorter.model.statement.types;
 
 
 import com.fenrir.filesorter.model.enums.Category;
+import com.fenrir.filesorter.model.enums.Group;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
@@ -19,7 +20,7 @@ import java.util.List;
 import static com.fenrir.filesorter.model.enums.Scope.*;
 
 public enum ProviderType {
-    DIMENSION("DIM", "dimension", new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER) {
+    DIMENSION("DIM", "dimension", new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER, Group.PHOTO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new ImageDimensionProvider(description);
@@ -33,7 +34,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dimensions);
         }
     },
-    FILE_EXTENSION("EXT", "extension", new Scope[]{SORT, RENAME, FILTER}, Category.STRING) {
+    FILE_EXTENSION("EXT", "extension", new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileExtensionProvider(description);
@@ -45,7 +46,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_CATEGORY("CAT", "category", new Scope[]{SORT, RENAME, FILTER}, Category.EXACT_STRING) {
+    FILE_CATEGORY("CAT", "category", new Scope[]{SORT, RENAME, FILTER}, Category.EXACT_STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileCategoryProvider(description);
@@ -57,7 +58,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_NAME("FIN", "file name", new Scope[]{RENAME, FILTER}, Category.STRING) {
+    FILE_NAME("FIN", "file name", new Scope[]{RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileNameProvider(description);
@@ -69,7 +70,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    SEPARATOR("/", "/", new Scope[]{SORT}, Category.NONE) {
+    SEPARATOR("/", "/", new Scope[]{SORT}, Category.NONE, Group.NONE) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileSeparatorProvider(description);
@@ -80,7 +81,7 @@ public enum ProviderType {
             throw new UnsupportedOperationException();
         }
     },
-    PATH("PAT", "path", new Scope[]{FILTER}, Category.STRING) {
+    PATH("PAT", "path", new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FilePathProvider(description);
@@ -93,7 +94,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, paths);
         }
     },
-    DATE("DAT", "creation date", new Scope[]{FILTER}, Category.DATE) {
+    DATE("DAT", "creation date", new Scope[]{FILTER}, Category.DATE, Group.DATES) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new DateProvider(description);
@@ -107,7 +108,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dates);
         }
     },
-    SIZE("SIZ", "size", new Scope[]{FILTER}, Category.NUMBER) {
+    SIZE("SIZ", "size", new Scope[]{FILTER}, Category.NUMBER, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(ProviderDescription description) {
             return new FileSizeProvider(description);
@@ -126,12 +127,14 @@ public enum ProviderType {
     private final String name;
     private final Scope[] scope;
     private final Category category;
+    private final Group group;
 
-    ProviderType(String token, String name, Scope[] scope, Category category) {
+    ProviderType(String token, String name, Scope[] scope, Category category, Group group) {
         this.token = token;
         this.name = name;
         this.scope = scope;
         this.category = category;
+        this.group = group;
     }
 
     public static ProviderType getType(String token, Scope scope) {
@@ -169,5 +172,9 @@ public enum ProviderType {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 }
