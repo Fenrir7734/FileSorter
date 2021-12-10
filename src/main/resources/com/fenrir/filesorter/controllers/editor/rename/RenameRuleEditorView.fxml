@@ -10,6 +10,7 @@
          <tabs>
             <Tab fx:id="ruleBuilderTab" text="Rule builder">
                <content>
+                  <fx:include fx:id="renameRuleBuilder" source="RenameRuleBuilderView.fxml"/>
                </content>
             </Tab>
             <Tab fx:id="expressionEditorTab" closable="false" text="Expression editor">
