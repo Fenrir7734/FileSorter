@@ -1,180 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.main.MainController">
-  <tabs>
-    <Tab text="Sort">
-          <content>
-            <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <top>
-                  <VBox BorderPane.alignment="CENTER">
-                     <children>
-                        <TitledPane collapsible="false" prefHeight="75.0" prefWidth="200.0" text="Target" VBox.vgrow="ALWAYS">
-                           <content>
-                              <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0" spacing="20.0">
-                                 <children>
-                                    <TextField fx:id="targetPathTextField" editable="false" HBox.hgrow="ALWAYS" />
-                                    <Button mnemonicParsing="false" onAction="#choiceTargetDirectory" text="Choose" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </HBox>
-                           </content>
-                        </TitledPane>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
-                  </VBox>
-               </top>
-               <bottom>
-                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#sort" prefHeight="30.0" prefWidth="100.0" text="Sort" />
-                        <ProgressIndicator fx:id="progressIndicator" prefHeight="30.0" prefWidth="30.0" progress="0.0" />
-                        <Label fx:id="progressLabel" prefHeight="30.0" prefWidth="710.0" />
-                     </children>
-                     <BorderPane.margin>
-                        <Insets />
-                     </BorderPane.margin>
-                     <padding>
-                        <Insets left="20.0" right="20.0" />
-                     </padding>
-                  </HBox>
-               </bottom></BorderPane>
-          </content>
-    </Tab>
-      <Tab text="Source">
-          <content>
-              <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <center>
-                  <ListView fx:id="sourcesListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets left="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
-                  </ListView>
-               </center>
-               <bottom>
-                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#addFileToSource" prefHeight="30.0" prefWidth="100.0" text="Add FIle" />
-                        <Button mnemonicParsing="false" onAction="#addDirectoryToSource" prefHeight="30.0" prefWidth="100.0" text="Add Folder" />
-                        <Button mnemonicParsing="false" onAction="#removeFromSource" prefHeight="30.0" prefWidth="100.0" text="Remove" />
-                     </children>
-                  </HBox>
-               </bottom></BorderPane>
-          </content>
-      </Tab>
-     <Tab text="Rule">
-        <content>
-           <SplitPane dividerPositions="0.25" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <items>
-                 <HBox prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                       <VBox alignment="TOP_CENTER" maxWidth="56.0" minWidth="56.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                          <children>
-                             <Button mnemonicParsing="false" onAction="#addRuleGroup" prefHeight="30.0" prefWidth="30.0" text="+" />
-                             <Button fx:id="removeRuleGroupButton" mnemonicParsing="false" onAction="#removeRuleGroup" prefHeight="30.0" prefWidth="30.0" text="-" />
-                             <Button fx:id="moveUpRuleGroupButton" mnemonicParsing="false" onAction="#moveRuleGroupUp" prefHeight="30.0" prefWidth="30.0" text="U" />
-                             <Button fx:id="moveDownRuleGroupButton" mnemonicParsing="false" onAction="#moveRuleGroupDown" prefHeight="30.0" prefWidth="30.0" text="D" />
-                          </children>
-                       </VBox>
-                       <ListView fx:id="ruleGroupListView" editable="true" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                    </children>
-                    <padding>
-                       <Insets right="5.0" />
-                    </padding>
-                 </HBox>
-                 <VBox prefHeight="569.0" prefWidth="476.0">
-                    <children>
-                       <TitledPane fx:id="ruleEditorPane" alignment="CENTER" collapsible="false" minWidth="400.0" prefHeight="543.0" prefWidth="660.0" text="Rule 1">
-                          <content>
-                             <VBox prefHeight="200.0" prefWidth="100.0">
-                                <children>
-                                   <TitledPane animated="false" collapsible="false" prefHeight="75.0" text="Rename">
-                                      <content>
-                                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                            <children>
-                                               <TextField fx:id="renameRuleTextField" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                               <Button mnemonicParsing="false" onAction="#editRenameRule" text="Edit" HBox.hgrow="ALWAYS" />
-                                            </children>
-                                            <padding>
-                                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                            </padding>
-                                         </HBox>
-                                      </content>
-                                      <VBox.margin>
-                                         <Insets bottom="10.0" />
-                                      </VBox.margin>
-                                   </TitledPane>
-                                   <TitledPane animated="false" collapsible="false" prefHeight="75.0" text="Sort">
-                                      <content>
-                                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                                            <children>
-                                               <TextField fx:id="sortRuleTextField" editable="false" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                               <Button mnemonicParsing="false" onAction="#editSortRule" text="Edit" HBox.hgrow="ALWAYS" />
-                                            </children>
-                                            <padding>
-                                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                            </padding>
-                                         </HBox>
-                                      </content>
-                                      <VBox.margin>
-                                         <Insets bottom="10.0" />
-                                      </VBox.margin>
-                                   </TitledPane>
-                                   <TitledPane animated="false" collapsible="false" prefHeight="286.0" text="Filter">
-                                      <content>
-                                         <HBox prefHeight="100.0" prefWidth="200.0">
-                                            <children>
-                                               <ListView fx:id="filterListView" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                               <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="50.0" spacing="17.0">
-                                                  <children>
-                                                     <Button mnemonicParsing="false" onAction="#addFilterRule" prefHeight="30.0" prefWidth="30.0" text="+" />
-                                                     <Button fx:id="editFilterRuleButton" mnemonicParsing="false" onAction="#editFilterRule" prefHeight="30.0" prefWidth="30.0" text="E" />
-                                                     <Button fx:id="removeFilterRuleButton" mnemonicParsing="false" onAction="#removeFilterRule" prefHeight="30.0" prefWidth="30.0" text="-" />
-                                                     <Button fx:id="moveUpFilterRuleButton" mnemonicParsing="false" onAction="#moveFilterRuleUp" prefHeight="30.0" prefWidth="30.0" text="U" />
-                                                     <Button fx:id="moveDownFilterRuleButton" mnemonicParsing="false" onAction="#moveFilterRuleDown" prefHeight="30.0" prefWidth="30.0" text="D" />
-                                                  </children>
-                                                  <HBox.margin>
-                                                     <Insets right="10.0" />
-                                                  </HBox.margin>
-                                               </VBox>
-                                            </children>
-                                            <padding>
-                                               <Insets bottom="20.0" left="20.0" top="20.0" />
-                                            </padding>
-                                         </HBox>
-                                      </content>
-                                   </TitledPane>
-                                </children>
-                             </VBox>
-                          </content>
-                       </TitledPane>
-                    </children>
-                    <padding>
-                       <Insets left="5.0" />
-                    </padding>
-                 </VBox>
-              </items>
-              <padding>
-                 <Insets bottom="20.0" right="20.0" top="20.0" />
-              </padding></SplitPane>
-        </content>
-      </Tab>
-  </tabs>
+    <tabs>
+        <Tab text="Sort">
+            <content>
+                <fx:include fx:id="sortTab" source="SortTabView.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="Source">
+            <content>
+                <fx:include fx:id="sourceTab" source="SourceTabView.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="Rule">
+            <content>
+                <fx:include fx:id="ruleTab" source="RuleTabView.fxml"/>
+            </content>
+        </Tab>
+    </tabs>
 </TabPane>
