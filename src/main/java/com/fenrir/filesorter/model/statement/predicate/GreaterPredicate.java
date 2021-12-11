@@ -17,6 +17,6 @@ public class GreaterPredicate<T extends Comparable<T>> implements Predicate<T> {
     @Override
     public boolean test(FileData fileData) throws IOException {
         T operand = operandStatement.get(fileData);
-        return operand.compareTo(arg) > 0;
+        return operand != null && operand.compareTo(arg) > 0;
     }
 }

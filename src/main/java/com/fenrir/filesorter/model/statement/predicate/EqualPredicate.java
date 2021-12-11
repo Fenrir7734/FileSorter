@@ -18,9 +18,11 @@ public class EqualPredicate<T extends Comparable<T>> implements Predicate<T> {
     @Override
     public boolean test(FileData fileData) throws IOException {
         T operand = operandStatement.get(fileData);
-        for (T arg : args) {
-            if (operand.compareTo(arg) == 0) {
-                return true;
+        if (operand != null) {
+            for (T arg : args) {
+                if (arg.compareTo(operand) == 0) {
+                    return true;
+                }
             }
         }
         return false;

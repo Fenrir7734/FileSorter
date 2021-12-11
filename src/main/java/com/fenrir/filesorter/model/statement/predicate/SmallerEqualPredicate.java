@@ -17,6 +17,6 @@ public class SmallerEqualPredicate<T extends Comparable<T>> implements Predicate
     @Override
     public boolean test(FileData fileData) throws IOException {
         T operand = operandStatement.get(fileData);
-        return operand.compareTo(arg) <= 0;
+        return operand != null && operand.compareTo(arg) <= 0;
     }
 }

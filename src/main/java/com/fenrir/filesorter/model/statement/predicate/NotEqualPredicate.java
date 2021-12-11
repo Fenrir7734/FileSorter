@@ -18,9 +18,11 @@ public class NotEqualPredicate<T extends Comparable<T>> implements Predicate<T> 
     @Override
     public boolean test(FileData fileData) throws IOException {
         T operand = operandStatement.get(fileData);
-        for (T arg: args) {
-            if (operand.compareTo(arg) == 0) {
-                return false;
+        if (operand != null) {
+            for (T arg: args) {
+                if (operand.compareTo(arg) == 0) {
+                    return false;
+                }
             }
         }
         return true;

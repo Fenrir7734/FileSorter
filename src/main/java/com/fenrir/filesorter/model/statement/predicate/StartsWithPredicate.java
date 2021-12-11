@@ -24,9 +24,11 @@ public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T
     @Override
     public boolean test(FileData fileData) throws IOException {
         String operand = operandStatement.get(fileData);
-        for (String arg: args) {
-            if (operand.startsWith(arg)) {
-                return true;
+        if (operand != null) {
+            for (String arg: args) {
+                if (operand.startsWith(arg)) {
+                    return true;
+                }
             }
         }
         return false;
