@@ -29,6 +29,10 @@ public class ExpressionEditorController {
         }
     }
 
+    public boolean isEditEnabled() {
+        return editExpressionCheckBox.isSelected();
+    }
+
     public String getExpression() {
         return expressionTextField.getText();
     }

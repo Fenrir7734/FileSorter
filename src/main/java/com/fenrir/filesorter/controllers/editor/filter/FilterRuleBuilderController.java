@@ -155,7 +155,7 @@ public class FilterRuleBuilderController {
         return String.format("%s(%s)%s(%s:%s)", "%", providerType.getToken(), "%", predicateType.getToken(), args);
     }
 
-    public void receiveRule(FilterRule rule) {
+    public void setRule(FilterRule rule) {
         Iterator<RuleElement> iter = rule.getRuleElementsIterator();
         RuleElement provider = iter.next();
         RuleElement predicate = iter.next();

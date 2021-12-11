@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.controllers.editor.filter;
 
-import com.fenrir.filesorter.controllers.Controller;
 import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.controllers.editor.EditorConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
@@ -48,11 +47,14 @@ public class FilterRuleEditorController implements EditorController {
     }
 
     public void receiveRule(FilterRule rule) {
-        filterRuleBuilderController.receiveRule(rule);
+        filterRuleBuilderController.setRule(rule);
     }
 
     @Override
     public String getExpression() {
+        if (expressionEditorController.isEditEnabled()) {
+            return expressionEditorController.getExpression();
+        }
         return filterRuleBuilderController.buildExpression();
     }
 
@@ -69,7 +71,7 @@ public class FilterRuleEditorController implements EditorController {
     @Override
     public void confirm() {
         try {
-            String expression = filterRuleBuilderController.buildExpression();
+            String expression = getExpression();
             FilterRule rule = new FilterRule(expression);
             FilterRuleParser parser = new FilterRuleParser();
             parser.validateRule(rule);
