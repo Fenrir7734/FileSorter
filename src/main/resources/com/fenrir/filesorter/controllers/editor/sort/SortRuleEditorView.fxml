@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER"
-      maxHeight="-Infinity"
-      maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/16"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController">
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController">
    <children>
-      <TextField fx:id="ruleTextField" prefWidth="360.0" />
-      <HBox alignment="CENTER" spacing="40.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#confirm" prefHeight="30.0" prefWidth="100.0" text="Confirm" />
-            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
-         </children>
-         <VBox.margin>
-            <Insets top="20.0" />
-         </VBox.margin>
-      </HBox>
+      <TabPane fx:id="ruleEditorTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+         <tabs>
+            <Tab fx:id="ruleBuilderTab" text="Rule builder">
+               <content>
+                  <fx:include fx:id="sortRuleBuilder" source="SortRuleBuilderView.fxml"/>
+               </content>
+            </Tab>
+            <Tab fx:id="expressionEditorTab" closable="false" text="Expression editor">
+               <content>
+                  <fx:include fx:id="expressionEditor" source="../ExpressionEditorView.fxml" />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <fx:include fx:id="editorConfirm" source="../EditorConfirmView.fxml" />
    </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
 </VBox>

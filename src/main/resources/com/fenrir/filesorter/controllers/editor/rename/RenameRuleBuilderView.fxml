@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.rename.RenameRuleBuilderController">
-    <HBox fx:id="ruleBuilderHBox" alignment="CENTER" prefHeight="40.0" spacing="10.0">
-        <VBox.margin>
-            <Insets top="20.0" />
-        </VBox.margin>
-      <children>
-         <TextField prefHeight="30.0" prefWidth="558.0" />
-      </children>
-    </HBox>
+   <ScrollPane prefHeight="40.0" prefWidth="558.0" vbarPolicy="NEVER">
+      <content>
+         <ListView fx:id="selectedTokensListView" minWidth="558.0" orientation="HORIZONTAL" prefHeight="36.0" />
+      </content>
+      <VBox.margin>
+         <Insets top="20.0" />
+      </VBox.margin>
+   </ScrollPane>
     <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="100.0">
       <content>
-         <TreeView prefHeight="200.0" prefWidth="200.0" />
+         <TreeView fx:id="tokenTreeView" prefHeight="200.0" prefWidth="200.0" />
       </content>
     </ScrollPane>
     <padding>

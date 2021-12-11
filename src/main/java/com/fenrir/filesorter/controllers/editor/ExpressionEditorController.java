@@ -29,6 +29,10 @@ public class ExpressionEditorController {
         }
     }
 
+    public String getExpression() {
+        return expressionTextField.getText();
+    }
+
     public void setExpression(String expression) {
         expressionTextField.setText(expression);
     }

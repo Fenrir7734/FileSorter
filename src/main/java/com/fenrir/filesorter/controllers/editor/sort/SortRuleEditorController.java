@@ -1,41 +1,81 @@
 package com.fenrir.filesorter.controllers.editor.sort;
 
-import com.fenrir.filesorter.controllers.Controller;
 import com.fenrir.filesorter.controllers.ControllerMediator;
+import com.fenrir.filesorter.controllers.editor.EditorConfirmController;
+import com.fenrir.filesorter.controllers.editor.EditorController;
+import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
+import com.fenrir.filesorter.model.parsers.FilterRuleParser;
+import com.fenrir.filesorter.model.parsers.SortRuleParser;
+import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SortRuleEditorController {
-    @FXML private TextField ruleTextField;
+public class SortRuleEditorController implements EditorController {
+    private final Logger logger = LoggerFactory.getLogger(SortRuleEditorController.class);
+
+    @FXML private ExpressionEditorController expressionEditorController;
+    @FXML private SortRuleBuilderController sortRuleBuilderController;
+    @FXML private EditorConfirmController editorConfirmController;
+
+    @FXML private TabPane ruleEditorTabPane;
+    @FXML private Tab ruleBuilderTab;
+    @FXML private Tab expressionEditorTab;
 
     @FXML
     public void initialize() {
         ControllerMediator.getInstance().registerSortRuleEditorController(this);
+        expressionEditorController.setParent(this);
+        editorConfirmController.setParent(this);
+
+        ruleBuilderTab.setDisable(true);
     }
 
-    @FXML
-    public void confirm() {
-        String expression = ruleTextField.getText();
-        StringRule sortRule = new StringRule(expression);
-        ControllerMediator.getInstance().sendReadySortRule(sortRule);
-        close();
-    }
-
-    @FXML
-    public void cancel() {
-        close();
-    }
-
-    private void close() {
-        Stage stage = (Stage) ruleTextField.getScene().getWindow();
-        stage.close();
-    }
-
-    public void receiveRule(StringRule sortRule) {
-        if (sortRule != null) {
-            ruleTextField.setText(sortRule.getExpression());
+    public void receiveRule(StringRule rule) {
+        if (rule != null) {
+            expressionEditorController.setExpression(rule.getExpression());
         }
+    }
+
+    @Override
+    public String getExpression() {
+        return null;
+    }
+
+    @Override
+    public void lockTab() {
+
+    }
+
+    @Override
+    public void unlockTab() {
+
+    }
+
+    @Override
+    public void confirm() {
+        try {
+            String expression = expressionEditorController.getExpression();
+            StringRule rule = new StringRule(expression);
+            SortRuleParser parser = new SortRuleParser();
+            parser.resolveRule(rule);
+            ControllerMediator.getInstance().sendReadySortRule(rule);
+            close();
+        } catch (ExpressionFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @Override
+    public void close() {
+        Stage stage = (Stage) ruleEditorTabPane.getScene().getWindow();
+        stage.close();
     }
 }
