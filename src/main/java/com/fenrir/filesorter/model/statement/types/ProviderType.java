@@ -121,6 +121,17 @@ public enum ProviderType {
             List<Long> sizes = Converter.convertToBytes(args);
             return new PredicateOperands<>(operand, sizes);
         }
+    },
+    STRING("STR", "custom name", new Scope[]{SORT, RENAME}, Category.STRING, Group.NONE) {
+        @Override
+        public Provider<?> getAsProvider(ProviderDescription description) {
+            return null;
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) throws ArgumentFormatException {
+            return null;
+        }
     };
 
     private final String token;

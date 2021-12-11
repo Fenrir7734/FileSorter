@@ -6,16 +6,19 @@ import com.fenrir.filesorter.model.file.utils.FilesCategory;
 import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
+import org.apache.commons.io.FileUtils;
 import org.apache.tika.Tika;
+import org.apache.tika.detect.DefaultDetector;
+import org.apache.tika.detect.Detector;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -108,15 +111,34 @@ public class FileData {
 
     public boolean isImage() throws IOException {
         if (!isDirectory) {
-            Tika tika = new Tika();
-            String mimeType = tika.detect(sourcePath.toString());
-            return mimeType.startsWith("image");
+            String type = getMimeType();
+            if (type.equals("application/octet-stream")) {
+                type = getMediaType();
+            }
+            return type.startsWith("image");
         }
         return false;
     }
 
-    public Dimension getImageDimension1() throws IOException {
-        //System.out.println("dimension");
+    private String getMimeType() {
+        Tika tika = new Tika();
+        return tika.detect(sourcePath.toString());
+    }
+
+    public String getMediaType() {
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(sourcePath.toFile()))) {
+            Detector detector = new DefaultDetector();
+            Metadata metadata = new Metadata();
+
+            MediaType mediaType = detector.detect(inputStream, metadata);
+            return mediaType.toString();
+        } catch (IOException e) {
+            logger.error("Error when reading file MediaType: {}", e.getMessage());
+        }
+        return "";
+    }
+
+    public Dimension getImageDimension() throws IOException {
         if (isImage() && dimension == null) {
             extractDimensionFromImage();
         }
@@ -129,13 +151,14 @@ public class FileData {
             int width = info.getWidth();
             int height = info.getHeight();
             dimension = Dimension.of(width, height);
-            //System.out.println(dimension);
-        } catch (IOException | ImageReadException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (ImageReadException e) {
+            logger.warn(e.getMessage());
         }
     }
 
-    public Dimension getImageDimension() throws IOException {
+    public Dimension getImageDimension1() throws IOException {
         InputStream inputStream = getInputStream();
         try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
             ImageReader reader = getImageReader(imageInputStream);

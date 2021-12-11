@@ -328,6 +328,7 @@ class FileDataTest {
         public void isImageShouldReturnTrueForImageWithoutExtensionInFilename() throws IOException {
             FileData fileData = new FileData(path);
             boolean isImage = fileData.isImage();
+            fileData.getMediaType();
             assertTrue(isImage);
         }
 
