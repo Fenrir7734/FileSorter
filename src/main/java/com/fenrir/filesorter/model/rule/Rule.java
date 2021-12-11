@@ -7,11 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RuleImpl {
+public class Rule {
     private final String expression;
     private final TokenContainer container = new TokenContainer();
 
-    public RuleImpl(String expression) throws ExpressionFormatException {
+    public Rule(String expression) throws ExpressionFormatException {
         this.expression = expression;
         resolveExpression();
     }
@@ -43,7 +43,7 @@ public class RuleImpl {
             extractedToken = extractedToken.substring(0, i);
         }
 
-        Token token = new Token(extractedToken, true, args);
+        Token token = new Token(extractedToken, args);
         container.add(token);
     }
 

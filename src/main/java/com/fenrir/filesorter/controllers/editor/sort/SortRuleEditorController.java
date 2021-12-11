@@ -5,10 +5,8 @@ import com.fenrir.filesorter.controllers.editor.EditorConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
-import com.fenrir.filesorter.model.parsers.FilterRuleParser;
 import com.fenrir.filesorter.model.parsers.SortRuleParser;
-import com.fenrir.filesorter.model.rule.FilterRule;
-import com.fenrir.filesorter.model.rule.StringRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
@@ -37,7 +35,7 @@ public class SortRuleEditorController implements EditorController {
         ruleBuilderTab.setDisable(true);
     }
 
-    public void receiveRule(StringRule rule) {
+    public void receiveRule(Rule rule) {
         if (rule != null) {
             expressionEditorController.setExpression(rule.getExpression());
         }
@@ -62,7 +60,7 @@ public class SortRuleEditorController implements EditorController {
     public void confirm() {
         try {
             String expression = expressionEditorController.getExpression();
-            StringRule rule = new StringRule(expression);
+            Rule rule = new Rule(expression);
             SortRuleParser parser = new SortRuleParser();
             parser.resolveRule(rule);
             ControllerMediator.getInstance().sendReadySortRule(rule);

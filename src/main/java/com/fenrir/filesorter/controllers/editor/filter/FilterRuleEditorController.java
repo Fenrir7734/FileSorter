@@ -6,7 +6,7 @@ import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.parsers.FilterRuleParser;
-import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -46,7 +46,7 @@ public class FilterRuleEditorController implements EditorController {
         }
     }
 
-    public void receiveRule(FilterRule rule) {
+    public void receiveRule(Rule rule) {
         filterRuleBuilderController.setRule(rule);
     }
 
@@ -72,7 +72,7 @@ public class FilterRuleEditorController implements EditorController {
     public void confirm() {
         try {
             String expression = getExpression();
-            FilterRule rule = new FilterRule(expression);
+            Rule rule = new Rule(expression);
             FilterRuleParser parser = new FilterRuleParser();
             parser.validateRule(rule);
             ControllerMediator.getInstance().sendReadyFilterRule(rule);

@@ -3,9 +3,9 @@ package com.fenrir.filesorter.model.parsers;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.Iterator;
-import com.fenrir.filesorter.model.rule.RuleElement;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.Token;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
@@ -20,25 +20,25 @@ import java.util.List;
  */
 public class FilterRuleParser {
 
-    public Predicate<? extends Comparable<?>> resolveRule(FilterRule rule) throws ExpressionFormatException {
+    public Predicate<? extends Comparable<?>> resolveRule(Rule rule) throws ExpressionFormatException {
         try {
             validateRule(rule);
 
-            Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
-            RuleElement operand = iterator.next();
-            RuleElement operator = iterator.next();
-            PredicateOperands<? extends Comparable<?>> operands = ProviderType.getType(operand.element(), Scope.FILTER)
+            Iterator<Token> iterator = rule.getTokenIterator();
+            Token operand = iterator.next();
+            Token operator = iterator.next();
+            PredicateOperands<? extends Comparable<?>> operands = ProviderType.getType(operand.symbol(), Scope.FILTER)
                     .getAsOperands(operator.args());
-            return PredicateType.getType(operator.element()).getPredicate(operands);
+            return PredicateType.getType(operator.symbol()).getPredicate(operands);
         } catch (ArgumentFormatException e) {
             throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
         }
     }
 
-    public void validateRule(FilterRule rule) throws ExpressionFormatException {
-        Iterator<RuleElement> iterator = rule.getRuleElementsIterator();
-        RuleElement operand = iterator.next();
-        RuleElement operator = iterator.next();
+    public void validateRule(Rule rule) throws ExpressionFormatException {
+        Iterator<Token> iterator = rule.getTokenIterator();
+        Token operand = iterator.next();
+        Token operator = iterator.next();
         if (iterator.hasNext()) {
             throw new ExpressionFormatException(
                     "Filter expression should contain only operand and operator token.",
@@ -51,47 +51,47 @@ public class FilterRuleParser {
         validateOperator(rule, operator);
     }
 
-    private void validateOperand(FilterRule rule, RuleElement operand) throws ExpressionFormatException {
+    private void validateOperand(Rule rule, Token operand) throws ExpressionFormatException {
         if (operand == null) {
             throw new ExpressionFormatException(
                     "Invalid expression, one of the mandatory tokens is missing.",
                     rule
             );
         }
-        ProviderType type = ProviderType.getType(operand.element(), Scope.FILTER);
+        ProviderType type = ProviderType.getType(operand.symbol(), Scope.FILTER);
 
         if (type == null) {
-            throw new TokenFormatException("Unknown operand.", rule, operand.element());
+            throw new TokenFormatException("Unknown operand.", rule, operand.symbol());
         }
     }
 
-    private void validateOperator(FilterRule rule, RuleElement operator) throws ExpressionFormatException {
+    private void validateOperator(Rule rule, Token operator) throws ExpressionFormatException {
         if (operator == null) {
             throw new ExpressionFormatException(
                     "Invalid expression, one of the mandatory tokens is missing.",
                     rule
             );
         }
-        PredicateType type = PredicateType.getType(operator.element());
+        PredicateType type = PredicateType.getType(operator.symbol());
 
         if (type == null) {
-            throw new TokenFormatException("Unknown operator.", rule, operator.element());
+            throw new TokenFormatException("Unknown operator.", rule, operator.symbol());
         }
         validateArgumentNumber(rule, operator);
     }
 
-    private void validateArgumentNumber(FilterRule rule, RuleElement operator) throws TokenFormatException {
+    private void validateArgumentNumber(Rule rule, Token operator) throws TokenFormatException {
         List<String> args = operator.args();
-        ArgumentNumber argumentNumber = PredicateType.getType(operator.element()).getArgumentNumber();
+        ArgumentNumber argumentNumber = PredicateType.getType(operator.symbol()).getArgumentNumber();
 
         if (argumentNumber == ArgumentNumber.NONE && !checkIfArgsEmpty(args)) {
-            throw new TokenFormatException("Expected zero arguments", rule, operator.element());
+            throw new TokenFormatException("Expected zero arguments", rule, operator.symbol());
         }
         if (argumentNumber == ArgumentNumber.SINGLE && !checkIfOnlyOneArg(args)) {
-            throw new TokenFormatException("Expected only one argument", rule, operator.element());
+            throw new TokenFormatException("Expected only one argument", rule, operator.symbol());
         }
         if (argumentNumber == ArgumentNumber.MULTIPLE && !checkIfAtLeastOne(args)) {
-            throw new TokenFormatException("Expected at least one argument.", rule, operator.element());
+            throw new TokenFormatException("Expected at least one argument.", rule, operator.symbol());
         }
     }
 

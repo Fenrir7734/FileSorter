@@ -4,35 +4,35 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RuleGroup {
-    private StringRule renameRule;
-    private StringRule sortRule;
-    private final ObservableList<FilterRule> filterRules = FXCollections.observableArrayList();
+    private Rule renameRule;
+    private Rule sortRule;
+    private final ObservableList<Rule> filterRules = FXCollections.observableArrayList();
 
-    public void setRenameRule(StringRule rule) {
+    public void setRenameRule(Rule rule) {
         renameRule = rule;
     }
 
-    public void setSortRule(StringRule sortRule) {
-        this.sortRule = sortRule;
+    public void setSortRule(Rule rule) {
+        this.sortRule = rule;
     }
 
-    public void addFilterRule(FilterRule rule) {
+    public void addFilterRule(Rule rule) {
         filterRules.add(rule);
     }
 
-    public void removeFilterRule(FilterRule rule) {
+    public void removeFilterRule(Rule rule) {
         filterRules.remove(rule);
     }
 
-    public StringRule getRenameRule() {
+    public Rule getRenameRule() {
         return renameRule;
     }
 
-    public StringRule getSortRule() {
+    public Rule getSortRule() {
         return sortRule;
     }
 
-    public ObservableList<FilterRule> getFilterRules() {
+    public ObservableList<Rule> getFilterRules() {
         return filterRules;
     }
 }

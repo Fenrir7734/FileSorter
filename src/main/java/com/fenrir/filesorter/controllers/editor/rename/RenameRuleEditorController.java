@@ -8,8 +8,7 @@ import com.fenrir.filesorter.controllers.editor.filter.FilterRuleBuilderControll
 import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.parsers.RenameRuleParser;
-import com.fenrir.filesorter.model.parsers.SortRuleParser;
-import com.fenrir.filesorter.model.rule.StringRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
@@ -53,7 +52,7 @@ public class RenameRuleEditorController implements EditorController {
         }
     }
 
-    public void receiveRule(StringRule rule) {
+    public void receiveRule(Rule rule) {
         if (rule != null) {
             expressionEditorController.setExpression(rule.getExpression());
         }
@@ -78,7 +77,7 @@ public class RenameRuleEditorController implements EditorController {
     public void confirm() {
         try {
             String expression = expressionEditorController.getExpression();
-            StringRule rule = new StringRule(expression);
+            Rule rule = new Rule(expression);
             RenameRuleParser parser = new RenameRuleParser();
             parser.resolveRule(rule);
             ControllerMediator.getInstance().sendReadyRenameRule(rule);

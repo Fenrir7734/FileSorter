@@ -2,11 +2,11 @@ package com.fenrir.filesorter.model.rule;
 
 import java.util.List;
 
-public class RuleElementIterator implements Iterator<RuleElement> {
-    private final List<RuleElement> expressionElements;
+public class TokenIterator implements Iterator<Token> {
+    private final List<Token> expressionElements;
     private int currentPosition = 0;
 
-    public RuleElementIterator(List<RuleElement> expressionElements) {
+    public TokenIterator(List<Token> expressionElements) {
         this.expressionElements = expressionElements;
     }
 
@@ -16,7 +16,7 @@ public class RuleElementIterator implements Iterator<RuleElement> {
     }
 
     @Override
-    public RuleElement next() {
+    public Token next() {
         return hasNext() ? expressionElements.get(currentPosition++) : null;
     }
 

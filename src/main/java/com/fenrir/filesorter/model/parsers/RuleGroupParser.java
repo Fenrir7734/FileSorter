@@ -31,21 +31,21 @@ public class RuleGroupParser {
         statementGroup = new StatementGroup();
     }
 
-    private void createRenameStatement(StringRule rule) throws TokenFormatException {
+    private void createRenameStatement(Rule rule) throws TokenFormatException {
         if (rule != null) {
             statementGroup.setRenameStatement(renameRuleParser.resolveRule(rule));
         }
     }
 
-    private void createSortStatement(StringRule rule) throws TokenFormatException {
+    private void createSortStatement(Rule rule) throws TokenFormatException {
         if (rule != null) {
             statementGroup.setSortStatement(sortRuleParser.resolveRule(rule));
         }
     }
 
-    private void createFilterStatement(List<FilterRule> rules) throws ExpressionFormatException {
+    private void createFilterStatement(List<Rule> rules) throws ExpressionFormatException {
         if (rules != null) {
-            for (FilterRule rule: rules) {
+            for (Rule rule: rules) {
                 statementGroup.addFilterStatement(filterRuleParser.resolveRule(rule));
             }
         }

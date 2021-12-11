@@ -18,12 +18,6 @@ class ProviderTypeTest {
     }
 
     @Test
-    public void getTypeShouldReturnDateProviderForValidDatePatternAndScope() {
-        ProviderType actualType = ProviderType.getType("YYYY", Scope.RENAME);
-        assertEquals(ProviderType.DATE, actualType);
-    }
-
-    @Test
     public void getTypeShouldReturnNullForValidTokenAndInvalidScope() {
         ProviderType actualType = ProviderType.getType("SIZ", Scope.RENAME);
         assertNull(actualType);
@@ -60,11 +54,30 @@ class ProviderTypeTest {
     }
 
     @Test
-    public void getAsProviderShouldReturnProvider() {
+    public void getAsProviderShouldReturnProvider() throws ArgumentFormatException {
         ProviderType type = ProviderType.FILE_NAME;
         Provider<?> provider = type.getAsProvider(null);
         assertNotNull(provider);
         assertTrue(provider instanceof FileNameProvider);
+    }
+
+    @Test
+    public void getAsProviderShouldReturnDateProviderForValidDatePattern() throws ArgumentFormatException {
+        ProviderType type = ProviderType.DATE;
+        Provider<?> provider = type.getAsProvider(List.of("YYYY"));
+        assertNotNull(provider);
+        assertTrue(provider instanceof DateProvider);
+    }
+
+    @Test
+    public void getAsProviderShouldThrowArgumentFormatExceptionForInvalidDatePattern() throws ArgumentFormatException {
+        ProviderType type = ProviderType.DATE;
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> type.getAsOperands(List.of("ABC")),
+                "Invalid date format"
+        );
+        assertEquals("ABC", exception.getArg());
     }
 
     @Test

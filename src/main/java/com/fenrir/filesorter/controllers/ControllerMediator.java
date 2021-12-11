@@ -4,8 +4,7 @@ import com.fenrir.filesorter.controllers.editor.rename.RenameRuleEditorControlle
 import com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController;
 import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
 import com.fenrir.filesorter.controllers.main.RuleTabController;
-import com.fenrir.filesorter.model.rule.FilterRule;
-import com.fenrir.filesorter.model.rule.StringRule;
+import com.fenrir.filesorter.model.rule.Rule;
 
 public class ControllerMediator {
     private static ControllerMediator instance;
@@ -31,27 +30,27 @@ public class ControllerMediator {
         this.filterRuleEditorController = controller;
     }
 
-    public void sendReadyRenameRule(StringRule rule) {
+    public void sendReadyRenameRule(Rule rule) {
         ruleTabController.receiveRenameRule(rule);
     }
 
-    public void sendReadySortRule(StringRule rule) {
+    public void sendReadySortRule(Rule rule) {
         ruleTabController.receiveSortRule(rule);
     }
 
-    public void sendReadyFilterRule(FilterRule rule) {
+    public void sendReadyFilterRule(Rule rule) {
         ruleTabController.receiveFilterRule(rule);
     }
 
-    public void sendRenameRuleToEdit(StringRule rule) {
+    public void sendRenameRuleToEdit(Rule rule) {
         renameRuleEditorController.receiveRule(rule);
     }
 
-    public void sendSortRuleToEdit(StringRule rule) {
+    public void sendSortRuleToEdit(Rule rule) {
         sortRuleEditorController.receiveRule(rule);
     }
 
-    public void sendFilterRuleToEdit(FilterRule rule) {
+    public void sendFilterRuleToEdit(Rule rule) {
         filterRuleEditorController.receiveRule(rule);
     }
 

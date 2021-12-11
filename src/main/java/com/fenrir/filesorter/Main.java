@@ -1,5 +1,6 @@
 package com.fenrir.filesorter;
 
+import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.rule.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -33,23 +34,7 @@ public class Main extends Application {
     }
 
     private static void test() throws Exception {
-        String sortExpression = "%(YYYY)-%(MM)%(/)%(0D)";
-        String renameExpression = "%(0D)-%(MM)-%(YYYY)";
-        String filterExpression = "%(DAT)%(>:2021-09-04)";
-        String source = "/home/fenrir/Documents/Test_environment/screenshot";
-        String target = "/home/fenrir/Documents/Test_environment/target/";
-
-        StringRule sortRule = new StringRule(sortExpression);
-        StringRule renameRule = new StringRule(renameExpression);
-        FilterRule filterRule = new FilterRule(filterExpression);
-
-        RuleGroup group = new RuleGroup();
-        group.setRenameRule(renameRule);
-        group.setSortRule(sortRule);
-        group.addFilterRule(filterRule);
-        List<RuleGroup> ruleGroups = List.of(group);
-        //Processor processor = new Processor(Path.of(source), Path.of(target), ruleGroups);
-        //processor.process();
-        //processor.getFileStructure().stream().map(FileData::resolveTargetPath).forEach(System.out::println);
+        Configuration configuration = new Configuration();
+        //configuration.setTargetRootDir();
     }
 }

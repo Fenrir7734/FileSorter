@@ -1,8 +1,10 @@
 package com.fenrir.filesorter.model.parsers;
 
+import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
+import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.rule.StringRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.statement.provider.ProviderDescription;
 import com.fenrir.filesorter.model.statement.provider.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +33,8 @@ class RenameRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenGivenInvalidToken() {
-        StringRule rule = new StringRule("%(ABC)");
+    public void shouldThrowTokenFormatExceptionWhenGivenInvalidToken() throws ExpressionFormatException {
+        Rule rule = new Rule("%(ABC)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -43,8 +45,8 @@ class RenameRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenGivenOnlySortToken() {
-        StringRule rule = new StringRule("%(/)");
+    public void shouldThrowTokenFormatExceptionWhenGivenSortToken() throws ExpressionFormatException {
+        Rule rule = new Rule("%(/)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -55,15 +57,67 @@ class RenameRuleParserTest {
     }
 
     @Test
-    public void shouldReturnListOfStringStatementForValidInput() throws TokenFormatException, IOException {
-        StringRule stringRule = new StringRule("%(FIN)-%(YYYY)-%(MM)-%(DD).%(EXT)");
+    public void shouldThrowTokenFormatExceptionWhenNoneArgumentTokenContainsArguments()
+            throws ExpressionFormatException {
+        Rule rule = new Rule("%(DIM:1920x1080)");
+        TokenFormatException exception = assertThrows(
+                TokenFormatException.class,
+                () -> parser.resolveRule(rule),
+                "Expected zero arguments"
+        );
+        assertEquals("DIM", exception.getToken());
+        assertEquals(rule, exception.getRule());
+    }
+
+    @Test
+    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsZeroArguments()
+            throws ExpressionFormatException {
+        Rule rule = new Rule("%(STR:)");
+        TokenFormatException exception = assertThrows(
+                TokenFormatException.class,
+                () -> parser.resolveRule(rule),
+                "Expected only one argument"
+        );
+        assertEquals("STR", exception.getToken());
+        assertEquals(rule, exception.getRule());
+    }
+
+    @Test
+    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsMoreThanOneArgument()
+            throws ExpressionFormatException {
+        Rule rule = new Rule("%(STR:abc, dbc)");
+        TokenFormatException exception = assertThrows(
+                TokenFormatException.class,
+                () -> parser.resolveRule(rule),
+                "Expected only one argument"
+        );
+        assertEquals("STR", exception.getToken());
+        assertEquals(rule, exception.getRule());
+    }
+
+    @Test
+    public void shouldThrowArgumentFormatExceptionWhenGiveInvalidArgument() throws ExpressionFormatException {
+        Rule rule = new Rule("%(DAT: INVALID)");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> parser.resolveRule(rule),
+                "Invalid date format"
+        );
+        assertEquals("INVALID", exception.getArg());
+        assertEquals("DAT", exception.getToken());
+        assertEquals(rule, exception.getRule());
+    }
+
+    @Test
+    public void shouldReturnListOfStringStatementForValidInput() throws ExpressionFormatException, IOException {
+        Rule stringRule = new Rule("%(FIN)%(STR:-)%(DAT:YYYY)%(STR:-)%(DAT:MM)%(STR:-)%(DAT:DD)%(STR:.)%(EXT)");
         List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
         List<Provider<?>> expectedStatements = List.of(
                 new FileNameProvider(null),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
                 new DateProvider(ProviderDescription.ofDate("YYYY")),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
-                new DateProvider(ProviderDescription.ofDate("MMM")),
+                new DateProvider(ProviderDescription.ofDate("MM")),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
                 new DateProvider(ProviderDescription.ofDate("DD")),
                 new LiteralProvider(ProviderDescription.ofLiteral(".")),

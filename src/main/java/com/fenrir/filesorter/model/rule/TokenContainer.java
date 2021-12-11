@@ -3,14 +3,14 @@ package com.fenrir.filesorter.model.rule;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RuleElementContainer {
-    private final List<RuleElement> ruleElements = new ArrayList<>();
+public class TokenContainer {
+    private final List<Token> ruleElements = new ArrayList<>();
 
-    protected void add(RuleElement element) {
+    protected void add(Token element) {
         this.ruleElements.add(element);
     }
 
-    public Iterator<RuleElement> iterator() {
-        return new RuleElementIterator(ruleElements);
+    public Iterator<Token> iterator() {
+        return new TokenIterator(ruleElements);
     }
 }

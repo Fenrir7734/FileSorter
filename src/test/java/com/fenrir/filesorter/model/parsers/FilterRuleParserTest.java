@@ -4,7 +4,7 @@ import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
-import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.predicate.EqualPredicate;
@@ -34,8 +34,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowExpressionFormatExceptionWhenOperatorTokenWasNotGiven() {
-        FilterRule rule = new FilterRule("%(DAT)");
+    public void shouldThrowExpressionFormatExceptionWhenOperatorTokenWasNotGiven() throws ExpressionFormatException {
+        Rule rule = new Rule("%(DAT)");
         ExpressionFormatException exception = assertThrows(
                 ExpressionFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -45,8 +45,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowExpressionFormatExceptionWhenOperandTokenWasNotGiven() {
-        FilterRule rule = new FilterRule("%(<:12k)");
+    public void shouldThrowExpressionFormatExceptionWhenOperandTokenWasNotGiven() throws ExpressionFormatException {
+        Rule rule = new Rule("%(<:12k)");
         ExpressionFormatException exception = assertThrows(
                 ExpressionFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -56,8 +56,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowExpressionFormatExceptionWhenGivenTooMuchTokens() {
-        FilterRule rule = new FilterRule("%(SIZ)%(DAT)%(<:12k)");
+    public void shouldThrowExpressionFormatExceptionWhenGivenTooMuchTokens() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(DAT)%(<:12k)");
         ExpressionFormatException exception = assertThrows(
                 ExpressionFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -67,8 +67,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowExpressionFormatExceptionWhenGivenNonStringOperandToOnlyStringOperator() {
-        FilterRule rule = new FilterRule("%(DAT)%(CON:2021-02-02)");
+    public void shouldThrowExpressionFormatExceptionWhenGivenNonStringOperandToOnlyStringOperator() throws ExpressionFormatException {
+        Rule rule = new Rule("%(DAT)%(CON:2021-02-02)");
         ExpressionFormatException exception = assertThrows(
                 ExpressionFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -77,8 +77,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenGivenInvalidOperatorToken() {
-        FilterRule rule = new FilterRule("%(SIZ)%(B:12k)");
+    public void shouldThrowTokenFormatExceptionWhenGivenInvalidOperatorToken() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(B:12k)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -89,8 +89,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenGivenInvalidOperandToken() {
-        FilterRule rule = new FilterRule("%(ABC)%(<:12k)");
+    public void shouldThrowTokenFormatExceptionWhenGivenInvalidOperandToken() throws ExpressionFormatException {
+        Rule rule = new Rule("%(ABC)%(<:12k)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -101,13 +101,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenNoneArgumentOperatorContainsArguments() {
-
-    }
-
-    @Test
-    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsZeroArguments() {
-        FilterRule rule = new FilterRule("%(SIZ)%(<:)");
+    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsZeroArguments() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(<:)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -118,8 +113,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsMoreThanOneArgument() {
-        FilterRule rule = new FilterRule("%(SIZ)%(<:12k, 15M)");
+    public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsMoreThanOneArgument() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(<:12k, 15M)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -130,8 +125,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowTokenFormatExceptionWhenMultipleArgumentOperatorContainsZeroArguments() {
-        FilterRule rule = new FilterRule("%(SIZ)%(==:)");
+    public void shouldThrowTokenFormatExceptionWhenMultipleArgumentOperatorContainsZeroArguments() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(==:)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -142,8 +137,8 @@ class FilterRuleParserTest {
     }
 
     @Test
-    public void shouldThrowArgumentFormatExceptionWhenGivenInvalidArguments() {
-        FilterRule rule = new FilterRule("%(SIZ)%(==:12k, 54M, 23F)");
+    public void shouldThrowArgumentFormatExceptionWhenGivenInvalidArguments() throws ExpressionFormatException {
+        Rule rule = new Rule("%(SIZ)%(==:12k, 54M, 23F)");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -156,7 +151,7 @@ class FilterRuleParserTest {
 
     @Test
     public void shouldReturnFilterOperatorStatementForValidInput() throws IOException, ExpressionFormatException {
-        FilterRule rule = new FilterRule("%(FIN)%(==:testfile)");
+        Rule rule = new Rule("%(FIN)%(==:testfile)");
         Predicate<? extends Comparable<?>> actualPredicate = parser.resolveRule(rule);
         assertTrue(actualPredicate instanceof EqualPredicate<?>);
 

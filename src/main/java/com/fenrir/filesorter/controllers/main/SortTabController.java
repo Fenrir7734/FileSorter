@@ -8,6 +8,8 @@ import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.log.LogAppender;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.RuleGroup;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -20,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
 public class SortTabController {
     private static final Logger logger = LoggerFactory.getLogger(SortTabController.class);
@@ -60,12 +64,28 @@ public class SortTabController {
         progressIndicator.setStyle("-fx-padding: 0 0 -16 0");
     }
 
+    private void test() {
+        try {
+            configuration = new Configuration();
+            configuration.setTargetRootDir(Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test"));
+            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wall3")));
+            RuleGroup group = new RuleGroup();
+            group.setSortRule(new Rule("%(DIM)"));
+            group.setRenameRule(new Rule("%(FIN)"));
+            group.addFilterRule(new Rule("%(DIM)%(==:1920x1080)"));
+            configuration.addNamedRuleGroup("aaa", group);
+        } catch (ExpressionFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     public void sort() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
+                    test();
                     configuration.validate();
                     Platform.runLater(() -> setProgressIndicatorToIndeterminate());
                     Processor processor = new Processor(configuration);

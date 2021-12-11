@@ -4,9 +4,9 @@ import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputContro
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputFactory;
 import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.enums.Scope;
-import com.fenrir.filesorter.model.rule.FilterRule;
 import com.fenrir.filesorter.model.rule.Iterator;
-import com.fenrir.filesorter.model.rule.RuleElement;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.Token;
 import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
@@ -155,12 +155,12 @@ public class FilterRuleBuilderController {
         return String.format("%s(%s)%s(%s:%s)", "%", providerType.getToken(), "%", predicateType.getToken(), args);
     }
 
-    public void setRule(FilterRule rule) {
-        Iterator<RuleElement> iter = rule.getRuleElementsIterator();
-        RuleElement provider = iter.next();
-        RuleElement predicate = iter.next();
-        ProviderType providerType = ProviderType.getType(provider.element(), Scope.FILTER);
-        PredicateType predicateType = PredicateType.getType(predicate.element());
+    public void setRule(Rule rule) {
+        Iterator<Token> iter = rule.getTokenIterator();
+        Token provider = iter.next();
+        Token predicate = iter.next();
+        ProviderType providerType = ProviderType.getType(provider.symbol(), Scope.FILTER);
+        PredicateType predicateType = PredicateType.getType(predicate.symbol());
         List<String> args = predicate.args();
         providerComboBox.getSelectionModel().select(providerType);
         predicateComboBox.getSelectionModel().select(predicateType);

@@ -38,7 +38,7 @@ class PredicateTypeTest {
     }
 
     @Test
-    public void getPredicateShouldReturnPredicate() throws ExpressionFormatException{
+    public void getPredicateShouldReturnPredicate() throws ExpressionFormatException {
         PredicateOperands<?> operands = new PredicateOperands<>(
                 new FileNameProvider(null),
                 List.of("abc")

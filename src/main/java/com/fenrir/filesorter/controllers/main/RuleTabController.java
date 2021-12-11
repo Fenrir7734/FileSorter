@@ -3,9 +3,8 @@ package com.fenrir.filesorter.controllers.main;
 
 import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.model.Configuration;
-import com.fenrir.filesorter.model.rule.FilterRule;
+import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
-import com.fenrir.filesorter.model.rule.StringRule;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +24,7 @@ public class RuleTabController {
     @FXML private TitledPane ruleEditorPane;
 
     @FXML private ListView<Pair<String, RuleGroup>> ruleGroupListView;
-    @FXML private ListView<FilterRule> filterListView;
+    @FXML private ListView<Rule> filterListView;
 
     @FXML private Button removeRuleGroupButton;
     @FXML private Button moveUpRuleGroupButton;
@@ -99,7 +98,7 @@ public class RuleTabController {
         filterListView.setItems(group.getFilterRules());
     }
 
-    private void updateRenameRuleTextFieldContent(StringRule rule) {
+    private void updateRenameRuleTextFieldContent(Rule rule) {
         if (rule != null) {
             renameRuleTextField.setText(rule.getExpression());
         } else {
@@ -107,7 +106,7 @@ public class RuleTabController {
         }
     }
 
-    private void updateSortRuleTextFieldContent(StringRule rule) {
+    private void updateSortRuleTextFieldContent(Rule rule) {
         if (rule != null) {
             sortRuleTextField.setText(rule.getExpression());
         } else {
@@ -115,7 +114,7 @@ public class RuleTabController {
         }
     }
 
-    private void onSelectedFilterRule(FilterRule oldValue, FilterRule newValue) {
+    private void onSelectedFilterRule(Rule oldValue, Rule newValue) {
         if (oldValue == null && newValue != null) {
             enableFilterRuleButtons();
         }
@@ -218,7 +217,7 @@ public class RuleTabController {
     @FXML
     public void editFilterRule() {
         try {
-            FilterRule selectedFilterRule = getSelectedFilterRule();
+            Rule selectedFilterRule = getSelectedFilterRule();
             if (selectedFilterRule != null) {
                 loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
                 ControllerMediator.getInstance().sendFilterRuleToEdit(selectedFilterRule);
@@ -242,7 +241,7 @@ public class RuleTabController {
     @FXML
     public void removeFilterRule() {
         RuleGroup selectedRuleGroup = getSelectedRuleGroup();
-        FilterRule selectedFilterRule = getSelectedFilterRule();
+        Rule selectedFilterRule = getSelectedFilterRule();
         selectedRuleGroup.removeFilterRule(selectedFilterRule);
     }
 
@@ -266,22 +265,22 @@ public class RuleTabController {
         );
     }
 
-    public void receiveRenameRule(StringRule rule) {
+    public void receiveRenameRule(Rule rule) {
         RuleGroup selectedRuleGroup = getSelectedRuleGroup();
         selectedRuleGroup.setRenameRule(rule);
         renameRuleTextField.setText(rule.getExpression());
     }
 
-    public void receiveSortRule(StringRule rule) {
+    public void receiveSortRule(Rule rule) {
         RuleGroup selectedRuleGroup = getSelectedRuleGroup();
         selectedRuleGroup.setSortRule(rule);
         sortRuleTextField.setText(rule.getExpression());
     }
 
-    public void receiveFilterRule(FilterRule rule) {
+    public void receiveFilterRule(Rule rule) {
         RuleGroup selectedRuleGroup = getSelectedRuleGroup();
-        FilterRule selectedFilterRule = getSelectedFilterRule();
-        List<FilterRule> filterRules = selectedRuleGroup.getFilterRules();
+        Rule selectedFilterRule = getSelectedFilterRule();
+        List<Rule> filterRules = selectedRuleGroup.getFilterRules();
         int indexOfOldFilterRule = filterRules.indexOf(selectedFilterRule);
 
         if (indexOfOldFilterRule == -1) {
@@ -314,7 +313,7 @@ public class RuleTabController {
                 .getValue();
     }
 
-    private FilterRule getSelectedFilterRule() {
+    private Rule getSelectedFilterRule() {
         return filterListView.getSelectionModel()
                 .getSelectedItem();
     }
@@ -334,10 +333,10 @@ public class RuleTabController {
         };
     }
 
-    private ListCell<FilterRule> createFilterCellFactory() {
+    private ListCell<Rule> createFilterCellFactory() {
         return new ListCell<>() {
             @Override
-            protected void updateItem(FilterRule rule, boolean empty) {
+            protected void updateItem(Rule rule, boolean empty) {
                 super.updateItem(rule, empty);
 
                 if (empty || rule == null) {

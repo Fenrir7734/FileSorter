@@ -7,28 +7,28 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RuleElementIteratorTest {
+class TokenIteratorTest {
 
     @Test
     public void hasNextShouldReturnFalseForEmptyList() {
-        Iterator<RuleElement> iterator = new RuleElementIterator(new ArrayList<>());
+        Iterator<Token> iterator = new TokenIterator(new ArrayList<>());
         assertFalse(iterator.hasNext());
     }
 
     @Test
     public void nextShouldReturnNullForEmptyList() {
-        Iterator<RuleElement> iterator = new RuleElementIterator(new ArrayList<>());
+        Iterator<Token> iterator = new TokenIterator(new ArrayList<>());
         assertNull(iterator.next());
     }
 
     @Test
     public void nextShouldReturnNextElement() {
-        List<RuleElement> elements = List.of(
-                new RuleElement("A", false, null),
-                new RuleElement("B", true, null),
-                new RuleElement("C", true, new ArrayList<>())
+        List<Token> elements = List.of(
+                new Token("A",  null),
+                new Token("B",  null),
+                new Token("C",  new ArrayList<>())
         );
-        Iterator<RuleElement> iterator = new RuleElementIterator(elements);
+        Iterator<Token> iterator = new TokenIterator(elements);
         assertEquals(elements.get(0), iterator.next());
         assertEquals(elements.get(1), iterator.next());
         assertEquals(elements.get(2), iterator.next());
@@ -37,12 +37,12 @@ class RuleElementIteratorTest {
 
     @Test
     public void resetShouldResetIterator() {
-        List<RuleElement> elements = List.of(
-                new RuleElement("A", false, null),
-                new RuleElement("B", true, null),
-                new RuleElement("C", true, new ArrayList<>())
+        List<Token> elements = List.of(
+                new Token("A", null),
+                new Token("B", null),
+                new Token("C",  new ArrayList<>())
         );
-        Iterator<RuleElement> iterator = new RuleElementIterator(elements);
+        Iterator<Token> iterator = new TokenIterator(elements);
         iterator.next();
         assertEquals(elements.get(1), iterator.next());
         iterator.reset();
