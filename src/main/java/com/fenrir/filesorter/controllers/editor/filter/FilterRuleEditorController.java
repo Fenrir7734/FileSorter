@@ -74,7 +74,7 @@ public class FilterRuleEditorController implements EditorController {
             String expression = getExpression();
             Rule rule = new Rule(expression);
             FilterRuleParser parser = new FilterRuleParser();
-            parser.validateRule(rule);
+            parser.resolveRule(rule);
             ControllerMediator.getInstance().sendReadyFilterRule(rule);
             close();
         } catch (ExpressionFormatException e) {

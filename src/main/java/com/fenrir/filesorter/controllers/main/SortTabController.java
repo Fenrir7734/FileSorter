@@ -85,7 +85,6 @@ public class SortTabController {
             @Override
             protected Void call() throws Exception {
                 try {
-                    test();
                     configuration.validate();
                     Platform.runLater(() -> setProgressIndicatorToIndeterminate());
                     Processor processor = new Processor(configuration);

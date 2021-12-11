@@ -145,6 +145,7 @@ public class FilterRuleBuilderController {
     }
 
     public String buildExpression() {
+        ActionType actionType = actionComboBox.getSelectionModel().getSelectedItem();
         ProviderType providerType = providerComboBox.getSelectionModel().getSelectedItem();
         PredicateType predicateType = predicateComboBox.getSelectionModel().getSelectedItem();
         List<String> argumentList = inputControllerMediator.receiveArguments()
@@ -152,16 +153,28 @@ public class FilterRuleBuilderController {
                 .filter(arg -> arg != null && !arg.isEmpty())
                 .toList();
         String args = String.join(",", argumentList);
-        return String.format("%s(%s)%s(%s:%s)", "%", providerType.getToken(), "%", predicateType.getToken(), args);
+        return String.format(
+                "%s(%s)%s(%s)%s(%s:%s)",
+                "%",
+                actionType.getToken(),
+                "%",
+                providerType.getToken(),
+                "%",
+                predicateType.getToken(),
+                args
+        );
     }
 
     public void setRule(Rule rule) {
         Iterator<Token> iter = rule.getTokenIterator();
+        Token action = iter.next();
         Token provider = iter.next();
         Token predicate = iter.next();
+        ActionType actionType = ActionType.getType(action.symbol());
         ProviderType providerType = ProviderType.getType(provider.symbol(), Scope.FILTER);
         PredicateType predicateType = PredicateType.getType(predicate.symbol());
         List<String> args = predicate.args();
+        actionComboBox.getSelectionModel().select(actionType);
         providerComboBox.getSelectionModel().select(providerType);
         predicateComboBox.getSelectionModel().select(predicateType);
         addInputFields(args.size() - 1);

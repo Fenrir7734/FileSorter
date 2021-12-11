@@ -3,6 +3,7 @@ package com.fenrir.filesorter.model.statement.predicate;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,38 +27,72 @@ class SmallerEqualPredicateTest {
     }
 
     @Test
-    public void shouldIgnoreMoreThanOneArgument() throws IOException {
+    public void shouldIgnoreMoreThanOneArgument()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L, 12L, 8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForOperandValueSmallerThanArgument() throws IOException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueIsSmallerThanArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForOperandValueEqualArgument() throws IOException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueIsEqualArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForOperandValueGreaterThanArgument() throws IOException {
+    public void testShouldReturnFalseForIncludeActionIfOperandValueIsGreaterThanArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
         assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueIsSmallerThanArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(16L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueIsEqualArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(12L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnTrueForExcludeActionIfOperandValueIsGreaterThanArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(8L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertTrue(predicate.test(file));
     }
 }

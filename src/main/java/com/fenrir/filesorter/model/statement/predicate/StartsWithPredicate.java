@@ -3,17 +3,20 @@ package com.fenrir.filesorter.model.statement.predicate;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.utils.TypeChecker;
 
 import java.io.IOException;
 import java.util.List;
 
 public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T> {
+    private final ActionType action;
     private final Provider<String> operandStatement;
     private final List<String> args;
 
-    public StartsWithPredicate(PredicateOperands<T> operands) throws ExpressionFormatException {
+    public StartsWithPredicate(ActionType action, PredicateOperands<T> operands) throws ExpressionFormatException {
         if (TypeChecker.isInstanceOfString(operands)) {
+            this.action = action;
             this.operandStatement = (Provider<String>) operands.operand();
             this.args = (List<String>) operands.args();
         } else {
@@ -24,13 +27,15 @@ public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T
     @Override
     public boolean test(FileData fileData) throws IOException {
         String operand = operandStatement.get(fileData);
-        if (operand != null) {
-            for (String arg: args) {
-                if (operand.startsWith(arg)) {
-                    return true;
-                }
+        if (operand == null) {
+            return false;
+        }
+
+        for (String arg: args) {
+            if (operand.startsWith(arg)) {
+                return action.perform();
             }
         }
-        return false;
+        return !action.perform();
     }
 }

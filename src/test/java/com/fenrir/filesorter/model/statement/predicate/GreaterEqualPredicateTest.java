@@ -3,6 +3,7 @@ package com.fenrir.filesorter.model.statement.predicate;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -30,34 +31,67 @@ class GreaterEqualPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L, 12L, 16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GreaterEqualPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForOperandValueGreaterThanArgument() throws IOException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueIsGreaterThanArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GreaterEqualPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForOperandValueEqualArgument() throws IOException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueIsEqualArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GreaterEqualPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForOperandValueSmallerThanArgument() throws IOException {
+    public void testShouldReturnFalseForIncludeActionIfOperandIsSmallerThanArgumentValue()
+            throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new GreaterEqualPredicate<>(operands);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.INCLUDE, operands);
         assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueIsGreaterThanArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(8L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueIsEqualArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(12L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnTrueForExcludeActionIfOperandValueIsSmallerThanArgumentValue()
+            throws IOException {
+        Provider<Long> operand = new FileSizeProvider(null);
+        List<Long> args = List.of(16L);
+        PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
+        Predicate<Long> predicate = new GreaterEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertTrue(predicate.test(file));
     }
 }

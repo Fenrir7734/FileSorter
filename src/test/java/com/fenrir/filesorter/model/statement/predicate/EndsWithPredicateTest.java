@@ -5,6 +5,7 @@ import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.provider.FileSizeProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -34,26 +35,48 @@ class EndsWithPredicateTest {
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
         assertThrows(
                 ExpressionFormatException.class,
-                () -> new EndsWithPredicate<>(operands),
+                () -> new EndsWithPredicate<>(ActionType.INCLUDE, operands),
                 "Invalid type of operand for given operator"
         );
     }
 
     @Test
-    public void testShouldReturnTrueIfOperandValueEndsWithAtLeastOneArgumentValue() throws IOException, ExpressionFormatException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueEndsWithAtLeastOneArgumentValue()
+            throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "file");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EndsWithPredicate<>(operands);
+        Predicate<String> predicate = new EndsWithPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseIfOperandValueNotEndsWithAnyArgumentValue() throws IOException, ExpressionFormatException {
+    public void testShouldReturnFalseForIncludeActionIfOperandValueNotEndsWithAnyArgumentValue()
+            throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EndsWithPredicate<>(operands);
+        Predicate<String> predicate = new EndsWithPredicate<>(ActionType.INCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueEndsWithAtLeastOneArgumentValue()
+            throws IOException, ExpressionFormatException {
+        Provider<String> operand = new FileNameProvider(null);
+        List<String> args = List.of("abc", "bcd", "file");
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new EndsWithPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnTrueForExcludeActionIfOperandValueNotEndsWithAnyArgumentValue()
+            throws IOException, ExpressionFormatException {
+        Provider<String> operand = new FileNameProvider(null);
+        List<String> args = List.of("abc", "bcd", "file");
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new EndsWithPredicate<>(ActionType.EXCLUDE, operands);
         assertFalse(predicate.test(file));
     }
 }

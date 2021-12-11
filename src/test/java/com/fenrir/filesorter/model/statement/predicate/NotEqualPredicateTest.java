@@ -3,6 +3,7 @@ package com.fenrir.filesorter.model.statement.predicate;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
 import com.fenrir.filesorter.model.statement.provider.Provider;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,20 +27,42 @@ class NotEqualPredicateTest {
     }
 
     @Test
-    public void testShouldReturnTrueIfOperandValueNotEqualToAnyArgumentValue() throws IOException {
+    public void testShouldReturnTrueForIncludeActionIfOperandValueIsNotEqualToAnyArgumentValue()
+            throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "def");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new NotEqualPredicate<>(operands);
+        Predicate<String> predicate = new NotEqualPredicate<>(ActionType.INCLUDE, operands);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseIfOperandValueEqualsToAtLeastOneArgumentValue() throws IOException {
+    public void testShouldReturnFalseForIncludeActionIfOperandValueIsEqualToAtLeastOneArgumentValue()
+            throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "cbd", "testfile");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new NotEqualPredicate<>(operands);
+        Predicate<String> predicate = new NotEqualPredicate<>(ActionType.INCLUDE, operands);
         assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnFalseForExcludeActionIfOperandValueIsNotEqualToAnyArgumentValue()
+            throws IOException {
+        Provider<String> operand = new FileNameProvider(null);
+        List<String> args = List.of("abc", "cbd", "def");
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new NotEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertFalse(predicate.test(file));
+    }
+
+    @Test
+    public void testShouldReturnTrueForExcludeActionIfOperandValueIsEqualToAtLeastOneArgumentValue()
+            throws IOException {
+        Provider<String> operand = new FileNameProvider(null);
+        List<String> args = List.of("abc", "cbd", "testfile");
+        PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
+        Predicate<String> predicate = new NotEqualPredicate<>(ActionType.EXCLUDE, operands);
+        assertTrue(predicate.test(file));
     }
 }
