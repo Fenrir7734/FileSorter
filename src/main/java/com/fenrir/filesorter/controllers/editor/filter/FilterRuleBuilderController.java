@@ -12,6 +12,7 @@ import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -58,6 +59,8 @@ public class FilterRuleBuilderController {
         initActionComboBox();
         initPredicateComboBox();
         initProviderComboBox();
+        inputContainer.getChildren()
+                .addListener((ListChangeListener<Node>) change -> onInputContainerChanged());
 
         actionComboBox.getSelectionModel().select(0);
         providerComboBox.getSelectionModel().select(0);
@@ -89,8 +92,17 @@ public class FilterRuleBuilderController {
 
     private void onSingleArgumentPredicate() {
         List<Node> inputFields = inputContainer.getChildren();
-        inputFields.subList(1, inputFields.size()).clear();
-        addInputFieldButton.setDisable(true);
+
+        // If first condition is met, after altering inputFields, inputContainer's change listener will be triggered.
+        // If inputFields size is already equal 1, adding button must be disabled here.
+        // If inputFields size is equal 0, adding button should be already enabled, and it should remain enabled.
+        if (inputFields.size() > 1) {
+            List<Node> inputFieldsToRemove = inputFields.subList(1, inputFields.size());
+            inputControllerMediator.removeInputFields(inputFieldsToRemove);
+            inputFieldsToRemove.clear();
+        } else if (inputFields.size() == 1) {
+            addInputFieldButton.setDisable(true);
+        }
     }
 
     private void initProviderComboBox() {
@@ -140,10 +152,15 @@ public class FilterRuleBuilderController {
         }
     }
 
-    private void onInputFieldDelete() {
+    private void onInputContainerChanged() {
         List<Node> inputFields = inputContainer.getChildren();
-        if (inputFields.size() == 1) {
-
+        PredicateType predicateType = predicateComboBox.getSelectionModel().getSelectedItem();
+        if (predicateType.getArgumentNumber() == ArgumentNumber.SINGLE) {
+            if (inputFields.size() == 0) {
+                addInputFieldButton.setDisable(false);
+            } else if(inputFields.size() == 1) {
+                addInputFieldButton.setDisable(true);
+            }
         }
     }
 

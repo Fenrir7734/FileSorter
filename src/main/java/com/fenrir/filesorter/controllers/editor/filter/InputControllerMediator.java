@@ -1,6 +1,8 @@
 package com.fenrir.filesorter.controllers.editor.filter;
 
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputController;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,17 @@ public class InputControllerMediator {
     public void unregisterInputController(ArgumentInputController controller) {
         filterRuleBuilderController.deleteInputField(controller.getInputContainer());
         inputControllers.remove(controller);
+    }
+
+    public void removeInputFields(List<Node> toRemove) {
+        List<ArgumentInputController> controllersToRemove = new ArrayList<>();
+        for (ArgumentInputController controller: inputControllers) {
+            HBox inputField = controller.getInputContainer();
+            if (toRemove.contains(inputField)) {
+                controllersToRemove.add(controller);
+            }
+        }
+        inputControllers.removeAll(controllersToRemove);
     }
 
     public List<String> receiveArguments() {

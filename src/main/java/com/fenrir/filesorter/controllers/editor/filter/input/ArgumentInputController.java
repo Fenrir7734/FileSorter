@@ -2,12 +2,12 @@ package com.fenrir.filesorter.controllers.editor.filter.input;
 
 import com.fenrir.filesorter.controllers.editor.filter.InputControllerMediator;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 public abstract class ArgumentInputController {
     private InputControllerMediator inputControllerMediator;
-    @FXML
-    private HBox inputHBox;
+    @FXML private HBox inputHBox;
 
     public abstract String readArguments();
 
