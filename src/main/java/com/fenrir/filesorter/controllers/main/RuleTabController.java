@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -208,6 +209,7 @@ public class RuleTabController {
     @FXML
     public void addFilterRule() {
         try {
+            filterListView.getSelectionModel().clearSelection();
             loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -233,6 +235,7 @@ public class RuleTabController {
         );
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
