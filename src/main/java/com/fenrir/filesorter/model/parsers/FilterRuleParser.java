@@ -16,9 +16,7 @@ import com.fenrir.filesorter.model.enums.ArgumentNumber;
 
 import java.util.List;
 
-/**
- * TODO: 1.Sprawdzenie kolejności tokenów 2. Jeżeli któregoś tokenu brakuje powinien informować którego
- */
+
 public class FilterRuleParser {
 
     public Predicate<? extends Comparable<?>> resolveRule(Rule rule) throws ExpressionFormatException {
