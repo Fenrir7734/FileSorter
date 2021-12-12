@@ -20,7 +20,7 @@ import static com.fenrir.filesorter.model.enums.ArgumentNumber.SINGLE;
 import static com.fenrir.filesorter.model.enums.Scope.*;
 
 public enum ProviderType {
-    DIMENSION("DIM", "dimension", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER, Group.PHOTO) {
+    DIMENSION("DIM", "image dimensions", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER, Group.PHOTO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             return new ImageDimensionProvider(null);
@@ -34,7 +34,35 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dimensions);
         }
     },
-    FILE_EXTENSION("EXT", "extension", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
+    WIDTH("WID", "image width", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER, Group.PHOTO) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args) {
+            return new ImageWidthProvider();
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
+                throws ArgumentFormatException {
+            Provider<Integer> operand = new ImageWidthProvider();
+            List<Integer> widths = Converter.convertToPositiveInteger(args);
+            return new PredicateOperands<>(operand, widths);
+        }
+    },
+    HEIGHT("HEI", "image height", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.NUMBER, Group.PHOTO) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args) {
+            return new ImageHeightProvider();
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
+                throws ArgumentFormatException {
+            Provider<Integer> operand = new ImageHeightProvider();
+            List<Integer> heights = Converter.convertToPositiveInteger(args);
+            return new PredicateOperands<>(operand, heights);
+        }
+    },
+    FILE_EXTENSION("EXT", "file extension", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             return new FileExtensionProvider(null);
@@ -46,7 +74,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_CATEGORY("CAT", "category", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.EXACT_STRING, Group.FILE_INFO) {
+    FILE_CATEGORY("CAT", "file category", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.EXACT_STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             return new FileCategoryProvider(null);
@@ -58,9 +86,10 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    DATE("DAT", "creation date", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
+    DATE("DAT", "file creation date", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
         @Override
-        public Provider<?> getAsProvider(List<String> args) throws ArgumentFormatException {
+        public Provider<?> getAsProvider(List<String> args)
+                throws ArgumentFormatException {
             try {
                 new SimpleDateFormat(args.get(0));
                 ProviderDescription description = ProviderDescription.ofDate(args.get(0));
@@ -78,6 +107,87 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, dates);
         }
     },
+    DATE_CREATED("DAC", "date created", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args)
+                throws ArgumentFormatException {
+            try {
+                new SimpleDateFormat(args.get(0));
+                ProviderDescription description = ProviderDescription.ofDate(args.get(0));
+                return new DateCreatedProvider(description);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+            }
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
+                throws ArgumentFormatException {
+            Provider<ChronoLocalDate> operand = new DateCreatedProvider(null);
+            List<ChronoLocalDate> dates = Converter.convertToDate(args);
+            return new PredicateOperands<>(operand, dates);
+        }
+    },
+    DATE_MODIFIED("DAM", "date modified", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args)
+                throws ArgumentFormatException {
+            try {
+                new SimpleDateFormat(args.get(0));
+                ProviderDescription description = ProviderDescription.ofDate(args.get(0));
+                return new DateModifiedProvider(description);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+            }
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
+                throws ArgumentFormatException {
+            Provider<ChronoLocalDate> operand = new DateModifiedProvider(null);
+            List<ChronoLocalDate> dates = Converter.convertToDate(args);
+            return new PredicateOperands<>(operand, dates);
+        }
+    },
+    DATE_ACCESSED("DAA", "date accessed", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args)
+                throws ArgumentFormatException {
+            try {
+                new SimpleDateFormat(args.get(0));
+                ProviderDescription description = ProviderDescription.ofDate(args.get(0));
+                return new DateAccessedProvider(description);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+            }
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
+                throws ArgumentFormatException {
+            Provider<ChronoLocalDate> operand = new DateAccessedProvider(null);
+            List<ChronoLocalDate> dates = Converter.convertToDate(args);
+            return new PredicateOperands<>(operand, dates);
+        }
+    },
+    DATE_CURRENT("DAU", "date current", SINGLE, new Scope[]{SORT, RENAME}, Category.DATE, Group.DATES) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args)
+                throws ArgumentFormatException {
+            try {
+                new SimpleDateFormat(args.get(0));
+                ProviderDescription description = ProviderDescription.ofDate(args.get(0));
+                return new DateCurrentProvider(description);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+            }
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
+            throw new UnsupportedOperationException();
+        }
+    },
     FILE_NAME("FIN", "file name", NONE, new Scope[]{RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
@@ -87,6 +197,30 @@ public enum ProviderType {
         @Override
         public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
             Provider<String> operand = new FileNameProvider(null);
+            return new PredicateOperands<>(operand, args);
+        }
+    },
+    FILE_NAME_WITH_EXTENSION("FIX", "file name with extension", NONE, new Scope[]{RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args) {
+            return new FileNameWithExtensionProvider();
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
+            Provider<String> operand = new FileNameWithExtensionProvider();
+            return new PredicateOperands<>(operand, args);
+        }
+    },
+    DIRECTORY_NAME("FON", "directory name", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args) {
+            return new DirectoryNameProvider();
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
+            Provider<String> operand = new DirectoryNameProvider();
             return new PredicateOperands<>(operand, args);
         }
     },
@@ -101,10 +235,10 @@ public enum ProviderType {
             throw new UnsupportedOperationException();
         }
     },
-    PATH("PAT", "path", NONE, new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
+    FILE_PATH("PAT", "file path", NONE, new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
-            return new FilePathProvider(null);
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -114,10 +248,23 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, paths);
         }
     },
-    SIZE("SIZ", "size", NONE, new Scope[]{FILTER}, Category.NUMBER, Group.FILE_INFO) {
+    DIRECTORY_PATH("PAF", "directory path", NONE, new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
-            return new FileSizeProvider(null);
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
+            Provider<Path> operand = new DirectoryPathProvider();
+            List<Path> paths = Converter.convertToPaths(args);
+            return new PredicateOperands<>(operand, paths);
+        }
+    },
+    FILE_SIZE("SIZ", "file size", NONE, new Scope[]{FILTER}, Category.NUMBER, Group.FILE_INFO) {
+        @Override
+        public Provider<?> getAsProvider(List<String> args) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -135,10 +282,11 @@ public enum ProviderType {
         }
 
         @Override
-        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) throws ArgumentFormatException {
+        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
             throw new UnsupportedOperationException();
         }
     };
+
 
     private final String token;
     private final String name;
