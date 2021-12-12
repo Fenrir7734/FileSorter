@@ -3,7 +3,10 @@ package com.fenrir.filesorter.model.utils;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.file.utils.Dimension;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
+import org.apache.tika.utils.StringUtils;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -18,6 +21,32 @@ public class Converter {
 
     private Converter() {
         throw new UnsupportedOperationException();
+    }
+
+    public static List<Integer> convertToPositiveInteger(List<String> args) throws ArgumentFormatException {
+        List<Integer> integers = new ArrayList<>();
+        for (String arg: args) {
+            if (isPositiveInteger(arg)) {
+                integers.add(Integer.parseInt(arg.trim()));
+            } else {
+                throw new ArgumentFormatException("Incorrect number format.", arg);
+            }
+        }
+        return integers;
+    }
+
+    private static boolean isPositiveInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        str = str.trim();
+        if (!str.matches("\\d+")) {
+            return false;
+        }
+        String max = String.valueOf(Integer.MAX_VALUE);
+        BigInteger integerMaxValue = new BigInteger(max);
+        BigInteger convertedNumber = new BigInteger(str);
+        return convertedNumber.compareTo(integerMaxValue) <= 0;
     }
 
     public static List<ChronoLocalDate> convertToDate(List<String> args) throws ArgumentFormatException {
@@ -96,7 +125,7 @@ public class Converter {
         if (!checkPostfix(c)) {
             throw new ArgumentFormatException(
                     "Incorrect size",
-                    ProviderType.SIZE.getToken(),
+                    ProviderType.FILE_SIZE.getToken(),
                     arg
             );
         }
