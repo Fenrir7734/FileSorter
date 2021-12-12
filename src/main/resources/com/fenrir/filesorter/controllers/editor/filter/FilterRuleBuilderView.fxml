@@ -20,12 +20,12 @@
             <Insets top="20.0" />
         </VBox.margin>
     </HBox>
-   <ScrollPane prefHeight="100.0" fitToWidth="true" fitToHeight="true">
+   <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="100.0">
       <content>
           <VBox fx:id="inputContainer" alignment="CENTER" spacing="10.0" />
       </content>
    </ScrollPane>
-    <Button mnemonicParsing="false" onAction="#addInputField" prefHeight="30.0" prefWidth="30.0" text="+" />
+    <Button fx:id="addInputFieldButton" mnemonicParsing="false" onAction="#addInputField" prefHeight="30.0" prefWidth="30.0" text="+" />
     <padding>
         <Insets left="20.0" right="20.0" />
     </padding>

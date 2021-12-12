@@ -2,6 +2,7 @@ package com.fenrir.filesorter.controllers.editor.filter;
 
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputController;
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputFactory;
+import com.fenrir.filesorter.model.enums.ArgumentNumber;
 import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.rule.Iterator;
@@ -13,6 +14,8 @@ import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -30,6 +33,8 @@ public class FilterRuleBuilderController {
     private final Logger logger = LoggerFactory.getLogger(FilterRuleBuilderController.class);
 
     @FXML private VBox inputContainer;
+
+    @FXML private Button addInputFieldButton;
 
     @FXML private ComboBox<ActionType> actionComboBox;
     @FXML private ComboBox<ProviderType> providerComboBox;
@@ -69,6 +74,23 @@ public class FilterRuleBuilderController {
         predicateComboBox.setItems(predicateTypeItems);
         predicateComboBox.setButtonCell(predicateCallback.call(null));
         predicateComboBox.setCellFactory(predicateCallback);
+        predicateComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> onPredicateTypeChanged(newValue));
+    }
+
+    private void onPredicateTypeChanged(PredicateType predicateType) {
+        if (predicateType.getArgumentNumber() == ArgumentNumber.SINGLE) {
+            onSingleArgumentPredicate();
+        } else {
+            addInputFieldButton.setDisable(false);
+        }
+    }
+
+    private void onSingleArgumentPredicate() {
+        List<Node> inputFields = inputContainer.getChildren();
+        inputFields.subList(1, inputFields.size()).clear();
+        addInputFieldButton.setDisable(true);
     }
 
     private void initProviderComboBox() {
@@ -115,6 +137,13 @@ public class FilterRuleBuilderController {
             loadInputField(providerType);
         } catch (IOException e) {
             logger.error("Error during changing input controller: {}", e.getMessage());
+        }
+    }
+
+    private void onInputFieldDelete() {
+        List<Node> inputFields = inputContainer.getChildren();
+        if (inputFields.size() == 1) {
+
         }
     }
 
