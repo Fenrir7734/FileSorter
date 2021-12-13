@@ -83,10 +83,12 @@ public class FilterRuleBuilderController {
     }
 
     private void onPredicateTypeChanged(PredicateType predicateType) {
-        if (predicateType.getArgumentNumber() == ArgumentNumber.SINGLE) {
-            onSingleArgumentPredicate();
-        } else {
-            addInputFieldButton.setDisable(false);
+        if (predicateType != null) {
+            if (predicateType.getArgumentNumber() == ArgumentNumber.SINGLE) {
+                onSingleArgumentPredicate();
+            } else {
+                addInputFieldButton.setDisable(false);
+            }
         }
     }
 
