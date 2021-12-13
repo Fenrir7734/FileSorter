@@ -6,7 +6,6 @@ import com.fenrir.filesorter.model.file.utils.FilesCategory;
 import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
-import org.apache.commons.io.FileUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.detect.DefaultDetector;
 import org.apache.tika.detect.Detector;
@@ -61,6 +60,13 @@ public class FileData {
         return calendar;
     }
 
+    public Calendar lastAccessTime() {
+        FileTime fileAccessTime = attributes.lastAccessTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(fileAccessTime.toMillis());
+        return calendar;
+    }
+
     public String getFileName() {
         return sourcePath.getFileName().toString();
     }
@@ -80,17 +86,6 @@ public class FileData {
         return fileName.lastIndexOf(".") != -1;
     }
 
-    public String getFileExtension() {
-        if (!isDirectory) {
-            String fileName = sourcePath.getFileName().toString();
-            int i = fileName.lastIndexOf(".");
-            if (i != -1) {
-                return fileName.substring(i + 1).trim();
-            }
-        }
-        return null;
-    }
-
     public FileCategoryType getFileCategory() throws IOException {
         if (isDirectory) {
             return null;
@@ -102,6 +97,17 @@ public class FileData {
         FilesCategory filesCategory = FilesCategory.getInstance();
         FileCategoryType category = filesCategory.matchCategory(extension);
         return category != null ? category : FileCategoryType.OTHERS;
+    }
+
+    public String getFileExtension() {
+        if (!isDirectory) {
+            String fileName = sourcePath.getFileName().toString();
+            int i = fileName.lastIndexOf(".");
+            if (i != -1) {
+                return fileName.substring(i + 1).trim();
+            }
+        }
+        return null;
     }
 
     public long getFileSize() {
@@ -156,6 +162,16 @@ public class FileData {
         } catch (ImageReadException e) {
             logger.warn(e.getMessage());
         }
+    }
+
+    public String getSourceParentDirectoryName() {
+        return sourcePath.getParent()
+                .getFileName()
+                .toString();
+    }
+
+    public Path getSourceParentDirectoryPath() {
+        return sourcePath.getParent();
     }
 
     public Dimension getImageDimension1() throws IOException {

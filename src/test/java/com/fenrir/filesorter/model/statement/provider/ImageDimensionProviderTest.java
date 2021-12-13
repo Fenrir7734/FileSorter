@@ -35,8 +35,8 @@ class ImageDimensionProviderTest {
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         Provider<Dimension> provider = new ImageDimensionProvider(null);
-        String resolution = provider.getAsString(fileData);
-        assertEquals("NonImage", resolution);
+        String actualDimension = provider.getAsString(fileData);
+        assertEquals("NonImage", actualDimension);
     }
 
     @Nested

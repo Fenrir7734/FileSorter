@@ -7,11 +7,15 @@ import java.io.IOException;
 public class ImageHeightProvider implements Provider<Integer> {
     @Override
     public Integer get(FileData fileData) throws IOException {
-        return null;
+        return fileData.isImage() ? fileData.getImageDimension().getHeight() : null;
     }
 
     @Override
     public String getAsString(FileData fileData) throws IOException {
-        return null;
+        if (!fileData.isImage()) {
+            return "NonImage";
+        }
+        int height = fileData.getImageDimension().getHeight();
+        return String.valueOf(height);
     }
 }

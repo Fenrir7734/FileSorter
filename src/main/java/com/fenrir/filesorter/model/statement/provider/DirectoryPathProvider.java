@@ -8,11 +8,11 @@ import java.nio.file.Path;
 public class DirectoryPathProvider implements Provider<Path> {
     @Override
     public Path get(FileData fileData) throws IOException {
-        return null;
+        return fileData.getSourceParentDirectoryPath();
     }
 
     @Override
     public String getAsString(FileData fileData) throws IOException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
