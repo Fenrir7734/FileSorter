@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class NotEqualPredicate<T extends Comparable<T>> implements Predicate<T> {
-    private final ActionType action;
+    private final boolean invert;
     private final Provider<T> operandStatement;
     private final List<T> args;
 
-    public NotEqualPredicate(ActionType action, PredicateOperands<T> operands) {
-        this.action = action;
+    public NotEqualPredicate(PredicateOperands<T> operands, boolean invert) {
+        this.invert = invert;
         this.operandStatement = operands.operand();
         this.args = operands.args();
     }
@@ -27,9 +27,9 @@ public class NotEqualPredicate<T extends Comparable<T>> implements Predicate<T> 
 
         for (T arg: args) {
             if (operand.compareTo(arg) == 0) {
-                return !action.perform();
+                return false ^ invert;
             }
         }
-        return action.perform();
+        return true ^ invert;
     }
 }

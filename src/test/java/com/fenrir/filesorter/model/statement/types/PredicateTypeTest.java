@@ -43,7 +43,7 @@ class PredicateTypeTest {
                 new FileNameProvider(null),
                 List.of("abc")
         );
-        Predicate<?> predicate = PredicateType.EQUAL.getPredicate(ActionType.INCLUDE, operands);
+        Predicate<?> predicate = PredicateType.EQUAL.getPredicate(operands, false);
         assertNotNull(predicate);
         assertTrue(predicate instanceof EqualPredicate);
     }
@@ -57,7 +57,7 @@ class PredicateTypeTest {
         PredicateType type = PredicateType.CONTAINS;
         assertThrows(
                 ExpressionFormatException.class,
-                () -> type.getPredicate(ActionType.INCLUDE, operands),
+                () -> type.getPredicate(operands, false),
                 "Invalid type of operand for given operator"
         );
     }

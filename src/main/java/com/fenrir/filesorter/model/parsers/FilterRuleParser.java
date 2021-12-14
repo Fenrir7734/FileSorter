@@ -30,7 +30,8 @@ public class FilterRuleParser {
             ActionType action = ActionType.getType(actionToken.symbol());
             PredicateOperands<? extends Comparable<?>> operands = ProviderType.getType(operand.symbol(), Scope.FILTER)
                     .getAsOperands(operator.args());
-            return PredicateType.getType(operator.symbol()).getPredicate(action, operands);
+            boolean isInverted = action != ActionType.INCLUDE;
+            return PredicateType.getType(operator.symbol()).getPredicate(operands, isInverted);
         } catch (ArgumentFormatException e) {
             throw new ArgumentFormatException(e.getMessage(), e, rule, e.getToken(), e.getArg());
         }

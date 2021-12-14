@@ -18,71 +18,71 @@ public enum PredicateType {
     EQUAL("==", "equal",  MULTIPLE, new Category[]{NUMBER, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new EqualPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new EqualPredicate<>(operands, isInverted);
         }
     },
     NOT_EQUAL("!=", "not equal", MULTIPLE, new Category[]{NUMBER, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new NotEqualPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new NotEqualPredicate<>(operands, isInverted);
         }
     },
     GREATER(">", "greater than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new GreaterPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new GreaterPredicate<>(operands, isInverted);
         }
     },
     GREATER_EQUAL(">=", "greater or equal than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new GreaterEqualPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new GreaterEqualPredicate<>(operands, isInverted);
         }
     },
     SMALLER("<", "smaller than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new SmallerPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new SmallerPredicate<>(operands, isInverted);
         }
     },
     SMALLER_EQUAL("<=", "smaller or equal than", SINGLE, new Category[]{NUMBER, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) {
-            return new SmallerEqualPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
+            return new SmallerEqualPredicate<>(operands, isInverted);
         }
     },
     CONTAINS("CON", "contains", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException {
-            return new ContainsPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) throws ExpressionFormatException {
+            return new ContainsPredicate<>(operands, isInverted);
         }
     },
     NOT_CONTAINS("NCO", "not contains", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException {
-            return new NotContainsPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) throws ExpressionFormatException {
+            return new NotContainsPredicate<>(operands, isInverted);
         }
     },
     STARTS_WITH("SW", "starts with", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException {
-            return new StartsWithPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) throws ExpressionFormatException {
+            return new StartsWithPredicate<>(operands, isInverted);
         }
     },
     ENDS_WITH("EW", "ends with", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
-                ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException {
-            return new EndsWithPredicate<>(action, operands);
+                PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) throws ExpressionFormatException {
+            return new EndsWithPredicate<>(operands, isInverted);
         }
     };
 
@@ -121,7 +121,7 @@ public enum PredicateType {
     }
 
     public abstract Predicate<? extends Comparable<?>> getPredicate(
-            ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException;
+            PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) throws ExpressionFormatException;
 
     public String getToken() {
         return token;

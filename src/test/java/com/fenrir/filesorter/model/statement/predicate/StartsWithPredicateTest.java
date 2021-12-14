@@ -35,48 +35,48 @@ class StartsWithPredicateTest {
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
         assertThrows(
                 ExpressionFormatException.class,
-                () -> new StartsWithPredicate<>(ActionType.INCLUDE, operands),
+                () -> new StartsWithPredicate<>(operands, false),
                 "Invalid type of operand for given operator"
         );
     }
 
     @Test
-    public void testShouldReturnTrueForIncludeActionIfOperandStartsWithAtLeastOneArgumentValue()
+    public void testShouldReturnTrueIfOperandStartsWithAtLeastOneArgumentValue()
             throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "test");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new StartsWithPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands, false);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForIncludeActionIfOperandNotStartsWithAnyArgumentValue()
+    public void testShouldReturnFalseIfOperandNotStartsWithAnyArgumentValue()
             throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new StartsWithPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands, false);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForExcludeActionIfOperandStartsWithAtLeastOneArgumentValue()
+    public void testShouldReturnFalseWhenInversionModeIsEnabledAndIfOperandStartsWithAtLeastOneArgumentValue()
             throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "test");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new StartsWithPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands, true);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForExcludeActionIfOperandNotStartsWithAnyArgumentValue()
+    public void testShouldReturnTrueWhenInversionModeIsEnabledAndIfOperandNotStartsWithAnyArgumentValue()
             throws IOException, ExpressionFormatException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("abc", "bcd", "cde");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new StartsWithPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<String> predicate = new StartsWithPredicate<>(operands, true);
         assertTrue(predicate.test(file));
     }
 }

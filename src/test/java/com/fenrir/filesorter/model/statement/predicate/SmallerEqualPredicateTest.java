@@ -32,67 +32,67 @@ class SmallerEqualPredicateTest {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L, 12L, 8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, false);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForIncludeActionIfOperandValueIsSmallerThanArgumentValue()
+    public void testShouldReturnTrueIfOperandValueIsSmallerThanArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, false);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForIncludeActionIfOperandValueIsEqualArgumentValue()
+    public void testShouldReturnTrueIfOperandValueIsEqualArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, false);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForIncludeActionIfOperandValueIsGreaterThanArgumentValue()
+    public void testShouldReturnFalseIfOperandValueIsGreaterThanArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, false);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForExcludeActionIfOperandValueIsSmallerThanArgumentValue()
+    public void testShouldReturnFalseWhenInversionModeIsEnabledAndIfOperandValueIsSmallerThanArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(16L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, true);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForExcludeActionIfOperandValueIsEqualArgumentValue()
+    public void testShouldReturnFalseWhenInversionModeIsEnabledAndnIfOperandValueIsEqualArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(12L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, true);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForExcludeActionIfOperandValueIsGreaterThanArgumentValue()
+    public void testShouldReturnTrueWhenInversionModeIsEnabledAndIfOperandValueIsGreaterThanArgumentValue()
             throws IOException {
         Provider<Long> operand = new FileSizeProvider(null);
         List<Long> args = List.of(8L);
         PredicateOperands<Long> operands = new PredicateOperands<>(operand, args);
-        Predicate<Long> predicate = new SmallerEqualPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<Long> predicate = new SmallerEqualPredicate<>(operands, true);
         assertTrue(predicate.test(file));
     }
 }

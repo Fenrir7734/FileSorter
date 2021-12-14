@@ -182,7 +182,7 @@ class FilterRuleParserTest {
         FileNameProvider operand = new FileNameProvider(null);
         List<String> args = List.of("testfile");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        EqualPredicate<String> expectedPredicate = new EqualPredicate<>(ActionType.INCLUDE, operands);
+        EqualPredicate<String> expectedPredicate = new EqualPredicate<>(operands, false);
         assertEquals(expectedPredicate.test(file), actualPredicate.test(file));
     }
 }

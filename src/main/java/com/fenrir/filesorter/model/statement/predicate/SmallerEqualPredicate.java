@@ -7,12 +7,12 @@ import com.fenrir.filesorter.model.statement.types.ActionType;
 import java.io.IOException;
 
 public class SmallerEqualPredicate<T extends Comparable<T>> implements Predicate<T> {
-    private final ActionType action;
+    private final boolean invert;
     private final Provider<T> operandStatement;
     private final T arg;
 
-    public SmallerEqualPredicate(ActionType action, PredicateOperands<T> operands) {
-        this.action = action;
+    public SmallerEqualPredicate(PredicateOperands<T> operands, boolean invert) {
+        this.invert = invert;
         this.operandStatement = operands.operand();
         this.arg = operands.args().get(0);
     }
@@ -24,6 +24,6 @@ public class SmallerEqualPredicate<T extends Comparable<T>> implements Predicate
             return false;
         }
 
-        return (operand.compareTo(arg) <= 0) == action.perform();
+        return operand.compareTo(arg) <= 0 ? true ^ invert : false ^ invert;
     }
 }

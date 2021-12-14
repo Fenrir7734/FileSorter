@@ -27,42 +27,42 @@ class EqualPredicateTest {
     }
 
     @Test
-    public void testShouldReturnTrueForIncludeActionIfOperandValueIsEqualToAnyArgumentValue()
+    public void testShouldReturnTrueIfOperandValueIsEqualToAnyArgumentValue()
             throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("file", "test", "testfile");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<String> predicate = new EqualPredicate<>(operands, false);
         assertTrue(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForIncludeActionIfOperandValueIsNotEqualToAnyArgumentValue()
+    public void testShouldReturnFalseIfOperandValueIsNotEqualToAnyArgumentValue()
             throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("file", "test", "file2");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EqualPredicate<>(ActionType.INCLUDE, operands);
+        Predicate<String> predicate = new EqualPredicate<>(operands, false);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnFalseForExcludeActionIfOperandValueIsEqualToAnyArgumentValue()
+    public void testShouldReturnFalseWhenInversionModeIsEnabledAndIfOperandValueIsEqualToAnyArgumentValue()
             throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("file", "test", "testfile");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EqualPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<String> predicate = new EqualPredicate<>(operands, true);
         assertFalse(predicate.test(file));
     }
 
     @Test
-    public void testShouldReturnTrueForExcludeActionIfOperandValueIsNotEqualToAnyArgumentValue()
+    public void testShouldReturnTrueWhenInversionModeIsEnabledAndIfOperandValueIsNotEqualToAnyArgumentValue()
             throws IOException {
         Provider<String> operand = new FileNameProvider(null);
         List<String> args = List.of("file", "test", "file2");
         PredicateOperands<String> operands = new PredicateOperands<>(operand, args);
-        Predicate<String> predicate = new EqualPredicate<>(ActionType.EXCLUDE, operands);
+        Predicate<String> predicate = new EqualPredicate<>(operands, true);
         assertTrue(predicate.test(file));
     }
 }

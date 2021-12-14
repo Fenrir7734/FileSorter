@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T> {
-    private final ActionType action;
+    private final boolean invert;
     private final Provider<String> operandStatement;
     private final List<String> args;
 
-    public StartsWithPredicate(ActionType action, PredicateOperands<T> operands) throws ExpressionFormatException {
+    public StartsWithPredicate(PredicateOperands<T> operands, boolean invert) throws ExpressionFormatException {
         if (TypeChecker.isInstanceOfString(operands)) {
-            this.action = action;
+            this.invert = invert;
             this.operandStatement = (Provider<String>) operands.operand();
             this.args = (List<String>) operands.args();
         } else {
@@ -33,9 +33,9 @@ public class StartsWithPredicate<T extends Comparable<T>> implements Predicate<T
 
         for (String arg: args) {
             if (operand.startsWith(arg)) {
-                return action.perform();
+                return true ^ invert;
             }
         }
-        return !action.perform();
+        return false ^ invert;
     }
 }
