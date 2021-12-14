@@ -68,11 +68,12 @@ public class SortTabController {
         try {
             configuration = new Configuration();
             configuration.setTargetRootDir(Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test"));
-            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wall3")));
+            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wall2")));
             RuleGroup group = new RuleGroup();
-            group.setSortRule(new Rule("%(DIM)"));
-            group.setRenameRule(new Rule("%(FIN)"));
-            group.addFilterRule(new Rule("%(DIM)%(==:1920x1080)"));
+            group.setSortRule(new Rule("%(DAC:YYYY-MM-dd)%(STR:--)%(DAM:YYYY-MM-dd)%(STR:--)%(STR:--)%(DAA:YYYY-MM-dd)"));
+            group.setRenameRule(new Rule("%(FIX)"));
+            //group.addFilterRule(new Rule("%(EXC)%(HEI)%(==:1080)"));
+            //group.addFilterRule(new Rule("%(INC)%(DIN)%(==:test)"));
             configuration.addNamedRuleGroup("aaa", group);
         } catch (ExpressionFormatException e) {
             e.printStackTrace();

@@ -212,7 +212,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    DIRECTORY_NAME("FON", "directory name", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
+    DIRECTORY_NAME("DIN", "directory name", NONE, new Scope[]{SORT, RENAME, FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             return new DirectoryNameProvider();
@@ -248,7 +248,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, paths);
         }
     },
-    DIRECTORY_PATH("PAF", "directory path", NONE, new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
+    DIRECTORY_PATH("PAD", "directory path", NONE, new Scope[]{FILTER}, Category.STRING, Group.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             throw new UnsupportedOperationException();
