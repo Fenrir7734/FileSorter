@@ -1,8 +1,8 @@
 package com.fenrir.filesorter.model.statement.types;
 
 import com.fenrir.filesorter.model.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.enums.ReturnType;
 import com.fenrir.filesorter.model.enums.Category;
-import com.fenrir.filesorter.model.enums.Group;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
@@ -57,15 +57,15 @@ class ProviderTypeTest {
     }
 
     @Test
-    public void getCategoryShouldReturnProviderCategory() {
-        Category category = ProviderType.FILE_CATEGORY.getCategory();
-        assertEquals(Category.EXACT_STRING, category);
+    public void getReturnTypeShouldReturnProviderReturnType() {
+        ReturnType returnType = ProviderType.CATEGORY.getReturnType();
+        assertEquals(ReturnType.EXACT_STRING, returnType);
     }
 
     @Test
     public void getGroupShouldReturnProviderGroup() {
-        Group group = ProviderType.DIMENSION.getGroup();
-        assertEquals(Group.PHOTO, group);
+        Category group = ProviderType.DIMENSION.getGroup();
+        assertEquals(Category.PHOTO, group);
     }
 
     @Test

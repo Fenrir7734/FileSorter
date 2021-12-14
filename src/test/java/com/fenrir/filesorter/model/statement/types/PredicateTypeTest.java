@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model.statement.types;
 
 import com.fenrir.filesorter.model.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.enums.ReturnType;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.statement.predicate.*;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.fenrir.filesorter.model.enums.ReturnType.*;
+import static com.fenrir.filesorter.model.enums.ReturnType.DATE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PredicateTypeTest {
@@ -26,6 +29,22 @@ class PredicateTypeTest {
     }
 
     @Test
+    public void getPredicatesForReturnTypeShouldReturnListOfAllPredicatesForGivenReturnType() {
+        List<PredicateType> predicateTypes = PredicateType.getPredicatesForReturnType(DATE);
+        assertEquals(
+                List.of(
+                        PredicateType.EQUAL,
+                        PredicateType.NOT_EQUAL,
+                        PredicateType.GREATER,
+                        PredicateType.GREATER_EQUAL,
+                        PredicateType.SMALLER,
+                        PredicateType.SMALLER_EQUAL
+                ),
+                predicateTypes
+        );
+    }
+
+    @Test
     public void getTokenShouldReturnTokenFor() {
         String token = PredicateType.EQUAL.getToken();
         assertEquals("==", token);
@@ -35,6 +54,12 @@ class PredicateTypeTest {
     public void getArgumentNumberShouldReturnArgumentNumber() {
         ArgumentNumber argumentNumber = PredicateType.EQUAL.getArgumentNumber();
         assertEquals(argumentNumber, ArgumentNumber.MULTIPLE);
+    }
+
+    @Test
+    public void getTypesShouldReturnReturnTypes() {
+        ReturnType[] returnTypes = PredicateType.EQUAL.getTypes();
+        assertArrayEquals(new ReturnType[]{NUMBER, STRING, EXACT_STRING, DATE}, returnTypes);
     }
 
     @Test

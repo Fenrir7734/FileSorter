@@ -151,7 +151,7 @@ public class RuleTabController {
 
         int i = 1;
         do {
-            ruleGroupName = "Rule Group " + (ruleGroupNames.size() + i++);
+            ruleGroupName = "Rule Category " + (ruleGroupNames.size() + i++);
         } while (ruleGroupNames.contains(ruleGroupName));
 
         return ruleGroupName;

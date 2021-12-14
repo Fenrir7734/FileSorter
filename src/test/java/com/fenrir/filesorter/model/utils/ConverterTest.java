@@ -248,7 +248,7 @@ class ConverterTest {
                 "Incorrect size"
         );
         String expectedArgument = "5K";
-        String expectedToken = "SIZ";
+        String expectedToken = "FIS";
         assertEquals(expectedArgument, exception.getArg());
         assertEquals(expectedToken, exception.getToken());
     }
@@ -261,7 +261,7 @@ class ConverterTest {
                 "Incorrect size"
         );
         String expectedArgument = "abc";
-        String expectedToken = "SIZ";
+        String expectedToken = "FIS";
         assertEquals(expectedArgument, exception.getArg());
         assertEquals(expectedToken, exception.getToken());
     }

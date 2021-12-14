@@ -3,7 +3,7 @@ package com.fenrir.filesorter.controllers.editor.filter;
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputController;
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputFactory;
 import com.fenrir.filesorter.model.enums.ArgumentNumber;
-import com.fenrir.filesorter.model.enums.Category;
+import com.fenrir.filesorter.model.enums.ReturnType;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.Rule;
@@ -137,8 +137,8 @@ public class FilterRuleBuilderController {
 
     private void populatePredicateList(ProviderType providerType) {
         predicateTypeItems.clear();
-        Category typeOfSelectedProvider = providerType.getCategory();
-        List<PredicateType> predicateTypes = PredicateType.getPredicatesForCategory(typeOfSelectedProvider);
+        ReturnType selectedProviderReturnType = providerType.getReturnType();
+        List<PredicateType> predicateTypes = PredicateType.getPredicatesForReturnType(selectedProviderReturnType);
         predicateTypeItems.addAll(predicateTypes);
         predicateComboBox.getSelectionModel().select(0);
     }

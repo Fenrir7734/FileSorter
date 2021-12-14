@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.controllers.editor.rename;
 
-import com.fenrir.filesorter.model.enums.Group;
+import com.fenrir.filesorter.model.enums.Category;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -24,11 +24,11 @@ public class RenameRuleBuilderController {
 
     public void initTokenTreeView() {
         ProviderType[] providerTypes = ProviderType.values();
-        Map<Group, List<ProviderType>> providerTypesByGroup = new HashMap<>();
+        Map<Category, List<ProviderType>> providerTypesByGroup = new HashMap<>();
         for (ProviderType type: providerTypes) {
             providerTypesByGroup.computeIfAbsent(type.getGroup(), k -> new ArrayList<>()).add(type);
         }
-        List<ProviderType> providerTypesWithoutGroup = providerTypesByGroup.getOrDefault(Group.NONE, new ArrayList<>());
-        providerTypesByGroup.remove(Group.NONE);
+        List<ProviderType> providerTypesWithoutGroup = providerTypesByGroup.getOrDefault(Category.NONE, new ArrayList<>());
+        providerTypesByGroup.remove(Category.NONE);
     }
 }
