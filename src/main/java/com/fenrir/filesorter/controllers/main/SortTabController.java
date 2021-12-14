@@ -68,11 +68,11 @@ public class SortTabController {
         try {
             configuration = new Configuration();
             configuration.setTargetRootDir(Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test"));
-            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wall2")));
+            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wallpapers")));
             RuleGroup group = new RuleGroup();
-            group.setSortRule(new Rule("%(DAC:YYYY-MM-dd)%(STR:--)%(DAM:YYYY-MM-dd)%(STR:--)%(STR:--)%(DAA:YYYY-MM-dd)"));
+            group.setSortRule(new Rule("%(DIM)"));
             group.setRenameRule(new Rule("%(FIX)"));
-            //group.addFilterRule(new Rule("%(EXC)%(HEI)%(==:1080)"));
+            group.addFilterRule(new Rule("%(INC)%(FIN)%(NCO:HD)"));
             //group.addFilterRule(new Rule("%(INC)%(DIN)%(==:test)"));
             configuration.addNamedRuleGroup("aaa", group);
         } catch (ExpressionFormatException e) {
@@ -86,6 +86,7 @@ public class SortTabController {
             @Override
             protected Void call() throws Exception {
                 try {
+                    test();
                     configuration.validate();
                     Platform.runLater(() -> setProgressIndicatorToIndeterminate());
                     Processor processor = new Processor(configuration);
@@ -101,6 +102,8 @@ public class SortTabController {
                 } catch (SortConfigurationException | IOException e) {
                     Platform.runLater(() -> setProgressIndicatorTo0());
                     logger.error("{}", e.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 return null;
             }

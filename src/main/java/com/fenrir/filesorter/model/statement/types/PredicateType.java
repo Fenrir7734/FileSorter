@@ -64,6 +64,13 @@ public enum PredicateType {
             return new ContainsPredicate<>(action, operands);
         }
     },
+    NOT_CONTAINS("NCO", "not contains", MULTIPLE, new Category[]{STRING}) {
+        @Override
+        public Predicate<? extends Comparable<?>> getPredicate(
+                ActionType action, PredicateOperands<? extends Comparable<?>> operands) throws ExpressionFormatException {
+            return new NotContainsPredicate<>(action, operands);
+        }
+    },
     STARTS_WITH("SW", "starts with", MULTIPLE, new Category[]{STRING}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
