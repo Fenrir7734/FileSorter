@@ -65,7 +65,6 @@ public class Converter {
             throw new ArgumentFormatException(
                     "Incorrect date format.",
                     e,
-                    ProviderType.DATE.getToken(),
                     arg
             );
         }

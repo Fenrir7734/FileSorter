@@ -165,9 +165,7 @@ class ConverterTest {
                 "Incorrect date format."
         );
         String expectedArgument = "2020:04:15";
-        String expectedToken = "DAT";
         assertEquals(expectedArgument, exception.getArg());
-        assertEquals(expectedToken, exception.getToken());
     }
 
     @Test

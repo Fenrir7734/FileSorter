@@ -86,27 +86,6 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    DATE("DAT", "file creation date", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
-        @Override
-        public Provider<?> getAsProvider(List<String> args)
-                throws ArgumentFormatException {
-            try {
-                new SimpleDateFormat(args.get(0));
-                ProviderDescription description = ProviderDescription.ofDate(args.get(0));
-                return new DateProvider(description);
-            } catch (IllegalArgumentException e) {
-                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
-            }
-        }
-
-        @Override
-        public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args)
-                throws ArgumentFormatException {
-            Provider<ChronoLocalDate> operand = new DateProvider(null);
-            List<ChronoLocalDate> dates = Converter.convertToDate(args);
-            return new PredicateOperands<>(operand, dates);
-        }
-    },
     DATE_CREATED("DAC", "date created", SINGLE, new Scope[]{SORT, RENAME, FILTER}, Category.DATE, Group.DATES) {
         @Override
         public Provider<?> getAsProvider(List<String> args)
@@ -116,7 +95,7 @@ public enum ProviderType {
                 ProviderDescription description = ProviderDescription.ofDate(args.get(0));
                 return new DateCreatedProvider(description);
             } catch (IllegalArgumentException e) {
-                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+                throw new ArgumentFormatException("Invalid date format", DATE_CREATED.getToken(), args.get(0));
             }
         }
 
@@ -137,7 +116,7 @@ public enum ProviderType {
                 ProviderDescription description = ProviderDescription.ofDate(args.get(0));
                 return new DateModifiedProvider(description);
             } catch (IllegalArgumentException e) {
-                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+                throw new ArgumentFormatException("Invalid date format", DATE_MODIFIED.getToken(), args.get(0));
             }
         }
 
@@ -158,7 +137,7 @@ public enum ProviderType {
                 ProviderDescription description = ProviderDescription.ofDate(args.get(0));
                 return new DateAccessedProvider(description);
             } catch (IllegalArgumentException e) {
-                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+                throw new ArgumentFormatException("Invalid date format", DATE_ACCESSED.getToken(), args.get(0));
             }
         }
 
@@ -179,7 +158,7 @@ public enum ProviderType {
                 ProviderDescription description = ProviderDescription.ofDate(args.get(0));
                 return new DateCurrentProvider(description);
             } catch (IllegalArgumentException e) {
-                throw new ArgumentFormatException("Invalid date format", DATE.getToken(), args.get(0));
+                throw new ArgumentFormatException("Invalid date format", DATE_CURRENT.getToken(), args.get(0));
             }
         }
 

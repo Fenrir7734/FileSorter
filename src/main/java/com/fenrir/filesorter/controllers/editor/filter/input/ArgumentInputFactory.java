@@ -14,7 +14,7 @@ public class ArgumentInputFactory {
             case DIRECTORY_PATH -> loadInput("DirectoryPathInput.fxml");
             case DIMENSION -> loadInput("DimensionInput.fxml");
             case FILE_CATEGORY -> loadInput("CategoryInput.fxml");
-            case DATE, DATE_CREATED, DATE_MODIFIED, DATE_ACCESSED -> loadInput("DateInput.fxml");
+            case DATE_CREATED, DATE_MODIFIED, DATE_ACCESSED -> loadInput("DateInput.fxml");
             case FILE_SIZE -> loadInput("SizeInput.fxml");
             case HEIGHT, WIDTH -> loadInput("NumberInput.fxml");
             default -> null;

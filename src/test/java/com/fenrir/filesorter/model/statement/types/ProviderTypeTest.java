@@ -1,5 +1,8 @@
 package com.fenrir.filesorter.model.statement.types;
 
+import com.fenrir.filesorter.model.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.enums.Category;
+import com.fenrir.filesorter.model.enums.Group;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
@@ -30,27 +33,39 @@ class ProviderTypeTest {
     }
 
     @Test
-    public void getTypeShouldReturnNullForValidDatePatternAndInvalidScope() {
-        ProviderType actualType = ProviderType.getType("YYYY", Scope.FILTER);
-        assertNull(actualType);
-    }
-
-    @Test
-    public void getTypeShouldReturnNullForInvalidDatePatternAndValidScope() {
-        ProviderType actualType = ProviderType.getType("Invalid Token", Scope.RENAME);
-        assertNull(actualType);
-    }
-
-    @Test
     public void getTokenShouldReturnToken() {
         String token = ProviderType.FILE_NAME.getToken();
         assertEquals("FIN", token);
     }
 
     @Test
+    public void getNameShouldReturnProviderName() {
+        String name = ProviderType.DIRECTORY_NAME.getToken();
+        assertEquals("DIN", name);
+    }
+
+    @Test
+    public void getArgumentNumberShouldReturnProviderArgumentNumber() {
+        ArgumentNumber argumentNumber = ProviderType.DATE_ACCESSED.getArgumentNumber();
+        assertEquals(ArgumentNumber.SINGLE, argumentNumber);
+    }
+
+    @Test
     public void getScopeShouldReturnArrayOfScope() {
         Scope[] scopes = ProviderType.FILE_NAME.getScope();
         assertArrayEquals(new Scope[]{Scope.RENAME, Scope.FILTER}, scopes);
+    }
+
+    @Test
+    public void getCategoryShouldReturnProviderCategory() {
+        Category category = ProviderType.FILE_CATEGORY.getCategory();
+        assertEquals(Category.EXACT_STRING, category);
+    }
+
+    @Test
+    public void getGroupShouldReturnProviderGroup() {
+        Group group = ProviderType.DIMENSION.getGroup();
+        assertEquals(Group.PHOTO, group);
     }
 
     @Test
@@ -63,15 +78,15 @@ class ProviderTypeTest {
 
     @Test
     public void getAsProviderShouldReturnDateProviderForValidDatePattern() throws ArgumentFormatException {
-        ProviderType type = ProviderType.DATE;
+        ProviderType type = ProviderType.DATE_CREATED;
         Provider<?> provider = type.getAsProvider(List.of("YYYY"));
         assertNotNull(provider);
-        assertTrue(provider instanceof DateProvider);
+        assertTrue(provider instanceof DateCreatedProvider);
     }
 
     @Test
     public void getAsProviderShouldThrowArgumentFormatExceptionForInvalidDatePattern() throws ArgumentFormatException {
-        ProviderType type = ProviderType.DATE;
+        ProviderType type = ProviderType.DATE_CREATED;
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> type.getAsOperands(List.of("ABC")),
@@ -94,16 +109,14 @@ class ProviderTypeTest {
 
     @Test
     public void getAsOperandShouldThrowArgumentFormatExceptionIfGivenIncorrectArgumentList() {
-        ProviderType type = ProviderType.DATE;
+        ProviderType type = ProviderType.DATE_CREATED;
         List<String> args = List.of("Incorrect value");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> type.getAsOperands(args),
                 "Incorrect date format."
         );
-        String actualToken = exception.getToken();
         String actualArgs = exception.getArg();
-        assertEquals(type.getToken(), actualToken);
         assertEquals(args.get(0), actualArgs);
     }
 

@@ -97,29 +97,29 @@ class RenameRuleParserTest {
 
     @Test
     public void shouldThrowArgumentFormatExceptionWhenGiveInvalidArgument() throws ExpressionFormatException {
-        Rule rule = new Rule("%(DAT: INVALID)");
+        Rule rule = new Rule("%(DAC: INVALID)");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> parser.resolveRule(rule),
                 "Invalid date format"
         );
         assertEquals("INVALID", exception.getArg());
-        assertEquals("DAT", exception.getToken());
+        assertEquals("DAC", exception.getToken());
         assertEquals(rule, exception.getRule());
     }
 
     @Test
     public void shouldReturnListOfStringStatementForValidInput() throws ExpressionFormatException, IOException {
-        Rule stringRule = new Rule("%(FIN)%(STR:-)%(DAT:YYYY)%(STR:-)%(DAT:MM)%(STR:-)%(DAT:DD)%(STR:.)%(EXT)");
+        Rule stringRule = new Rule("%(FIN)%(STR:-)%(DAC:YYYY)%(STR:-)%(DAC:MM)%(STR:-)%(DAC:DD)%(STR:.)%(EXT)");
         List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
         List<Provider<?>> expectedStatements = List.of(
                 new FileNameProvider(null),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
-                new DateProvider(ProviderDescription.ofDate("YYYY")),
+                new DateCreatedProvider(ProviderDescription.ofDate("YYYY")),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
-                new DateProvider(ProviderDescription.ofDate("MM")),
+                new DateCreatedProvider(ProviderDescription.ofDate("MM")),
                 new LiteralProvider(ProviderDescription.ofLiteral("-")),
-                new DateProvider(ProviderDescription.ofDate("DD")),
+                new DateCreatedProvider(ProviderDescription.ofDate("DD")),
                 new LiteralProvider(ProviderDescription.ofLiteral(".")),
                 new FileExtensionProvider(null)
         );
