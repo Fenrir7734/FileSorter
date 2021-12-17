@@ -48,7 +48,7 @@ public class FilesCategory {
                 return category;
             }
         }
-        return null;
+        return FileCategoryType.OTHERS;
     }
 
     public static FilesCategory getInstance() throws IOException {

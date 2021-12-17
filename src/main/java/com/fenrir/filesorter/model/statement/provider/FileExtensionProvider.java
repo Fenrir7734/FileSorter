@@ -10,8 +10,7 @@ public class FileExtensionProvider implements Provider<String> {
 
     @Override
     public String get(FileData fileData) throws IOException {
-        String extension = fileData.getFileExtension();
-        return extension != null ? extension : "";
+        return fileData.getFileExtension();
     }
 
     @Override

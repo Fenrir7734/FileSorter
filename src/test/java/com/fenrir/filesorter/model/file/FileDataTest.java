@@ -133,19 +133,43 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileExtensionShouldReturnNullForFileWithoutExtension() throws IOException {
+    public void getFileExtensionShouldReturnEmptyStringForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         String extension = fileData.getFileExtension();
-        assertNull(extension);
+        assertEquals("", extension);
     }
 
     @Test
-    public void getFileExtensionShouldReturnNullForDirectory() throws IOException {
+    public void getFileExtensionShouldReturnEmptyStringForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir.test");
         FileData fileData = new FileData(path);
         String extension = fileData.getFileExtension();
-        assertNull(extension);
+        assertEquals("", extension);
+    }
+
+    @Test
+    public void getRealExtensionShouldReturnExtension() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile.txt");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getRealFileExtension();
+        assertEquals("txt", extension);
+    }
+
+    @Test
+    public void getRealFileExtensionShouldReturnExtensionForFileWithoutExtensionInFileName() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getRealFileExtension();
+        assertEquals("txt", extension);
+    }
+
+    @Test
+    public void getRealFileExtensionShouldReturnEmptyStringForDirectory() throws IOException {
+        Path path = FileUtils.createDirectory(tempDir, "dir.test");
+        FileData fileData = new FileData(path);
+        String extension = fileData.getRealFileExtension();
+        assertEquals("", extension);
     }
 
     @Test
@@ -157,35 +181,35 @@ class FileDataTest {
     }
 
     @Test
-    public void getFileCategoryShouldReturnOtherCategoryForFileWithoutExtension() throws IOException {
+    public void getFileCategoryShouldReturnCategoryForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileCategoryType category = fileData.getFileCategory();
-        assertEquals(FileCategoryType.OTHERS, category);
+        assertEquals(FileCategoryType.TEXT, category);
     }
 
     @Test
     public void getFileCategoryShouldReturnCategoryForFileWithOnlyExtension() throws IOException {
-        Path path = FileUtils.createFile(tempDir, ".mp3");
+        Path path = FileUtils.createFile(tempDir, ".txt");
         FileData fileData = new FileData(path);
         FileCategoryType category = fileData.getFileCategory();
-        assertEquals(FileCategoryType.AUDIO, category);
+        assertEquals(FileCategoryType.TEXT, category);
     }
 
     @Test
-    public void getFileCategoryShouldReturnNullForDirectory() throws IOException {
+    public void getFileCategoryShouldReturnOtherCategoryForDirectory() throws IOException {
         Path path = FileUtils.createDirectory(tempDir, "dir");
         FileData fileData = new FileData(path);
         FileCategoryType category = fileData.getFileCategory();
-        assertNull(category);
+        assertEquals(FileCategoryType.OTHERS, category);
     }
 
     @Test
-    public void getFileCategoryShouldReturnOtherCategoryForFileWithoutMatchingCategory() throws IOException {
-        Path path = FileUtils.createFile(tempDir, "testfile.xyz");
+    public void getFileCategoryShouldReturnTextCategoryForFileWithIncorrectExtensionInFileName() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile.mp3");
         FileData fileData = new FileData(path);
         FileCategoryType category = fileData.getFileCategory();
-        assertEquals(FileCategoryType.OTHERS, category);
+        assertEquals(FileCategoryType.TEXT, category);
     }
 
     @Test
@@ -337,7 +361,6 @@ class FileDataTest {
         public void isImageShouldReturnTrueForImageWithoutExtensionInFilename() throws IOException {
             FileData fileData = new FileData(path);
             boolean isImage = fileData.isImage();
-            fileData.getMediaType();
             assertTrue(isImage);
         }
 
