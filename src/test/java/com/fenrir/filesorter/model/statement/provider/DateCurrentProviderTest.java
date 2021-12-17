@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,13 +33,13 @@ class DateCurrentProviderTest {
     }
 
     @Test
-    public void getAsStringShouldReturnFileLastAccessTime() throws IOException {
-        Date currentDate = new Date();
-        String pattern = "YYYY-MM-DD HH:mm:ss";
+    public void getAsStringShouldReturnCurrentTime() throws IOException {
+        LocalDateTime currentDate = LocalDateTime.now();
+        String pattern = "YYYY-MM-DD HH:mm:ss A";
         ProviderDescription description = ProviderDescription.ofDate(pattern);
-        Provider<ChronoLocalDate> provider = new DateCurrentProvider(description);
-        String actualDate = provider.getAsString(null);
-        String expectedDate = new SimpleDateFormat(pattern).format(currentDate);
+        DateCurrentProvider provider = new DateCurrentProvider(description);
+        String actualDate = provider.getAsString(currentDate);
+        String expectedDate = currentDate.format(DateTimeFormatter.ofPattern(pattern));
         assertEquals(expectedDate, actualDate);
     }
 }

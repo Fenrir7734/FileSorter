@@ -3,15 +3,17 @@ package com.fenrir.filesorter.model.statement.provider;
 import com.fenrir.filesorter.model.file.FileData;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
 public class DateCurrentProvider implements Provider<ChronoLocalDate> {
-    private final ProviderDescription description;
+    private DateTimeFormatter formatter;
 
     public DateCurrentProvider(ProviderDescription description) {
-        this.description = description;
+        if (description != null && description.pattern() != null) {
+            formatter = DateTimeFormatter.ofPattern(description.pattern());
+        }
     }
 
     @Override
@@ -19,13 +21,12 @@ public class DateCurrentProvider implements Provider<ChronoLocalDate> {
         throw new UnsupportedOperationException();
     }
 
-    String getAsString(Date date) {
-        String datePattern = description.pattern();
-        return new SimpleDateFormat(datePattern).format(date);
+    String getAsString(LocalDateTime date) {
+        return date.format(formatter);
     }
 
     @Override
     public String getAsString(FileData fileData) throws IOException {
-        return getAsString(new Date());
+        return getAsString(LocalDateTime.now());
     }
 }
