@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +46,9 @@ class DateModifiedProviderTest {
         ProviderDescription description = ProviderDescription.ofDate(pattern);
         Provider<ChronoLocalDate> provider = new DateModifiedProvider(description);
         String actualDate = provider.getAsString(fileData);
-        String expectedDate = new SimpleDateFormat(pattern).format(newFileModifiedTime.toMillis());
+        String expectedDate = modifiedTime.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(pattern));
         assertEquals(expectedDate, actualDate);
     }
 }

@@ -30,7 +30,7 @@ class FileDataTest {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
-        long creationTimeInMillis = fileData.creationTime().getTimeInMillis();
+        long creationTimeInMillis = fileData.creationTime().toMillis();
         assertEquals(time.toMillis(), creationTimeInMillis);
     }
 
@@ -39,8 +39,17 @@ class FileDataTest {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         FileTime time = Files.readAttributes(path, BasicFileAttributes.class).lastModifiedTime();
-        long lastModifiedTimeInMillis = fileData.lastModifiedTime().getTimeInMillis();
+        long lastModifiedTimeInMillis = fileData.lastModifiedTime().toMillis();
         assertEquals(time.toMillis(), lastModifiedTimeInMillis);
+    }
+
+    @Test
+    public void getLastModifiedTimeShouldReturnFileTimeOfFileLastAccessTime() throws IOException {
+        Path path = FileUtils.createFile(tempDir, "testfile");
+        FileData fileData = new FileData(path);
+        FileTime time = Files.readAttributes(path, BasicFileAttributes.class).lastAccessTime();
+        long lastAccessTimeInMillis = fileData.lastAccessTime().toMillis();
+        assertEquals(time.toMillis(), lastAccessTimeInMillis);
     }
 
     @Test

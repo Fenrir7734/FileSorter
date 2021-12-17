@@ -46,25 +46,16 @@ public class FileData {
         this.dimension = null;
     }
 
-    public Calendar creationTime() {
-        FileTime fileCreationTime = attributes.creationTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(fileCreationTime.toMillis());
-        return calendar;
+    public FileTime creationTime() {
+        return attributes.creationTime();
     }
 
-    public Calendar lastModifiedTime() {
-        FileTime fileModificationTime = attributes.lastModifiedTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(fileModificationTime.toMillis());
-        return calendar;
+    public FileTime lastModifiedTime() {
+        return attributes.lastModifiedTime();
     }
 
-    public Calendar lastAccessTime() {
-        FileTime fileAccessTime = attributes.lastAccessTime();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(fileAccessTime.toMillis());
-        return calendar;
+    public FileTime lastAccessTime() {
+        return attributes.lastAccessTime();
     }
 
     public String getFileName() {

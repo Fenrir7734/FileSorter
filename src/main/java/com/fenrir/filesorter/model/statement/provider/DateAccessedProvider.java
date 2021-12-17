@@ -3,29 +3,33 @@ package com.fenrir.filesorter.model.statement.provider;
 import com.fenrir.filesorter.model.file.FileData;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.chrono.ChronoLocalDate;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
 
 public class DateAccessedProvider implements Provider<ChronoLocalDate> {
-    private final ProviderDescription description;
+    private DateTimeFormatter formatter;
 
     public DateAccessedProvider(ProviderDescription description) {
-        this.description = description;
+        if (description != null && description.pattern() != null) {
+            formatter = DateTimeFormatter.ofPattern(description.pattern());
+        }
     }
 
     @Override
     public ChronoLocalDate get(FileData fileData) throws IOException {
-        Calendar calendar = fileData.lastAccessTime();
-        return LocalDate.ofInstant(calendar.toInstant(), ZoneId.systemDefault());
+        return fileData.lastAccessTime()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     @Override
     public String getAsString(FileData fileData) throws IOException {
-        String datePattern = description.pattern();
-        Calendar calendar = fileData.lastAccessTime();
-        return new SimpleDateFormat(datePattern).format(calendar.getTime());
+        return fileData.lastAccessTime()
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+                .format(formatter);
     }
 }
