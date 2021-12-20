@@ -12,33 +12,33 @@ import java.util.List;
 public class ImageDimension {
     private static ImageDimension instance;
 
-    private final String path = "src/main/resources/image_resolutions.json";
-    private final List<Dimension> resolutions = new ArrayList<>();
+    private final String path = "src/main/resources/image_dimensions.json";
+    private final List<Dimension> dimensions = new ArrayList<>();
 
     public ImageDimension() throws IOException {
-        readResolutionsFromFile();
+        readDimensionsFromFile();
     }
 
-    private void readResolutionsFromFile() throws IOException {
+    private void readDimensionsFromFile() throws IOException {
         String content = new String(Files.readAllBytes(Path.of(path)));
         JSONObject object = new JSONObject(content);
-        JSONArray resolutionsJSONArray = object.getJSONArray("resolutions");
+        JSONArray dimensionsJSONArray = object.getJSONArray("dimensions");
 
-        for (int i = 0; i < resolutionsJSONArray.length(); i++) {
-            JSONObject resolutionJSONObject = resolutionsJSONArray.getJSONObject(i);
-            Dimension resolution = getResolutionFromJSONObject(resolutionJSONObject);
-            resolutions.add(resolution);
+        for (int i = 0; i < dimensionsJSONArray.length(); i++) {
+            JSONObject dimensionJSONObject = dimensionsJSONArray.getJSONObject(i);
+            Dimension resolution = getDimensionFromJSONObject(dimensionJSONObject);
+            dimensions.add(resolution);
         }
     }
 
-    private Dimension getResolutionFromJSONObject(JSONObject object) {
+    private Dimension getDimensionFromJSONObject(JSONObject object) {
         int width = object.getInt("width");
         int height = object.getInt("height");
         return Dimension.of(width, height);
     }
 
-    public boolean matchResolution(Dimension resolution) {
-        return resolutions.contains(resolution);
+    public boolean matchDimension(Dimension dimension) {
+        return dimensions.contains(dimension);
     }
 
     public static ImageDimension getInstance() throws IOException {

@@ -22,6 +22,6 @@ public class ImageDimensionProvider implements Provider<Dimension> {
         }
         Dimension dimension = fileData.getImageDimension();
         ImageDimension imageDimension = ImageDimension.getInstance();
-        return imageDimension.matchResolution(dimension) ? dimension.toString() : "Other";
+        return imageDimension.matchDimension(dimension) ? dimension.toString() : "Other";
     }
 }
