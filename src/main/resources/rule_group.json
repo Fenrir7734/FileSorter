@@ -1,0 +1,20 @@
+{
+  "Rule group 1": {
+    "Rename": "example 1",
+    "Sort": "example 1",
+    "Filter": [
+      "example 1",
+      "example 1",
+      "example 1"
+    ]
+  },
+  "Rule group 2": {
+    "Rename": "example 2",
+    "Sort": "example 2",
+    "Filter": [
+      "example 2",
+      "example 2",
+      "example 2"
+    ]
+  }
+}
