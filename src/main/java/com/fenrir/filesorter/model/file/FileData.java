@@ -29,9 +29,9 @@ public class FileData {
     private Path targetPath;
     private long count;
 
-    private String fileName;
-    private String extension;
-    private long fileSize;
+    private final String fileName;
+    private final String extension;
+    private final long fileSize;
 
     private final FileTime creationTime;
     private final FileTime lastModifiedTime;

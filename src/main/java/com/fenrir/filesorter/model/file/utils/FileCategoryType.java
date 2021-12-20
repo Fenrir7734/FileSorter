@@ -14,7 +14,7 @@ public enum FileCategoryType {
     SLIDE("slide"),
     OTHERS("others");
 
-    private String name;
+    private final String name;
 
     FileCategoryType(String name) {
         this.name = name;
