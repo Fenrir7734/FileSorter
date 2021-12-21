@@ -1,7 +1,8 @@
 package com.fenrir.filesorter.controllers.editor.filter;
 
+import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
 import com.fenrir.filesorter.controllers.ControllerMediator;
-import com.fenrir.filesorter.controllers.editor.EditorConfirmController;
+import com.fenrir.filesorter.controllers.confirm.EditorConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
@@ -14,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class FilterRuleEditorController implements EditorController {
+public class FilterRuleEditorController implements EditorController, ConfirmationController {
     private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
 
     @FXML private ExpressionEditorController expressionEditorController;

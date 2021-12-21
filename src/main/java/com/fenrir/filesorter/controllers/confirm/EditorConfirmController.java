@@ -1,9 +1,9 @@
-package com.fenrir.filesorter.controllers.editor;
+package com.fenrir.filesorter.controllers.confirm;
 
 import javafx.fxml.FXML;
 
 public class EditorConfirmController {
-    private EditorController parentController;
+    private ConfirmationController parentController;
 
     @FXML
     public void confirm() {
@@ -15,7 +15,7 @@ public class EditorConfirmController {
         parentController.close();
     }
 
-    public void setParent(EditorController editorController) {
+    public void setParent(ConfirmationController editorController) {
         parentController = editorController;
     }
 }
