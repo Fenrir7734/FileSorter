@@ -41,5 +41,4 @@ public class RuleGroup {
     public ObservableList<Rule> getFilterRules() {
         return filterRules;
     }
-
 }

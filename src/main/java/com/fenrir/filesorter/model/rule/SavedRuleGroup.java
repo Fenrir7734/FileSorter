@@ -19,20 +19,26 @@ import java.util.Objects;
 public class SavedRuleGroup {
     private final Logger logger = LoggerFactory.getLogger(SavedRuleGroup.class);
 
-    private final static String PATH = "src/main/resources/rule_group.json";
     private final static String RENAME_KEY = "Rename";
     private final static String SORT_KEY = "Sort";
     private final static String FILTER_KEY = "Filter";
 
+    private final String path;
     private JSONObject savedRuleGroup;
 
     public SavedRuleGroup() throws IOException {
+        path = "src/main/resources/rule_group.json";
+        readRuleGroupsFromFile();
+    }
+
+    SavedRuleGroup(String path) throws IOException {
+        this.path = path;
         readRuleGroupsFromFile();
     }
 
     private void readRuleGroupsFromFile() throws IOException {
         try {
-            String content = new String(Files.readAllBytes(Path.of(PATH)));
+            String content = new String(Files.readAllBytes(Path.of(path)));
             savedRuleGroup = new JSONObject(content);
         } catch (IOException e) {
             logger.error("Error during reading rule_group.json: {}", e.getMessage());
@@ -111,7 +117,7 @@ public class SavedRuleGroup {
     }
 
     public void saveRuleGroupsToFile() throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(PATH))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
             writer.write(savedRuleGroup.toString(4));
         } catch (IOException e) {
             logger.error("Error during writing to rule_group.json file: {}", e.getMessage());

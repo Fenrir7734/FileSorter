@@ -7,10 +7,15 @@
         "Sort": "%(DIM)",
         "Rename": "%(FIX)"
     },
-    "Rule Group 6": {
+    "Rule Group (1)": {
         "Filter": [],
         "Sort": "",
         "Rename": ""
+    },
+    "": {
+        "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
     },
     "Test": {
         "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
