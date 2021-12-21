@@ -1,20 +1,29 @@
 {
-  "Rule group 1": {
-    "Rename": "example 1",
-    "Sort": "example 1",
-    "Filter": [
-      "example 1",
-      "example 1",
-      "example 1"
-    ]
-  },
-  "Rule group 2": {
-    "Rename": "example 2",
-    "Sort": "example 2",
-    "Filter": [
-      "example 2",
-      "example 2",
-      "example 2"
-    ]
-  }
+    "Test": {
+        "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
+    },
+    "Rule group 2": {
+        "Filter": [
+            "example 2",
+            "example 2",
+            "example 2"
+        ],
+        "Sort": "example 2",
+        "Rename": "example 2"
+    },
+    "Rule group 1": {
+        "Filter": [
+            "%(INC)%(DIM)%(==:1920x1080)",
+            "%(INC)%(FIN)%(SW:HD)"
+        ],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
+    },
+    "Test 2": {
+        "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
+    }
 }
