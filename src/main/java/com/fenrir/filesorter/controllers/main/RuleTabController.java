@@ -30,6 +30,8 @@ public class RuleTabController {
     @FXML private Button removeRuleGroupButton;
     @FXML private Button moveUpRuleGroupButton;
     @FXML private Button moveDownRuleGroupButton;
+    @FXML private Button saveRuleGroupButton;
+    @FXML private Button loadRuleGroupButton;
     @FXML private Button editFilterRuleButton;
     @FXML private Button removeFilterRuleButton;
     @FXML private Button moveUpFilterRuleButton;
@@ -82,6 +84,7 @@ public class RuleTabController {
         removeRuleGroupButton.setDisable(false);
         moveUpRuleGroupButton.setDisable(false);
         moveDownRuleGroupButton.setDisable(false);
+        saveRuleGroupButton.setDisable(false);
     }
 
     private void hideRuleEditorPane() {
@@ -89,6 +92,7 @@ public class RuleTabController {
         removeRuleGroupButton.setDisable(true);
         moveUpRuleGroupButton.setDisable(true);
         moveDownRuleGroupButton.setDisable(true);
+        saveRuleGroupButton.setDisable(true);
     }
 
     private void updateRuleEditorPane(Pair<String, RuleGroup> value) {
@@ -162,6 +166,16 @@ public class RuleTabController {
         Pair<String, RuleGroup> namedRuleGroup = ruleGroupListView.getSelectionModel()
                 .getSelectedItem();
         configuration.removeRuleGroup(namedRuleGroup);
+    }
+
+    @FXML
+    public void saveRuleGroup() {
+
+    }
+
+    @FXML
+    public void loadRuleGroup() {
+
     }
 
     @FXML
