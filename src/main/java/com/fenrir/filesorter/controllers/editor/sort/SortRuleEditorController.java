@@ -2,7 +2,7 @@ package com.fenrir.filesorter.controllers.editor.sort;
 
 import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
 import com.fenrir.filesorter.controllers.ControllerMediator;
-import com.fenrir.filesorter.controllers.confirm.EditorConfirmController;
+import com.fenrir.filesorter.controllers.confirm.ConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
@@ -21,7 +21,7 @@ public class SortRuleEditorController implements EditorController, ConfirmationC
 
     @FXML private ExpressionEditorController expressionEditorController;
     @FXML private SortRuleBuilderController sortRuleBuilderController;
-    @FXML private EditorConfirmController editorConfirmController;
+    @FXML private ConfirmController confirmController;
 
     @FXML private TabPane ruleEditorTabPane;
     @FXML private Tab ruleBuilderTab;
@@ -31,7 +31,7 @@ public class SortRuleEditorController implements EditorController, ConfirmationC
     public void initialize() {
         ControllerMediator.getInstance().registerSortRuleEditorController(this);
         expressionEditorController.setParent(this);
-        editorConfirmController.setParent(this);
+        confirmController.setParent(this);
 
         ruleBuilderTab.setDisable(true);
     }

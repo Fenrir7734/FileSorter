@@ -20,6 +20,6 @@
             </Tab>
         </tabs>
       </TabPane>
-       <fx:include fx:id="editorConfirm" source="../../confirm/EditorConfirmView.fxml" />
+       <fx:include fx:id="confirm" source="../../confirm/EditorConfirmView.fxml" />
    </children>
 </VBox>

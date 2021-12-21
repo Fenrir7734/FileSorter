@@ -2,7 +2,7 @@ package com.fenrir.filesorter.controllers.confirm;
 
 import javafx.fxml.FXML;
 
-public class EditorConfirmController {
+public class ConfirmController {
     private ConfirmationController parentController;
 
     @FXML

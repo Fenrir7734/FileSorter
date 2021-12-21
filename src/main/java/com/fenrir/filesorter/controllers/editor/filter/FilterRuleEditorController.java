@@ -2,7 +2,7 @@ package com.fenrir.filesorter.controllers.editor.filter;
 
 import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
 import com.fenrir.filesorter.controllers.ControllerMediator;
-import com.fenrir.filesorter.controllers.confirm.EditorConfirmController;
+import com.fenrir.filesorter.controllers.confirm.ConfirmController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
@@ -20,7 +20,7 @@ public class FilterRuleEditorController implements EditorController, Confirmatio
 
     @FXML private ExpressionEditorController expressionEditorController;
     @FXML private FilterRuleBuilderController filterRuleBuilderController;
-    @FXML private EditorConfirmController editorConfirmController;
+    @FXML private ConfirmController confirmController;
 
     @FXML private TabPane ruleEditorTabPane;
     @FXML private Tab ruleBuilderTab;
@@ -31,7 +31,7 @@ public class FilterRuleEditorController implements EditorController, Confirmatio
         try {
             ControllerMediator.getInstance().registerFilterRuleEditorController(this);
             expressionEditorController.setParent(this);
-            editorConfirmController.setParent(this);
+            confirmController.setParent(this);
             ruleEditorTabPane.getSelectionModel()
                     .selectedItemProperty()
                     .addListener((observable, oldValue, newValue) -> onTabChange(newValue));
