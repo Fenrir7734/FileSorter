@@ -19,7 +19,7 @@ import java.util.Objects;
 public class SavedRuleGroup {
     private final Logger logger = LoggerFactory.getLogger(SavedRuleGroup.class);
 
-    private final static String PATH = "src/main/resources/rule_group.json";
+    private final static String PATH = "src/main/resources/rule_group_1.json";
     private final static String RENAME_KEY = "Rename";
     private final static String SORT_KEY = "Sort";
     private final static String FILTER_KEY = "Filter";
@@ -96,9 +96,12 @@ public class SavedRuleGroup {
         for (Rule filterRule: group.getFilterRules()) {
             filters.put(filterRule.getExpression());
         }
+        String renameExpression = group.getRenameRule() != null ? group.getRenameRule().getExpression() : "";
+        String sortExpression = group.getSortRule() != null ? group.getSortRule().getExpression() : "";
+
         JSONObject ruleGroupJSONObject = new JSONObject();
-        ruleGroupJSONObject.put(RENAME_KEY, group.getRenameRule().getExpression());
-        ruleGroupJSONObject.put(SORT_KEY, group.getSortRule().getExpression());
+        ruleGroupJSONObject.put(RENAME_KEY, renameExpression);
+        ruleGroupJSONObject.put(SORT_KEY, sortExpression);
         ruleGroupJSONObject.put(FILTER_KEY, filters);
         return ruleGroupJSONObject;
     }

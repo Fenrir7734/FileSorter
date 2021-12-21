@@ -1,4 +1,17 @@
 {
+    "Rule Group 8": {
+        "Filter": [
+            "%(INC)%(FIN)%(==:fsdaf)",
+            "%(EXC)%(FIP)%(!=:/home/fenrir/Android/Sdk/platforms/android-28/data/res/values-mcc310-mnc800-sv/strings.xml)"
+        ],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
+    },
+    "Rule Group 6": {
+        "Filter": [],
+        "Sort": "",
+        "Rename": ""
+    },
     "Test": {
         "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
         "Sort": "%(DIM)",
@@ -25,5 +38,15 @@
         "Filter": ["%(INC)%(FIN)%(NCO:HD)"],
         "Sort": "%(DIM)",
         "Rename": "%(FIX)"
+    },
+    "Rule Group 17": {
+        "Filter": ["%(INC)%(FIN)%(==:fsdaf)"],
+        "Sort": "%(DIM)",
+        "Rename": "%(FIX)"
+    },
+    "Rule Group 1": {
+        "Filter": [],
+        "Sort": "",
+        "Rename": ""
     }
 }

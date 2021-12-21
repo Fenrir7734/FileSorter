@@ -170,7 +170,15 @@ public class RuleTabController {
 
     @FXML
     public void saveRuleGroup() {
-
+        try {
+            loadView("/com/fenrir/filesorter/controllers/save/SaveRuleGroupView.fxml");
+            String selectedRuleGroupName = getSelectedRuleGroupName();
+            RuleGroup selectedRuleGroup = getSelectedRuleGroup();
+            ControllerMediator.getInstance()
+                    .sendRuleGroup(selectedRuleGroupName, selectedRuleGroup);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
@@ -199,7 +207,7 @@ public class RuleTabController {
     @FXML
     public void editRenameRule() {
         try {
-            loadEditorView("/com/fenrir/filesorter/controllers/editor/rename/RenameRuleEditorView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/rename/RenameRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendRenameRuleToEdit(selectedRuleGroup.getRenameRule());
@@ -211,7 +219,7 @@ public class RuleTabController {
     @FXML
     public void editSortRule() {
         try {
-            loadEditorView("/com/fenrir/filesorter/controllers/editor/sort/SortRuleEditorView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/sort/SortRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendSortRuleToEdit(selectedRuleGroup.getSortRule());
@@ -224,7 +232,7 @@ public class RuleTabController {
     public void addFilterRule() {
         try {
             filterListView.getSelectionModel().clearSelection();
-            loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -235,7 +243,7 @@ public class RuleTabController {
         try {
             Rule selectedFilterRule = getSelectedFilterRule();
             if (selectedFilterRule != null) {
-                loadEditorView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
+                loadView("/com/fenrir/filesorter/controllers/editor/filter/FilterRuleEditorView.fxml");
                 ControllerMediator.getInstance().sendFilterRuleToEdit(selectedFilterRule);
             }
         } catch (IOException e) {
@@ -243,7 +251,7 @@ public class RuleTabController {
         }
     }
 
-    private void loadEditorView(String name) throws IOException {
+    private void loadView(String name) throws IOException {
         Parent parent = FXMLLoader.load(
                 Objects.requireNonNull(getClass().getResource(name))
         );
@@ -328,6 +336,12 @@ public class RuleTabController {
         return ruleGroupListView.getSelectionModel()
                 .getSelectedItem()
                 .getValue();
+    }
+
+    private String getSelectedRuleGroupName() {
+        return ruleGroupListView.getSelectionModel()
+                .getSelectedItem()
+                .getKey();
     }
 
     private Rule getSelectedFilterRule() {

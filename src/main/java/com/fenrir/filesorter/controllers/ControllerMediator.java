@@ -4,7 +4,9 @@ import com.fenrir.filesorter.controllers.editor.rename.RenameRuleEditorControlle
 import com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController;
 import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
 import com.fenrir.filesorter.controllers.main.RuleTabController;
+import com.fenrir.filesorter.controllers.save.SaveRuleGroupController;
 import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.RuleGroup;
 
 public class ControllerMediator {
     private static ControllerMediator instance;
@@ -13,6 +15,7 @@ public class ControllerMediator {
     private RenameRuleEditorController renameRuleEditorController;
     private SortRuleEditorController sortRuleEditorController;
     private FilterRuleEditorController filterRuleEditorController;
+    private SaveRuleGroupController saveRuleGroupController;
 
     public void registerRuleTabController(RuleTabController controller) {
         this.ruleTabController = controller;
@@ -28,6 +31,11 @@ public class ControllerMediator {
 
     public void registerFilterRuleEditorController(FilterRuleEditorController controller) {
         this.filterRuleEditorController = controller;
+    }
+
+    public void registerSaveRuleGroupController(SaveRuleGroupController controller) {
+        System.out.println("tu");
+        this.saveRuleGroupController = controller;
     }
 
     public void sendReadyRenameRule(Rule rule) {
@@ -52,6 +60,10 @@ public class ControllerMediator {
 
     public void sendFilterRuleToEdit(Rule rule) {
         filterRuleEditorController.receiveRule(rule);
+    }
+
+    public void sendRuleGroup(String name, RuleGroup ruleGroup) {
+        saveRuleGroupController.receiveRuleGroup(name, ruleGroup);
     }
 
     private ControllerMediator() { }

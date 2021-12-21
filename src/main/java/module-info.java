@@ -24,6 +24,8 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.controllers to javafx.fxml;
     exports com.fenrir.filesorter.controllers.editor.filter.input;
     opens com.fenrir.filesorter.controllers.editor.filter.input to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.save;
+    opens com.fenrir.filesorter.controllers.save to javafx.fxml;
     exports com.fenrir.filesorter.model;
     opens com.fenrir.filesorter.model to javafx.fxml;
     exports com.fenrir.filesorter.model.parsers;
