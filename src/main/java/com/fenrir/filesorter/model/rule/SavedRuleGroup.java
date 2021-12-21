@@ -19,7 +19,7 @@ import java.util.Objects;
 public class SavedRuleGroup {
     private final Logger logger = LoggerFactory.getLogger(SavedRuleGroup.class);
 
-    private final static String PATH = "src/main/resources/rule_group_1.json";
+    private final static String PATH = "src/main/resources/rule_group.json";
     private final static String RENAME_KEY = "Rename";
     private final static String SORT_KEY = "Sort";
     private final static String FILTER_KEY = "Filter";

@@ -10,15 +10,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class SaveRuleGroupController implements ConfirmationController {
-    private final Logger logger = LoggerFactory.getLogger(SaveRuleGroupController.class);
-
     @FXML private ConfirmController confirmController;
     @FXML private VBox saveRuleGroupVBox;
     @FXML private TextField ruleGroupNameTextField;

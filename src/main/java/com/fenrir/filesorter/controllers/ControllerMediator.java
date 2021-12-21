@@ -34,7 +34,6 @@ public class ControllerMediator {
     }
 
     public void registerSaveRuleGroupController(SaveRuleGroupController controller) {
-        System.out.println("tu");
         this.saveRuleGroupController = controller;
     }
 
