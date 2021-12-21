@@ -61,8 +61,12 @@ public class ControllerMediator {
         filterRuleEditorController.receiveRule(rule);
     }
 
-    public void sendRuleGroup(String name, RuleGroup ruleGroup) {
+    public void sendRuleGroupForSave(String name, RuleGroup ruleGroup) {
         saveRuleGroupController.receiveRuleGroup(name, ruleGroup);
+    }
+
+    public void sendRuleGroupFromLoad(String name, RuleGroup ruleGroup) {
+        ruleTabController.receiveRuleGroup(name, ruleGroup);
     }
 
     private ControllerMediator() { }

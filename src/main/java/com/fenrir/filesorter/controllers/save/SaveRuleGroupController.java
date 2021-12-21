@@ -48,7 +48,7 @@ public class SaveRuleGroupController implements ConfirmationController {
     }
 
     public boolean saveRuleGroup() throws IOException {
-        String ruleGroupName = ruleGroupNameTextField.getText();
+        String ruleGroupName = ruleGroupNameTextField.getText().trim();
         List<String> namesOfSavedRuleGroups = savedRuleGroup.getRuleGroupNames();
         if (!namesOfSavedRuleGroups.contains(ruleGroupName)) {
             savedRuleGroup.appendRuleGroup(ruleGroupName, ruleGroupToSave);

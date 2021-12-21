@@ -49,17 +49,13 @@ public class SavedRuleGroup {
     }
 
     public RuleGroup getRuleGroup(String name) throws ExpressionFormatException {
-        try {
-            if (savedRuleGroup.has(name)) {
-                JSONObject ruleGroupJSONObject = savedRuleGroup.getJSONObject(name);
-                RuleGroup ruleGroup = parseJSON(ruleGroupJSONObject);
-                validate(ruleGroup);
-                return ruleGroup;
-            } else {
-                throw new IllegalArgumentException("Rule Group with this name don't exists");
-            }
-        } catch (ExpressionFormatException e) {
-            throw new ExpressionFormatException("Loading failed. Invalid expression.");
+        if (savedRuleGroup.has(name)) {
+            JSONObject ruleGroupJSONObject = savedRuleGroup.getJSONObject(name);
+            RuleGroup ruleGroup = parseJSON(ruleGroupJSONObject);
+            validate(ruleGroup);
+            return ruleGroup;
+        } else {
+            throw new IllegalArgumentException("Rule Group with this name don't exists");
         }
     }
 

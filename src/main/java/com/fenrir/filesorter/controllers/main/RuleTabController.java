@@ -144,19 +144,19 @@ public class RuleTabController {
 
     @FXML
     public void addRuleGroup() {
-        String name = generateUniqName();
+        String name = generateUniqName("Rule Group");
         RuleGroup group = new RuleGroup();
         configuration.addNamedRuleGroup(name, group);
     }
 
-    private String generateUniqName() {
+    private String generateUniqName(String name) {
         List<String> ruleGroupNames = configuration.getRuleGroupsNames();
-        String ruleGroupName;
+        String ruleGroupName = name;
 
         int i = 1;
-        do {
-            ruleGroupName = "Rule Group " + (ruleGroupNames.size() + i++);
-        } while (ruleGroupNames.contains(ruleGroupName));
+        while (ruleGroupNames.contains(ruleGroupName)) {
+            ruleGroupName = name + " (" + i++ + ")";
+        }
 
         return ruleGroupName;
     }
@@ -175,7 +175,7 @@ public class RuleTabController {
             String selectedRuleGroupName = getSelectedRuleGroupName();
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
-                    .sendRuleGroup(selectedRuleGroupName, selectedRuleGroup);
+                    .sendRuleGroupForSave(selectedRuleGroupName, selectedRuleGroup);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -183,7 +183,11 @@ public class RuleTabController {
 
     @FXML
     public void loadRuleGroup() {
-
+        try {
+            loadView("/com/fenrir/filesorter/controllers/save/LoadRuleGroupView.fxml");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
@@ -313,6 +317,11 @@ public class RuleTabController {
         } else {
             filterRules.set(indexOfOldFilterRule, rule);
         }
+    }
+
+    public void receiveRuleGroup(String name, RuleGroup ruleGroup) {
+        name = generateUniqName(name);
+        configuration.addNamedRuleGroup(name, ruleGroup);
     }
 
     private <T> void moveSelectedItem(ListView<T> listView, ObservableList<T> itemList, MoveDirection direction) {
