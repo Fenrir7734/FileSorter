@@ -32,28 +32,46 @@ class SavedRuleGroupTest {
 
     @Nested
     class TestForCorrectData {
+        String name1;
+        RuleGroup ruleGroup1;
+        JSONObject ruleGroup1JSONObject;
+        String name2;
+        RuleGroup ruleGroup2;
+        JSONObject ruleGroup2JSONObject;
 
         @BeforeEach
         public void initFile() throws IOException, ExpressionFormatException {
             JSONObject root = new JSONObject();
 
-            JSONObject child1 = new JSONObject();
-            JSONArray filterArray1 = new JSONArray();
-            filterArray1.put("%(INC)%(FIN)%(NCO:HD)");
-            filterArray1.put("%(INC)%(FIN)%(==:abcd)");
-            child1.put("Sort", "%(DIM)");
-            child1.put("Rename", "%(FIX)");
-            child1.put("Filter", filterArray1);
-            root.put("Rule group 1", child1);
+            name1 = "Rule group 1";
+            ruleGroup1 = new RuleGroup();
+            ruleGroup1.setSortRule(new Rule("%(DIM)"));
+            ruleGroup1.setRenameRule(new Rule("%(FIX)"));
+            ruleGroup1.addFilterRule(new Rule("%(INC)%(DIM)%(==:1920x1080)"));
+            ruleGroup1.addFilterRule(new Rule("%(INC)%(FIN)%(SW:HD)"));
+            JSONArray jsonArray1 = new JSONArray();
+            jsonArray1.put(ruleGroup1.getFilterRules().get(0).getExpression());
+            jsonArray1.put(ruleGroup1.getFilterRules().get(1).getExpression());
+            ruleGroup1JSONObject = new JSONObject();
+            ruleGroup1JSONObject.put("Sort", ruleGroup1.getSortRule().getExpression());
+            ruleGroup1JSONObject.put("Rename", ruleGroup1.getRenameRule().getExpression());
+            ruleGroup1JSONObject.put("Filter", jsonArray1);
+            root.put(name1, ruleGroup1JSONObject);
 
-            JSONObject child2 = new JSONObject();
-            JSONArray filterArray2 = new JSONArray();
-            filterArray2.put("%(INC)%(DIM)%(==:1920x1080)");
-            filterArray2.put("%(INC)%(FIN)%(SW:HD)");
-            child2.put("Sort", "%(DIM)");
-            child2.put("Rename", "%(FIN)");
-            child2.put("Filter", filterArray2);
-            root.put("Rule group 2", child2);
+            name2 = "Rule group 2";
+            ruleGroup2 = new RuleGroup();
+            ruleGroup2.setSortRule(new Rule("%(DIM)"));
+            ruleGroup2.setRenameRule(new Rule("%(FIN)"));
+            ruleGroup2.addFilterRule(new Rule("%(INC)%(FIN)%(NCO:HD)"));
+            ruleGroup2.addFilterRule(new Rule("%(INC)%(FIN)%(==:abcd)"));
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.put(ruleGroup2.getFilterRules().get(0).getExpression());
+            jsonArray2.put(ruleGroup2.getFilterRules().get(1).getExpression());
+            ruleGroup2JSONObject = new JSONObject();
+            ruleGroup2JSONObject.put("Sort", ruleGroup2.getSortRule().getExpression());
+            ruleGroup2JSONObject.put("Rename", ruleGroup2.getRenameRule().getExpression());
+            ruleGroup2JSONObject.put("Filter", jsonArray2);
+            root.put(name2, ruleGroup2JSONObject);
 
             filePath = tempDir.resolve("test.json");
             try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
@@ -71,19 +89,15 @@ class SavedRuleGroupTest {
         public void getRuleGroupNamesShouldReturnListOfRuleGroupNames() throws IOException {
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
             List<String> actualRuleGroupNames = savedRuleGroup.getRuleGroupNames();
-            List<String> expectedRuleGroupNames = List.of("Rule group 2", "Rule group 1");
+            List<String> expectedRuleGroupNames = List.of(name2, name1);
             assertEquals(expectedRuleGroupNames, actualRuleGroupNames);
         }
 
         @Test
         public void getRuleGroupShouldReturnRuleGroupForExistingName() throws IOException, ExpressionFormatException {
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-            RuleGroup ruleGroup = savedRuleGroup.getRuleGroup("Rule group 1");
-            assertEquals("%(DIM)", ruleGroup.getSortRule().toString());
-            assertEquals("%(FIX)", ruleGroup.getRenameRule().toString());
-            assertEquals(2, ruleGroup.getFilterRules().size());
-            assertEquals("%(INC)%(FIN)%(NCO:HD)", ruleGroup.getFilterRules().get(0).toString());
-            assertEquals("%(INC)%(FIN)%(==:abcd)", ruleGroup.getFilterRules().get(1).toString());
+            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(name1);
+            assertEquals(ruleGroup1, actualRuleGroup);
         }
 
         @Test
@@ -98,50 +112,43 @@ class SavedRuleGroupTest {
 
         @Test
         public void appendRuleGroupShouldAddRuleGroupToJSONObjectForCorrectRuleGroup() throws IOException, ExpressionFormatException {
-            String name = "test";
-            RuleGroup expectedRuleGroup = new RuleGroup();
-            expectedRuleGroup.setRenameRule(new Rule("%(DIN)"));
-            expectedRuleGroup.setSortRule(new Rule("%(EXT)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
+            String nameOfNewRuleGroup = "test";
+            RuleGroup newRuleGroup = new RuleGroup();
+            newRuleGroup.setRenameRule(new Rule("%(DIN)"));
+            newRuleGroup.setSortRule(new Rule("%(EXT)"));
+            newRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
+            newRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-            savedRuleGroup.appendRuleGroup(name, expectedRuleGroup);
-            assertEquals(List.of(name, "Rule group 2", "Rule group 1"), savedRuleGroup.getRuleGroupNames());
-            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(name);
-            assertEquals(expectedRuleGroup.getSortRule().toString(), actualRuleGroup.getSortRule().toString());
-            assertEquals(expectedRuleGroup.getRenameRule().toString(), actualRuleGroup.getRenameRule().toString());
-            assertEquals(expectedRuleGroup.getFilterRules().size(), actualRuleGroup.getFilterRules().size());
-            assertEquals(
-                    expectedRuleGroup.getFilterRules().get(0).toString(),
-                    actualRuleGroup.getFilterRules().get(0).toString()
-            );
-            assertEquals(
-                    expectedRuleGroup.getFilterRules().get(1).toString(),
-                    actualRuleGroup.getFilterRules().get(1).toString()
-            );
+            savedRuleGroup.appendRuleGroup(nameOfNewRuleGroup, newRuleGroup);
+            assertEquals(List.of(nameOfNewRuleGroup, name2, name1), savedRuleGroup.getRuleGroupNames());
+            assertEquals(ruleGroup1, savedRuleGroup.getRuleGroup(name1));
+            assertEquals(ruleGroup2, savedRuleGroup.getRuleGroup(name2));
+            assertEquals(newRuleGroup, savedRuleGroup.getRuleGroup(nameOfNewRuleGroup));
         }
 
         @Test
         public void appendRuleGroupShouldAddRuleGroupToJSONObjectForRuleGroupWithoutOneOfTheRule()
                 throws IOException, ExpressionFormatException {
-            String name = "test";
-            RuleGroup expectedRuleGroup = new RuleGroup();
-            expectedRuleGroup.setRenameRule(new Rule("%(DIN)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
+            String nameOfNewRuleGroup = "test";
+            RuleGroup newRuleGroup = new RuleGroup();
+            newRuleGroup.setRenameRule(new Rule("%(DIN)"));
+            newRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
+            newRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-            savedRuleGroup.appendRuleGroup(name, expectedRuleGroup);
-            assertEquals(List.of(name, "Rule group 2", "Rule group 1"), savedRuleGroup.getRuleGroupNames());
-            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(name);
+            savedRuleGroup.appendRuleGroup(nameOfNewRuleGroup, newRuleGroup);
+            assertEquals(List.of(nameOfNewRuleGroup, name2, name1), savedRuleGroup.getRuleGroupNames());
+            assertEquals(ruleGroup1, savedRuleGroup.getRuleGroup(name1));
+            assertEquals(ruleGroup2, savedRuleGroup.getRuleGroup(name2));
+            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(nameOfNewRuleGroup);
             assertEquals("", actualRuleGroup.getSortRule().toString());
-            assertEquals(expectedRuleGroup.getRenameRule().toString(), actualRuleGroup.getRenameRule().toString());
-            assertEquals(expectedRuleGroup.getFilterRules().size(), actualRuleGroup.getFilterRules().size());
+            assertEquals(newRuleGroup.getRenameRule().toString(), actualRuleGroup.getRenameRule().toString());
+            assertEquals(newRuleGroup.getFilterRules().size(), actualRuleGroup.getFilterRules().size());
             assertEquals(
-                    expectedRuleGroup.getFilterRules().get(0).toString(),
+                    newRuleGroup.getFilterRules().get(0).toString(),
                     actualRuleGroup.getFilterRules().get(0).toString()
             );
             assertEquals(
-                    expectedRuleGroup.getFilterRules().get(1).toString(),
+                    newRuleGroup.getFilterRules().get(1).toString(),
                     actualRuleGroup.getFilterRules().get(1).toString()
             );
         }
@@ -149,12 +156,14 @@ class SavedRuleGroupTest {
         @Test
         public void appendRuleGroupShouldAddRuleGroupToJSONObjectForEmptyRuleGroup()
                 throws IOException, ExpressionFormatException {
-            String name = "test";
-            RuleGroup expectedRuleGroup = new RuleGroup();
+            String nameOfNewRuleGroup = "test";
+            RuleGroup newRuleGroup = new RuleGroup();
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-            savedRuleGroup.appendRuleGroup(name, expectedRuleGroup);
-            assertEquals(List.of(name, "Rule group 2", "Rule group 1"), savedRuleGroup.getRuleGroupNames());
-            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(name);
+            savedRuleGroup.appendRuleGroup(nameOfNewRuleGroup, newRuleGroup);
+            assertEquals(List.of(nameOfNewRuleGroup, name2, name1), savedRuleGroup.getRuleGroupNames());
+            assertEquals(ruleGroup1, savedRuleGroup.getRuleGroup(name1));
+            assertEquals(ruleGroup2, savedRuleGroup.getRuleGroup(name2));
+            RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(nameOfNewRuleGroup);
             assertEquals("", actualRuleGroup.getSortRule().toString());
             assertEquals("", actualRuleGroup.getRenameRule().toString());
             assertTrue(actualRuleGroup.getFilterRules().isEmpty());
@@ -174,17 +183,33 @@ class SavedRuleGroupTest {
         @Test
         public void saveRuleGroupToFileShouldSaveAppendedRuleGroupToFile()
                 throws IOException, ExpressionFormatException {
-            String name = "test";
-            RuleGroup expectedRuleGroup = new RuleGroup();
-            expectedRuleGroup.setRenameRule(new Rule("%(DIN)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
-            expectedRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
+            String nameOfNewRuleGroup = "test";
+            RuleGroup newRuleGroup = new RuleGroup();
+            newRuleGroup.setRenameRule(new Rule("%(DIN)"));
+            newRuleGroup.setSortRule(new Rule("%(EXT)"));
+            newRuleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:jpg)"));
+            newRuleGroup.addFilterRule(new Rule("%(EXC)%(WID)%(==:1920,1080)"));
             SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-            savedRuleGroup.appendRuleGroup(name, expectedRuleGroup);
+            savedRuleGroup.appendRuleGroup(nameOfNewRuleGroup, newRuleGroup);
             savedRuleGroup.saveRuleGroupsToFile();
-
             String content = new String(Files.readAllBytes(filePath));
-
+            JSONObject actualObject = new JSONObject(content);
+            assertEquals(List.of(nameOfNewRuleGroup, name2, name1), actualObject.names().toList());
+            assertEquals(ruleGroup1JSONObject.toString(), actualObject.getJSONObject(name1).toString());
+            assertEquals(ruleGroup2JSONObject.toString(), actualObject.getJSONObject(name2).toString());
+            JSONObject actualNewRuleGroup = actualObject.getJSONObject(nameOfNewRuleGroup);
+            assertEquals(newRuleGroup.getSortRule().toString(), actualNewRuleGroup.getString("Sort"));
+            assertEquals(newRuleGroup.getRenameRule().toString(), actualNewRuleGroup.getString("Rename"));
+            JSONArray actualFilterRuleOfNewRuleGroup = actualNewRuleGroup.getJSONArray("Filter");
+            assertEquals(newRuleGroup.getFilterRules().size(), actualFilterRuleOfNewRuleGroup.length());
+            assertEquals(
+                    newRuleGroup.getFilterRules().get(0).toString(),
+                    actualFilterRuleOfNewRuleGroup.get(0)
+            );
+            assertEquals(
+                    newRuleGroup.getFilterRules().get(1).toString(),
+                    actualFilterRuleOfNewRuleGroup.get(1)
+            );
         }
     }
 }
