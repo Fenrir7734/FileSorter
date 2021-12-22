@@ -143,4 +143,30 @@ public class RuleTest {
 
         assertFalse(iterator.hasNext());
     }
+
+    @Test
+    public void equalShouldReturnTrueIfObjectsAreTheSame() throws ExpressionFormatException {
+        Rule rule1 = new Rule("%(DIM)%(FIN)%(/)%(DAT:YYYY-0M-0D)");
+        Rule rule2 = new Rule("%(DIM)%(FIN)%(/)%(DAT:YYYY-0M-0D)");
+        assertEquals(rule1, rule2);
+    }
+
+    @Test
+    public void equalShouldReturnFalseIfExpressionsAreDifferent() throws ExpressionFormatException {
+        Rule rule1 = new Rule("%(DIM)%(FIN)%(/)%(DAT:YYYY-0M-0D)");
+        Rule rule2 = new Rule("%(DIM)%(FIN)");
+        assertNotEquals(rule1, rule2);
+    }
+
+    @Test
+    public void equalShouldReturnFalseIfOneObjectIsEqualNull() throws ExpressionFormatException {
+        Rule rule1 = new Rule("%(DIM)%(FIN)%(/)%(DAT:YYYY-0M-0D)");
+        assertNotEquals(rule1, null);
+    }
+
+    @Test
+    public void equalShouldReturnFalseForObjectsOfADifferentType() throws ExpressionFormatException {
+        Rule rule1 = new Rule("%(DIM)%(FIN)%(/)%(DAT:YYYY-0M-0D)");
+        assertNotEquals(rule1, new Object());
+    }
 }

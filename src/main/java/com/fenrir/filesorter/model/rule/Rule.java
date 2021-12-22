@@ -3,6 +3,7 @@ package com.fenrir.filesorter.model.rule;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -63,6 +64,20 @@ public class Rule {
 
     public String getExpression() {
         return expression;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rule rule = (Rule) o;
+        return Objects.equals(expression, rule.expression)
+                && Objects.equals(container, rule.container);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression, container);
     }
 
     @Override

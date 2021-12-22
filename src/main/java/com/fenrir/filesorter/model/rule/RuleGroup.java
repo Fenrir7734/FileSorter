@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RuleGroup {
     private Rule renameRule;
@@ -40,5 +41,20 @@ public class RuleGroup {
 
     public ObservableList<Rule> getFilterRules() {
         return filterRules;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RuleGroup ruleGroup = (RuleGroup) o;
+        return Objects.equals(renameRule, ruleGroup.renameRule)
+                && Objects.equals(sortRule, ruleGroup.sortRule)
+                && Objects.equals(filterRules, ruleGroup.filterRules);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(renameRule, sortRule, filterRules);
     }
 }
