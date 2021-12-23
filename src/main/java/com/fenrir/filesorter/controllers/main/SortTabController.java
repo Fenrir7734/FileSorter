@@ -13,10 +13,16 @@ import com.fenrir.filesorter.model.rule.RuleGroup;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 public class SortTabController {
     private static final Logger logger = LoggerFactory.getLogger(SortTabController.class);
@@ -81,6 +88,18 @@ public class SortTabController {
     }
 
     @FXML
+    public void choiceTargetDirectory() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        File selectedDirectory = directoryChooser.showDialog(targetPathTextField.getScene().getWindow());
+
+        if (selectedDirectory != null) {
+            configuration.setTargetRootDir(selectedDirectory.toPath());
+            targetPathTextField.setText(selectedDirectory.getAbsolutePath());
+        }
+    }
+
+    @FXML
     public void sort() {
         Task<Void> task = new Task<Void>() {
             @Override
@@ -111,14 +130,21 @@ public class SortTabController {
     }
 
     @FXML
-    public void choiceTargetDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        File selectedDirectory = directoryChooser.showDialog(targetPathTextField.getScene().getWindow());
-
-        if (selectedDirectory != null) {
-            configuration.setTargetRootDir(selectedDirectory.toPath());
-            targetPathTextField.setText(selectedDirectory.getAbsolutePath());
+    public void undo() {
+        try {
+            Parent parent = FXMLLoader.load(
+                    Objects.requireNonNull(getClass().getResource("/com/fenrir/filesorter/controllers/BackupHistoryView.fxml"))
+            );
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open backup history.");
+            alert.showAndWait();
+            e.printStackTrace();
         }
     }
 
