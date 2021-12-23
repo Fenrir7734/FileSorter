@@ -7,7 +7,6 @@ import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.SavedRuleGroup;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;

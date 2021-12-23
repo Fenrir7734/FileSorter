@@ -2,18 +2,8 @@ package com.fenrir.filesorter.model.statement.types;
 
 
 public enum ActionType {
-    INCLUDE("INC", "Include") {
-        @Override
-        public boolean perform() {
-            return true;
-        }
-    },
-    EXCLUDE("EXC", "Exclude") {
-        @Override
-        public boolean perform() {
-            return false;
-        }
-    };
+    INCLUDE("INC", "Include"),
+    EXCLUDE("EXC", "Exclude");
 
     private final String token;
     private final String name;
@@ -22,8 +12,6 @@ public enum ActionType {
         this.token = token;
         this.name = name;
     }
-
-    public abstract boolean perform();
 
     public static ActionType getType(String token) {
         ActionType[] types = ActionType.values();

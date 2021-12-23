@@ -1,7 +1,5 @@
 package com.fenrir.filesorter;
 
-import com.fenrir.filesorter.model.Configuration;
-import com.fenrir.filesorter.model.rule.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +8,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Main extends Application {
