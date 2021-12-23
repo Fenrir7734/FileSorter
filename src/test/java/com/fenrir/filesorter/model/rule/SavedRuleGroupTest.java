@@ -31,7 +31,7 @@ class SavedRuleGroupTest {
     }
 
     @Nested
-    class TestForCorrectData {
+    class TestForCorrectDataInFile {
         String name1;
         RuleGroup ruleGroup1;
         JSONObject ruleGroup1JSONObject;
@@ -209,6 +209,48 @@ class SavedRuleGroupTest {
             assertEquals(
                     newRuleGroup.getFilterRules().get(1).toString(),
                     actualFilterRuleOfNewRuleGroup.get(1)
+            );
+        }
+    }
+
+    @Nested
+    class TestForIncorrectData {
+        String name;
+        RuleGroup ruleGroup;
+        JSONObject ruleGroupJSONObject;
+
+        @BeforeEach
+        public void initFile() throws IOException, ExpressionFormatException {
+            JSONObject root = new JSONObject();
+
+            name = "Rule group 1";
+            ruleGroup = new RuleGroup();
+            ruleGroup.setSortRule(new Rule("%(Incorrect)"));
+            ruleGroup.setRenameRule(new Rule("%(FIX)"));
+            ruleGroup.addFilterRule(new Rule("%(INC)%(DIM)%(==:1920x1080)"));
+            ruleGroup.addFilterRule(new Rule("%(INC)%(FIN)%(SW:HD)"));
+            JSONArray jsonArray1 = new JSONArray();
+            jsonArray1.put(ruleGroup.getFilterRules().get(0).getExpression());
+            jsonArray1.put(ruleGroup.getFilterRules().get(1).getExpression());
+            ruleGroupJSONObject = new JSONObject();
+            ruleGroupJSONObject.put("Sort", ruleGroup.getSortRule().getExpression());
+            ruleGroupJSONObject.put("Rename", ruleGroup.getRenameRule().getExpression());
+            ruleGroupJSONObject.put("Filter", jsonArray1);
+            root.put(name, ruleGroupJSONObject);
+
+            filePath = tempDir.resolve("test.json");
+            try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
+                writer.write(root.toString(4));
+            }
+        }
+
+        @Test
+        public void getRuleGroupShouldThrowExpressionFormatExceptionForIncorrectRuleGroupInFile()
+                throws IOException {
+            SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
+            assertThrows(
+                    ExpressionFormatException.class,
+                    () -> savedRuleGroup.getRuleGroup(name)
             );
         }
     }
