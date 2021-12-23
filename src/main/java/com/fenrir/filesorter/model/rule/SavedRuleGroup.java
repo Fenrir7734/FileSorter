@@ -21,6 +21,8 @@ import java.util.Objects;
 public class SavedRuleGroup {
     private final Logger logger = LoggerFactory.getLogger(SavedRuleGroup.class);
 
+    public final static String PATH = "src/main/resources/rule_group.json";
+
     private final static String RENAME_KEY = "Rename";
     private final static String SORT_KEY = "Sort";
     private final static String FILTER_KEY = "Filter";
@@ -29,7 +31,7 @@ public class SavedRuleGroup {
     private JSONObject savedRuleGroup;
 
     public SavedRuleGroup() throws IOException {
-        path = "src/main/resources/rule_group.json";
+        path = PATH;
         readRuleGroupsFromFile();
     }
 
@@ -139,7 +141,7 @@ public class SavedRuleGroup {
     }
 
     public static void generateRuleGroupFile() throws IOException {
-        generateRuleGroupFile("src/main/resources/rule_group.json");
+        generateRuleGroupFile(PATH);
     }
 
     static void generateRuleGroupFile(String path) throws IOException {
