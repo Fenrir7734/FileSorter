@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.model.file;
 
-import javafx.util.Pair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,33 +18,61 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FileBackup {
-    private final Logger logger = LoggerFactory.getLogger(FileBackup.class);
+public class BackupManager {
+    private final Logger logger = LoggerFactory.getLogger(BackupManager.class);
 
-    private final static String BACKUP_DIR_PATH = "src/main/resources/rule_group.json";
+    private final static String BACKUP_DIR_PATH = "src/main/resources/backup/";
     private final static String SOURCE_KEY = "from";
     private final static String TARGET_KEY = "to";
     private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    public void makeBackup(List<Pair<Path, Path>> paths) throws IOException {
+    public List<FilePath> readBackup(String name) throws IOException, JSONException {
+        try {
+            Path backupFilePath = Path.of(BACKUP_DIR_PATH).resolve(name);
+            String content = new String(Files.readAllBytes(backupFilePath));
+            JSONArray backup = new JSONArray(content);
+            return mapJSONArrayToListOfFilePaths(backup);
+        } catch (IOException | JSONException e) {
+            logger.error("Error during reading backup {} message: {}", name, e.getMessage());
+            throw e;
+        }
+    }
+
+    private List<FilePath> mapJSONArrayToListOfFilePaths(JSONArray array) {
+        List<FilePath> paths = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            FilePath filePath = mapJSONObjectToFilePath(object);
+            paths.add(filePath);
+        }
+        return paths;
+    }
+
+    private FilePath mapJSONObjectToFilePath(JSONObject object) {
+        Path sourcePath = Path.of(object.getString(SOURCE_KEY));
+        Path targetPath = Path.of(object.getString(TARGET_KEY));
+        return FilePath.of(sourcePath, targetPath);
+    }
+
+    public void makeBackup(List<FilePath> paths) throws IOException {
         JSONArray backupAsJSON = parsePaths(paths);
         String pathToBackupFile = createBackupFile();
         writeToFile(pathToBackupFile, backupAsJSON);
     }
 
-    private JSONArray parsePaths(List<Pair<Path, Path>> paths) {
+    private JSONArray parsePaths(List<FilePath> paths) {
         JSONArray root = new JSONArray();
-        for (Pair<Path, Path> pathPair: paths) {
-            JSONObject filePathsBackup = parsePair(pathPair);
+        for (FilePath filePath : paths) {
+            JSONObject filePathsBackup = parsePair(filePath);
             root.put(filePathsBackup);
         }
         return root;
     }
 
-    private JSONObject parsePair(Pair<Path, Path> pathPair) {
+    private JSONObject parsePair(FilePath filePath) {
         JSONObject object = new JSONObject();
-        object.put(SOURCE_KEY, pathPair.getKey());
-        object.put(TARGET_KEY, pathPair.getValue());
+        object.put(SOURCE_KEY, filePath.source());
+        object.put(TARGET_KEY, filePath.target());
         return object;
     }
 
@@ -80,6 +107,16 @@ public class FileBackup {
         return name + ".json";
     }
 
+    public void deleteBackup(String name) throws IOException {
+        try {
+            Path path = Path.of(BACKUP_DIR_PATH).resolve(name);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            logger.error("Error during deleting backup {} message: {}", name, e.getMessage());
+            throw e;
+        }
+    }
+
     public List<String> getAllBackupsNamesWithoutExtension() throws IOException {
         return getAllBackupsNames().stream()
                 .map(s -> s.substring(0, s.lastIndexOf(".json")))
@@ -96,31 +133,8 @@ public class FileBackup {
         }
     }
 
-    public List<Pair<Path, Path>> readBackup(String name) throws IOException, JSONException {
-        try {
-            Path backupFilePath = Path.of(BACKUP_DIR_PATH).resolve(name);
-            String content = new String(Files.readAllBytes(backupFilePath));
-            JSONArray backup = new JSONArray(content);
-            return mapJSONArrayToListOfPaths(backup);
-        } catch (IOException | JSONException e) {
-            logger.error("Error during reading backup {} message: {}", name, e.getMessage());
-            throw e;
-        }
-    }
-
-    private List<Pair<Path, Path>> mapJSONArrayToListOfPaths(JSONArray array) {
-        List<Pair<Path, Path>> paths = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            Pair<Path, Path> pairOfPaths = mapJSONObjectToPairOfPaths(object);
-            paths.add(pairOfPaths);
-        }
-        return paths;
-    }
-
-    private Pair<Path, Path> mapJSONObjectToPairOfPaths(JSONObject object) {
-        Path sourcePath = Path.of(object.getString(SOURCE_KEY));
-        Path targetPath = Path.of(object.getString(TARGET_KEY));
-        return new Pair<>(sourcePath, targetPath);
+    public File getBackupFile(String name) {
+        Path path = Path.of(BACKUP_DIR_PATH).resolve(name);
+        return new File(path.toString());
     }
 }

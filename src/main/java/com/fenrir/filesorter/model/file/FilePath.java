@@ -8,7 +8,7 @@ public class FilePath {
     private Path resolvedTargetPath;
     private long count;
 
-    public FilePath(Path source, Path target, int count) {
+    private FilePath(Path source, Path target, int count) {
         this.source = source;
         this.target = target;
         this.count = count;
@@ -24,7 +24,11 @@ public class FilePath {
         return filePath;
     }
 
-    public void resolveTargetPath() {
+    public void resolveTargetPath() throws IllegalArgumentException {
+        if (target == null) {
+            throw new IllegalArgumentException("Target path is missing");
+        }
+
         if (count > 0) {
             String pathStr = target.getFileName().toString();
             String toInsert = String.format(" (%d)", count);

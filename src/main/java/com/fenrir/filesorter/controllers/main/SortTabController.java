@@ -7,6 +7,7 @@ import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
+import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.log.LogAppender;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
@@ -23,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,6 +148,10 @@ public class SortTabController {
             alert.showAndWait();
             e.printStackTrace();
         }
+    }
+
+    public void receiveBackup(List<FilePath> backup) {
+
     }
 
     public void setConfiguration(Configuration configuration) {
