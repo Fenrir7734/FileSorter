@@ -74,11 +74,15 @@ public class SavedRuleGroup {
     }
 
     private RuleGroup parseJSON(JSONObject object) throws ExpressionFormatException {
-        Rule renameRule = new Rule(object.getString(RENAME_KEY));
-        Rule sortRule = new Rule(object.getString(SORT_KEY));
+        String renameExpression = object.getString(RENAME_KEY);
+        String sortExpression = object.getString(SORT_KEY);
+        Rule renameRule = renameExpression.isBlank() ? null : new Rule(renameExpression);
+        Rule sortRule = sortExpression.isBlank() ? null : new Rule(sortExpression);
         List<Rule> filterRules = new ArrayList<>();
-        for (String filterRule: JSONArrayToList(object.getJSONArray(FILTER_KEY))) {
-            filterRules.add(new Rule(filterRule));
+        for (String filterExpression : JSONArrayToList(object.getJSONArray(FILTER_KEY))) {
+            if (!filterExpression.isBlank()) {
+                filterRules.add(new Rule(filterExpression));
+            }
         }
         RuleGroup group = new RuleGroup();
         group.setRenameRule(renameRule);

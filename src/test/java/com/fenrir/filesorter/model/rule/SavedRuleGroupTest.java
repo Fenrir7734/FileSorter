@@ -189,7 +189,7 @@ class SavedRuleGroupTest {
             assertEquals(ruleGroup1, savedRuleGroup.getRuleGroup(name1));
             assertEquals(ruleGroup2, savedRuleGroup.getRuleGroup(name2));
             RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(nameOfNewRuleGroup);
-            assertEquals("", actualRuleGroup.getSortRule().toString());
+            assertNull(actualRuleGroup.getSortRule());
             assertEquals(newRuleGroup.getRenameRule().toString(), actualRuleGroup.getRenameRule().toString());
             assertEquals(newRuleGroup.getFilterRules().size(), actualRuleGroup.getFilterRules().size());
             assertEquals(
@@ -213,8 +213,8 @@ class SavedRuleGroupTest {
             assertEquals(ruleGroup1, savedRuleGroup.getRuleGroup(name1));
             assertEquals(ruleGroup2, savedRuleGroup.getRuleGroup(name2));
             RuleGroup actualRuleGroup = savedRuleGroup.getRuleGroup(nameOfNewRuleGroup);
-            assertEquals("", actualRuleGroup.getSortRule().toString());
-            assertEquals("", actualRuleGroup.getRenameRule().toString());
+            assertNull(actualRuleGroup.getSortRule());
+            assertNull(actualRuleGroup.getRenameRule());
             assertTrue(actualRuleGroup.getFilterRules().isEmpty());
         }
 
