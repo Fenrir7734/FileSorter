@@ -1,0 +1,10 @@
+[
+  {
+    "from": "source_path",
+    "to": "target_path"
+  },
+  {
+    "from": "source_path",
+    "to": "target_path"
+  }
+]

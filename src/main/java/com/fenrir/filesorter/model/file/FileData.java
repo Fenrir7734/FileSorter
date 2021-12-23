@@ -28,6 +28,7 @@ public class FileData {
     private final Path sourcePath;
     private Path targetPath;
     private long count;
+    private Path resolvedTargetPath;
 
     private final String fileName;
     private final String extension;
@@ -100,7 +101,12 @@ public class FileData {
         } else {
             pathStr += toInsert;
         }
-        return targetPath.getParent().resolve(Path.of(pathStr));
+        resolvedTargetPath = targetPath.getParent().resolve(Path.of(pathStr));
+        return resolvedTargetPath;
+    }
+
+    public Path getResolvedTargetPath() {
+        return resolvedTargetPath;
     }
 
     public Path getSourcePath() {
