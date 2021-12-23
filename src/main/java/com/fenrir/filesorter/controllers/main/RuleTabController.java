@@ -5,6 +5,7 @@ import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
+import com.fenrir.filesorter.model.rule.SavedRuleGroup;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -176,8 +178,13 @@ public class RuleTabController {
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendRuleGroupForSave(selectedRuleGroupName, selectedRuleGroup);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        } catch (IOException | JSONException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load saved rule groups. " + e.getMessage());
+            alert.showAndWait();
+            boolean generate = askIfGenerateNewFile();
+            if (generate) {
+                generateNewRuleGroupFile();
+            }
         }
     }
 
@@ -185,8 +192,33 @@ public class RuleTabController {
     public void loadRuleGroup() {
         try {
             loadView("/com/fenrir/filesorter/controllers/save/LoadRuleGroupView.fxml");
+        } catch (IOException | JSONException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load saved rule groups. " + e.getMessage());
+            alert.showAndWait();
+            boolean generate = askIfGenerateNewFile();
+            if (generate) {
+                generateNewRuleGroupFile();
+            }
+        }
+    }
+
+    private boolean askIfGenerateNewFile() {
+        Alert alert = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "Generate valid file? All saved data will be lost.",
+                ButtonType.YES,
+                ButtonType.CANCEL
+        );
+        alert.showAndWait();
+        return alert.getResult() != null && alert.getResult() == ButtonType.YES;
+    }
+
+    private void generateNewRuleGroupFile() {
+        try {
+            SavedRuleGroup.generateRuleGroupFile();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not create new file.");
+            alert.showAndWait();
         }
     }
 

@@ -3,10 +3,12 @@ package com.fenrir.filesorter.model.rule;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,18 +42,22 @@ public class SavedRuleGroup {
         try {
             String content = new String(Files.readAllBytes(Path.of(path)));
             savedRuleGroup = new JSONObject(content);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             logger.error("Error during reading rule_group.json: {}", e.getMessage());
             throw e;
         }
     }
 
     public List<String> getRuleGroupNames() {
-        return savedRuleGroup.names()
-                .toList()
-                .stream()
-                .map(Object::toString)
-                .toList();
+        JSONArray array = savedRuleGroup.names();
+        List<String> nameList = new ArrayList<>();
+        if (array != null) {
+            nameList = array.toList()
+                    .stream()
+                    .map(Object::toString)
+                    .toList();
+        }
+        return nameList;
     }
 
     public RuleGroup getRuleGroup(String name) throws ExpressionFormatException {
@@ -130,5 +136,19 @@ public class SavedRuleGroup {
                 .stream()
                 .map(Objects::toString)
                 .toList();
+    }
+
+    public static void generateRuleGroupFile() throws IOException {
+        generateRuleGroupFile("src/main/resources/rule_group.json");
+    }
+
+    static void generateRuleGroupFile(String path) throws IOException {
+        JSONObject object = new JSONObject();
+        File file = new File(path);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.write(object.toString(4));
+        } catch (IOException e) {
+            throw e;
+        }
     }
 }

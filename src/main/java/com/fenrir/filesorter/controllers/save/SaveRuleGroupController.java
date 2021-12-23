@@ -7,9 +7,11 @@ import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.rule.SavedRuleGroup;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,16 +25,10 @@ public class SaveRuleGroupController implements ConfirmationController {
     private RuleGroup ruleGroupToSave;
 
     @FXML
-    public void initialize() {
-        try {
-            ControllerMediator.getInstance().registerSaveRuleGroupController(this);
-            confirmController.setParent(this);
-            savedRuleGroup = new SavedRuleGroup();
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load saved rule groups");
-            alert.showAndWait();
-            close();
-        }
+    public void initialize() throws IOException, JSONException {
+        ControllerMediator.getInstance().registerSaveRuleGroupController(this);
+        confirmController.setParent(this);
+        savedRuleGroup = new SavedRuleGroup();
     }
 
     @FXML

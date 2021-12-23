@@ -32,9 +32,4 @@ public class Main extends Application {
     public static void main(String[] args) throws Exception {
         launch(args);
     }
-
-    private static void test() throws Exception {
-        Configuration configuration = new Configuration();
-        //configuration.setTargetRootDir();
-    }
 }

@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -26,16 +27,10 @@ public class LoadRuleGroupController {
     private SavedRuleGroup savedRuleGroup;
 
     @FXML
-    public void initialize() {
-        try {
-            savedRuleGroup = new SavedRuleGroup();
-            initRuleGroupListView();
-            disableButtons();
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load saved rule groups");
-            alert.showAndWait();
-            close();
-        }
+    public void initialize() throws IOException, JSONException {
+        savedRuleGroup = new SavedRuleGroup();
+        initRuleGroupListView();
+        disableButtons();
     }
 
     private void initRuleGroupListView() {

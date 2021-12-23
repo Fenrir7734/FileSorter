@@ -2,12 +2,14 @@ package com.fenrir.filesorter.model.rule;
 
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,6 +30,53 @@ class SavedRuleGroupTest {
                 IOException.class,
                 () -> new SavedRuleGroup("Invalid path")
         );
+    }
+
+    @Test
+    public void getRuleGroupNamesShouldReturnEmptyListIfNoRulesHaveBeenWritten() throws IOException {
+        JSONObject root = new JSONObject();
+        filePath = tempDir.resolve("test.json");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
+            writer.write(root.toString(4));
+        }
+
+        SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
+        assertTrue(savedRuleGroup.getRuleGroupNames().isEmpty());
+    }
+
+    @Test
+    public void constructorShouldThrowJSONExceptionForInvalidFileContent() throws IOException {
+        filePath = tempDir.resolve("test.json");
+        File file = new File(filePath.toString());
+        file.createNewFile();
+        assertEquals(0, file.length());
+        assertThrows(
+                JSONException.class,
+                () -> new SavedRuleGroup(filePath.toString())
+        );
+    }
+
+    @Test
+    public void generateRuleGroupFileShouldGenerateJSONFileWithOnlyRootElementIfThisFileDontExist() throws IOException {
+        filePath = tempDir.resolve("test.json");
+        SavedRuleGroup.generateRuleGroupFile(filePath.toString());
+        String content = new String(Files.readAllBytes(filePath));
+        assertEquals("{}", content);
+    }
+
+    @Test
+    public void generateRuleGroupFileShouldOverrideJSONFile() throws IOException {
+        filePath = tempDir.resolve("test.json");
+        File file = new File(filePath.toString());
+        file.createNewFile();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
+            writer.write("content");
+        }
+        String content = new String(Files.readAllBytes(filePath));
+        assertEquals("content", content);
+        SavedRuleGroup.generateRuleGroupFile(filePath.toString());
+        content = new String(Files.readAllBytes(filePath));
+        assertEquals("{}", content);
     }
 
     @Nested
