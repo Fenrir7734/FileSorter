@@ -181,7 +181,7 @@ class SavedRuleGroupTest {
         }
 
         @Test
-        public void saveRuleGroupToFileShouldSaveAppendedRuleGroupToFile()
+        public void saveRuleGroupToFileShouldSaveRuleGroupsToFileWithAppendedNewRuleGroup()
                 throws IOException, ExpressionFormatException {
             String nameOfNewRuleGroup = "test";
             RuleGroup newRuleGroup = new RuleGroup();
@@ -210,6 +210,18 @@ class SavedRuleGroupTest {
                     newRuleGroup.getFilterRules().get(1).toString(),
                     actualFilterRuleOfNewRuleGroup.get(1)
             );
+        }
+
+        @Test
+        public void saveRuleGroupShouldSaveRuleGroupsToFileWithRemovedRuleGroup()
+                throws IOException {
+            SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
+            savedRuleGroup.removeRuleGroup(name1);
+            savedRuleGroup.saveRuleGroupsToFile();
+            String content = new String(Files.readAllBytes(filePath));
+            JSONObject actualObject = new JSONObject(content);
+            assertEquals(List.of(name2), actualObject.names().toList());
+            assertEquals(ruleGroup2JSONObject.toString(), actualObject.getJSONObject(name2).toString());
         }
     }
 
