@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model.file;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class FilePath {
     private final Path source;
@@ -61,6 +62,22 @@ public class FilePath {
 
     public Path resolvedTargetPath() {
         return resolvedTargetPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FilePath filePath = (FilePath) o;
+        return count == filePath.count
+                && Objects.equals(source, filePath.source)
+                && Objects.equals(target, filePath.target)
+                && Objects.equals(resolvedTargetPath, filePath.resolvedTargetPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, target, resolvedTargetPath, count);
     }
 
     @Override
