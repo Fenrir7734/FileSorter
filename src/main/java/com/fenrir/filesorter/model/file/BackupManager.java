@@ -26,9 +26,32 @@ public class BackupManager {
     private final static String TARGET_KEY = "to";
     private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    private final String pathToBackupDirectory;
+
+    public BackupManager() throws IOException {
+        this(BACKUP_DIR_PATH);
+    }
+
+    BackupManager(String pathToBackupDirectory) throws IOException {
+        this.pathToBackupDirectory = pathToBackupDirectory;
+        checkForBackupDirectory();
+    }
+
+    private void checkForBackupDirectory() throws IOException {
+        File dir = new File(pathToBackupDirectory);
+        if (!dir.exists() || !dir.isDirectory()) {
+            if (!dir.mkdirs()) {
+                throw new IOException(
+                        "The backup directory does not exist and the attempt " +
+                                "to create a new backup directory has failed."
+                );
+            }
+        }
+    }
+
     public List<FilePath> readBackup(String name) throws IOException, JSONException {
         try {
-            Path backupFilePath = Path.of(BACKUP_DIR_PATH).resolve(name);
+            Path backupFilePath = Path.of(pathToBackupDirectory).resolve(name);
             String content = new String(Files.readAllBytes(backupFilePath));
             JSONArray backup = new JSONArray(content);
             return mapJSONArrayToListOfFilePaths(backup);
@@ -54,10 +77,17 @@ public class BackupManager {
         return FilePath.of(sourcePath, targetPath);
     }
 
-    public void makeBackup(List<FilePath> paths) throws IOException {
+    String makeBackup(List<FilePath> paths, LocalDateTime localDateTime) throws IOException {
         JSONArray backupAsJSON = parsePaths(paths);
-        String pathToBackupFile = createBackupFile();
+        String fileName = generateUniqueNameForBackup(localDateTime);
+        String pathToBackupFile = createBackupFile(fileName);
         writeToFile(pathToBackupFile, backupAsJSON);
+        return Path.of(pathToBackupFile).getFileName()
+                .toString();
+    }
+
+    public String makeBackup(List<FilePath> paths) throws IOException {
+        return makeBackup(paths, LocalDateTime.now());
     }
 
     private JSONArray parsePaths(List<FilePath> paths) {
@@ -76,9 +106,8 @@ public class BackupManager {
         return object;
     }
 
-    private String createBackupFile() throws IOException {
-        String fileName = generateNameForBackup();
-        String pathToBackupFile = Path.of(BACKUP_DIR_PATH)
+    private String createBackupFile(String fileName) throws IOException {
+        String pathToBackupFile = Path.of(pathToBackupDirectory)
                 .resolve(fileName)
                 .toString();
         File file = new File(pathToBackupFile);
@@ -95,9 +124,9 @@ public class BackupManager {
         }
     }
 
-    private String generateNameForBackup() throws IOException {
+    private String generateUniqueNameForBackup(LocalDateTime localDateTime) throws IOException {
         List<String> backupNames = getAllBackupsNamesWithoutExtension();
-        String date = LocalDateTime.now().format(FORMATTER);
+        String date = localDateTime.format(FORMATTER);
         String name = date;
 
         int i = 1;
@@ -109,8 +138,8 @@ public class BackupManager {
 
     public void deleteBackup(String name) throws IOException {
         try {
-            Path path = Path.of(BACKUP_DIR_PATH).resolve(name);
-            Files.deleteIfExists(path);
+            Path path = Path.of(pathToBackupDirectory).resolve(name);
+            Files.delete(path);
         } catch (IOException e) {
             logger.error("Error during deleting backup {} message: {}", name, e.getMessage());
             throw e;
@@ -124,7 +153,7 @@ public class BackupManager {
     }
 
     public List<String> getAllBackupsNames() throws IOException {
-        try (Stream<Path> stream = Files.list(Path.of(BACKUP_DIR_PATH))) {
+        try (Stream<Path> stream = Files.list(Path.of(pathToBackupDirectory))) {
             return stream.filter(f -> !Files.isDirectory(f))
                     .map(Path::getFileName)
                     .map(Path::toString)
@@ -133,8 +162,13 @@ public class BackupManager {
         }
     }
 
-    public File getBackupFile(String name) {
-        Path path = Path.of(BACKUP_DIR_PATH).resolve(name);
-        return new File(path.toString());
+    public File getBackupFile(String name) throws IOException {
+        Path backupFilePath = Path.of(pathToBackupDirectory).resolve(name);
+        File backupFile = new File(backupFilePath.toString());
+        if (backupFile.exists() && backupFile.isFile() && name.endsWith(".json")) {
+            return new File(backupFile.toString());
+        } else {
+            throw new IOException("File " + backupFilePath + " does not exists.");
+        }
     }
 }
