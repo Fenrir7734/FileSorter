@@ -144,9 +144,8 @@ public class SortTabController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open backup history.");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open backup history." + e.getMessage());
             alert.showAndWait();
-            e.printStackTrace();
         }
     }
 

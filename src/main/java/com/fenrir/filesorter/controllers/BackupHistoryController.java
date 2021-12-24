@@ -11,11 +11,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 public class BackupHistoryController {
