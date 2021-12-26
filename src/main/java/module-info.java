@@ -49,12 +49,14 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.controllers.editor to javafx.fxml;
     exports com.fenrir.filesorter.controllers.main;
     opens com.fenrir.filesorter.controllers.main to javafx.fxml;
-    exports com.fenrir.filesorter.controllers.editor.rename;
-    opens com.fenrir.filesorter.controllers.editor.rename to javafx.fxml;
-    exports com.fenrir.filesorter.controllers.editor.sort;
-    opens com.fenrir.filesorter.controllers.editor.sort to javafx.fxml;
     exports com.fenrir.filesorter.controllers.confirm;
     opens com.fenrir.filesorter.controllers.confirm to javafx.fxml;
-    exports com.fenrir.filesorter.controllers.editor.rename.input;
-    opens com.fenrir.filesorter.controllers.editor.rename.input to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.editor.string.rename;
+    opens com.fenrir.filesorter.controllers.editor.string.rename to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.editor.string.sort;
+    opens com.fenrir.filesorter.controllers.editor.string.sort to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.editor.string;
+    opens com.fenrir.filesorter.controllers.editor.string to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.editor.string.input;
+    opens com.fenrir.filesorter.controllers.editor.string.input to javafx.fxml;
 }

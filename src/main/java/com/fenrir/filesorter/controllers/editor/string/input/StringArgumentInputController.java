@@ -1,8 +1,8 @@
-package com.fenrir.filesorter.controllers.editor.rename.input;
+package com.fenrir.filesorter.controllers.editor.string.input;
 
 import com.fenrir.filesorter.controllers.confirm.ConfirmController;
 import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
-import com.fenrir.filesorter.controllers.editor.rename.InputControllerMediator;
+import com.fenrir.filesorter.controllers.editor.string.InputControllerMediator;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.fxml.FXML;
 

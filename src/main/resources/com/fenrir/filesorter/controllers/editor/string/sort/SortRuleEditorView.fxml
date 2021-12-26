@@ -4,22 +4,22 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.rename.RenameRuleEditorController">
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.string.sort.SortRuleEditorController">
    <children>
       <TabPane fx:id="ruleEditorTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
          <tabs>
             <Tab fx:id="ruleBuilderTab" text="Rule builder">
                <content>
-                  <fx:include fx:id="renameRuleBuilder" source="RenameRuleBuilderView.fxml"/>
+                  <fx:include fx:id="stringRuleBuilder" source="SortRuleBuilderView.fxml"/>
                </content>
             </Tab>
             <Tab fx:id="expressionEditorTab" closable="false" text="Expression editor">
                <content>
-                  <fx:include fx:id="expressionEditor" source="../ExpressionEditorView.fxml" />
+                  <fx:include fx:id="expressionEditor" source="../../ExpressionEditorView.fxml" />
                </content>
             </Tab>
          </tabs>
       </TabPane>
-      <fx:include fx:id="confirm" source="../../confirm/EditorConfirmView.fxml" />
+      <fx:include fx:id="confirm" source="../../../confirm/EditorConfirmView.fxml" />
    </children>
 </VBox>

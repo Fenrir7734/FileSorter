@@ -1,7 +1,8 @@
 package com.fenrir.filesorter.controllers;
 
-import com.fenrir.filesorter.controllers.editor.rename.RenameRuleEditorController;
-import com.fenrir.filesorter.controllers.editor.sort.SortRuleEditorController;
+import com.fenrir.filesorter.controllers.editor.string.StringRuleEditorController;
+import com.fenrir.filesorter.controllers.editor.string.rename.RenameRuleEditorController;
+import com.fenrir.filesorter.controllers.editor.string.sort.SortRuleEditorController;
 import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
 import com.fenrir.filesorter.controllers.main.RuleTabController;
 import com.fenrir.filesorter.controllers.save.SaveRuleGroupController;
@@ -12,8 +13,7 @@ public class ControllerMediator {
     private static ControllerMediator instance;
 
     private RuleTabController ruleTabController;
-    private RenameRuleEditorController renameRuleEditorController;
-    private SortRuleEditorController sortRuleEditorController;
+    private StringRuleEditorController stringRuleEditorController;
     private FilterRuleEditorController filterRuleEditorController;
     private SaveRuleGroupController saveRuleGroupController;
 
@@ -21,12 +21,8 @@ public class ControllerMediator {
         this.ruleTabController = controller;
     }
 
-    public void registerRenameRuleEditorController(RenameRuleEditorController controller) {
-        this.renameRuleEditorController = controller;
-    }
-
-    public void registerSortRuleEditorController(SortRuleEditorController controller) {
-        this.sortRuleEditorController = controller;
+    public void registerStringRuleEditorController(StringRuleEditorController controller) {
+        this.stringRuleEditorController = controller;
     }
 
     public void registerFilterRuleEditorController(FilterRuleEditorController controller) {
@@ -50,11 +46,11 @@ public class ControllerMediator {
     }
 
     public void sendRenameRuleToEdit(Rule rule) {
-        renameRuleEditorController.receiveRule(rule);
+        stringRuleEditorController.receiveRule(rule);
     }
 
     public void sendSortRuleToEdit(Rule rule) {
-        sortRuleEditorController.receiveRule(rule);
+        stringRuleEditorController.receiveRule(rule);
     }
 
     public void sendFilterRuleToEdit(Rule rule) {

@@ -1,10 +1,7 @@
-package com.fenrir.filesorter.controllers.editor.rename;
+package com.fenrir.filesorter.controllers.editor.string;
 
-import com.fenrir.filesorter.controllers.editor.rename.input.StringArgumentInputController;
-import com.fenrir.filesorter.model.enums.Scope;
-import com.fenrir.filesorter.model.rule.Iterator;
+import com.fenrir.filesorter.controllers.editor.string.input.StringArgumentInputController;
 import com.fenrir.filesorter.model.rule.Rule;
-import com.fenrir.filesorter.model.rule.Token;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,10 +21,13 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-public class RenameRuleBuilderController {
-    @FXML private ListView<ProviderType> providerListView;
+public abstract class StringRuleBuilderController {
+    @FXML
+    private ListView<ProviderType> providerListView;
     @FXML private ListView<ProviderArgPair> selectedProvidersListView;
 
     private final ObservableList<ProviderType> providerTypeItems = FXCollections.observableArrayList();
@@ -46,23 +46,13 @@ public class RenameRuleBuilderController {
     }
 
     private void initProviderListView() {
-        populateProviderList();
+        List<ProviderType> providerTypes = getProviderList();
+        providerTypeItems.addAll(providerTypes);
         providerListView.setItems(providerTypeItems);
         providerListView.setCellFactory(providerCallback);
     }
 
-    private void populateProviderList() {
-        ProviderType[] types = ProviderType.values();
-        for (ProviderType type: types) {
-            if (isProviderInRenameScope(type)) {
-                providerTypeItems.add(type);
-            }
-        }
-    }
-
-    private boolean isProviderInRenameScope(ProviderType type) {
-        return Arrays.asList(type.getScope()).contains(Scope.RENAME);
-    }
+    protected abstract List<ProviderType> getProviderList();
 
     private void initSelectedProviderListView() {
         selectedProvidersListView.setItems(selectedProviderTypeItems);
@@ -87,7 +77,7 @@ public class RenameRuleBuilderController {
 
     private void openTextInput() {
         try {
-            loadView("/com/fenrir/filesorter/controllers/editor/rename/input/TextInputView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/string/input/TextInputView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -133,15 +123,11 @@ public class RenameRuleBuilderController {
     }
 
     public void setRule(Rule rule) {
-        Iterator<Token> iterator = rule.getTokenIterator();
-        while (iterator.hasNext()) {
-            Token token = iterator.next();
-            ProviderType providerType = ProviderType.getType(token.symbol(), Scope.RENAME);
-            String args = token.args() != null ? String.join(",", token.args()) : null;
-            ProviderArgPair pair = new ProviderArgPair(providerType, args);
-            selectedProviderTypeItems.add(pair);
-        }
+        List<ProviderArgPair> providerArgPairs = parseRule(rule);
+        selectedProviderTypeItems.addAll(providerArgPairs);
     }
+
+    protected abstract List<ProviderArgPair> parseRule(Rule rule);
 
     private Callback<ListView<ProviderType>, ListCell<ProviderType>> createProviderCellFactory() {
         return new Callback<>() {
@@ -198,9 +184,9 @@ public class RenameRuleBuilderController {
         Button deleteButton = new Button("\u00D7");
         deleteButton.setStyle(
                 "-fx-background-color: transparent;" +
-                "-fx-text-fill: red;" +
-                "-fx-padding: 0 0 0 0;" +
-                "-fx-cursor: hand"
+                        "-fx-text-fill: red;" +
+                        "-fx-padding: 0 0 0 0;" +
+                        "-fx-cursor: hand"
         );
         return deleteButton;
     }
@@ -209,17 +195,17 @@ public class RenameRuleBuilderController {
         HBox container = new HBox();
         container.setStyle(
                 "-fx-max-height: 20px;" +
-                "-fx-pref-height: 20px;" +
-                "-fx-padding: 0 10px 0 10px;" +
-                "-fx-background-radius: 20px;" +
-                "-fx-background-color: #23c3cf;" +
-                "-fx-border-radius: 20px;" +
-                "-fx-spacing: 5px"
+                        "-fx-pref-height: 20px;" +
+                        "-fx-padding: 0 10px 0 10px;" +
+                        "-fx-background-radius: 20px;" +
+                        "-fx-background-color: #23c3cf;" +
+                        "-fx-border-radius: 20px;" +
+                        "-fx-spacing: 5px"
         );
         return container;
     }
 
-    private static class ProviderArgPair {
+    protected static class ProviderArgPair {
         private final ProviderType providerType;
         private final Optional<String> args;
 

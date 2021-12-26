@@ -1,29 +1,23 @@
-package com.fenrir.filesorter.controllers.editor.rename;
+package com.fenrir.filesorter.controllers.editor.string;
 
-import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
 import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.controllers.confirm.ConfirmController;
+import com.fenrir.filesorter.controllers.confirm.ConfirmationController;
 import com.fenrir.filesorter.controllers.editor.EditorController;
 import com.fenrir.filesorter.controllers.editor.ExpressionEditorController;
-import com.fenrir.filesorter.controllers.editor.filter.FilterRuleBuilderController;
-import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
-import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
-import com.fenrir.filesorter.model.parsers.RenameRuleParser;
 import com.fenrir.filesorter.model.rule.Rule;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+public abstract class StringRuleEditorController implements EditorController, ConfirmationController {
+    private final Logger logger = LoggerFactory.getLogger(StringRuleEditorController.class);
 
-public class RenameRuleEditorController implements EditorController, ConfirmationController {
-    private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
-
+    @FXML private StringRuleBuilderController stringRuleBuilderController;
     @FXML private ExpressionEditorController expressionEditorController;
-    @FXML private RenameRuleBuilderController renameRuleBuilderController;
     @FXML private ConfirmController confirmController;
 
     @FXML private TabPane ruleEditorTabPane;
@@ -33,14 +27,15 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
     @FXML
     public void initialize() {
         try {
-            ControllerMediator.getInstance().registerRenameRuleEditorController(this);
+            ControllerMediator.getInstance().registerStringRuleEditorController(this);
             expressionEditorController.setParent(this);
             confirmController.setParent(this);
             ruleEditorTabPane.getSelectionModel()
                     .selectedItemProperty()
                     .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
         } catch (Exception e) {
-            logger.error("Error during initializing RenameRuleEditor: {}", e.getMessage());
+            logger.error("Error during initializing StringRuleEditor: {}", e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -53,7 +48,7 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
 
     public void receiveRule(Rule rule) {
         if (rule != null) {
-            renameRuleBuilderController.setRule(rule);
+            stringRuleBuilderController.setRule(rule);
         }
     }
 
@@ -62,7 +57,7 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
         if (expressionEditorController.isEditEnabled()) {
             return expressionEditorController.getExpression();
         }
-        return renameRuleBuilderController.buildExpression();
+        return stringRuleBuilderController.buildExpression();
     }
 
     @Override
@@ -73,21 +68,6 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
     @Override
     public void unlockTab() {
         ruleBuilderTab.setDisable(false);
-    }
-
-    @Override
-    public void confirm() {
-        try {
-            String expression = getExpression();
-            Rule rule = new Rule(expression);
-            RenameRuleParser parser = new RenameRuleParser();
-            parser.resolveRule(rule);
-            ControllerMediator.getInstance().sendReadyRenameRule(rule);
-            close();
-        } catch (ExpressionFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            alert.showAndWait();
-        }
     }
 
     @Override

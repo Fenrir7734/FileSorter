@@ -243,7 +243,7 @@ public class RuleTabController {
     @FXML
     public void editRenameRule() {
         try {
-            loadView("/com/fenrir/filesorter/controllers/editor/rename/RenameRuleEditorView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/string/rename/RenameRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendRenameRuleToEdit(selectedRuleGroup.getRenameRule());
@@ -255,12 +255,13 @@ public class RuleTabController {
     @FXML
     public void editSortRule() {
         try {
-            loadView("/com/fenrir/filesorter/controllers/editor/sort/SortRuleEditorView.fxml");
+            loadView("/com/fenrir/filesorter/controllers/editor/string/sort/SortRuleEditorView.fxml");
             RuleGroup selectedRuleGroup = getSelectedRuleGroup();
             ControllerMediator.getInstance()
                     .sendSortRuleToEdit(selectedRuleGroup.getSortRule());
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

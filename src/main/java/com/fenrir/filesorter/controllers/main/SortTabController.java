@@ -85,29 +85,30 @@ public class SortTabController {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                try {
-                    configuration.validate();
-                    Platform.runLater(() -> setProgressIndicatorToIndeterminate());
-                    Processor processor = new Processor(configuration);
-                    Sorter sorter = new Sorter(processor);
-                    sorter.sort();
-                    Platform.runLater(() -> setProgressIndicatorToDone());
-                } catch (TokenFormatException e) {
-                    Platform.runLater(() -> setProgressIndicatorTo0());
-                    logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
-                } catch (ExpressionFormatException e) {
-                    Platform.runLater(() -> setProgressIndicatorTo0());
-                    logger.error("{} Rule: {}", e.getMessage(), e.getRule());
-                } catch (SortConfigurationException | IOException e) {
-                    Platform.runLater(() -> setProgressIndicatorTo0());
-                    logger.error("{}", e.getMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
                 return null;
             }
         };
         new Thread(task).start();
+        try {
+            configuration.validate();
+            Platform.runLater(() -> setProgressIndicatorToIndeterminate());
+            Processor processor = new Processor(configuration);
+            Sorter sorter = new Sorter(processor);
+            sorter.sort();
+            Platform.runLater(() -> setProgressIndicatorToDone());
+        } catch (TokenFormatException e) {
+            Platform.runLater(() -> setProgressIndicatorTo0());
+            logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
+        } catch (ExpressionFormatException e) {
+            Platform.runLater(() -> setProgressIndicatorTo0());
+            logger.error("{} Rule: {}", e.getMessage(), e.getRule());
+        } catch (SortConfigurationException | IOException e) {
+            Platform.runLater(() -> setProgressIndicatorTo0());
+            logger.error("{}", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
