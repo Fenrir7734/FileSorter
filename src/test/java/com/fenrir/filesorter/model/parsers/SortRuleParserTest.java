@@ -109,14 +109,14 @@ class SortRuleParserTest {
 
     @Test
     public void shouldReturnListOfStringStatementForValidInput() throws ExpressionFormatException, IOException {
-        Rule stringRule = new Rule("%(DAC:YYYY)%(DAC:MM)%(/)%(DAC:DD)%(STR:-)%(EXT)");
+        Rule stringRule = new Rule("%(DAC:YYYY)%(DAC:MM)%(/)%(DAC:DD)%(TXT:-)%(EXT)");
         List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
         List<Provider<?>> expectedStatements = List.of(
                 new DateCreatedProvider(ProviderDescription.ofDate("YYYY")),
                 new DateCreatedProvider(ProviderDescription.ofDate("MM")),
                 new FileSeparatorProvider(null),
                 new DateCreatedProvider(ProviderDescription.ofDate("DD")),
-                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new CustomTextProvider(ProviderDescription.ofLiteral("-")),
                 new FileExtensionProvider(null)
         );
         String actualResult = StatementUtils.build(statementsFromParser, file);

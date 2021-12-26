@@ -20,7 +20,7 @@ public class TypeChecker {
                 || provider instanceof FileExtensionProvider
                 || provider instanceof FileNameProvider
                 || provider instanceof FileSeparatorProvider
-                || provider instanceof LiteralProvider;
+                || provider instanceof CustomTextProvider;
     }
 
     private static <T extends Comparable<T>> boolean checkArguments(List<T> args) {

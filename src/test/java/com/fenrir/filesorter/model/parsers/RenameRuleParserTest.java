@@ -110,17 +110,17 @@ class RenameRuleParserTest {
 
     @Test
     public void shouldReturnListOfStringStatementForValidInput() throws ExpressionFormatException, IOException {
-        Rule stringRule = new Rule("%(FIN)%(STR:-)%(DAC:YYYY)%(STR:-)%(DAC:MM)%(STR:-)%(DAC:DD)%(STR:.)%(EXT)");
+        Rule stringRule = new Rule("%(FIN)%(TXT:-)%(DAC:YYYY)%(TXT:-)%(DAC:MM)%(TXT:-)%(DAC:DD)%(TXT:.)%(EXT)");
         List<Provider<?>> statementsFromParser = parser.resolveRule(stringRule);
         List<Provider<?>> expectedStatements = List.of(
                 new FileNameProvider(null),
-                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new CustomTextProvider(ProviderDescription.ofLiteral("-")),
                 new DateCreatedProvider(ProviderDescription.ofDate("YYYY")),
-                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new CustomTextProvider(ProviderDescription.ofLiteral("-")),
                 new DateCreatedProvider(ProviderDescription.ofDate("MM")),
-                new LiteralProvider(ProviderDescription.ofLiteral("-")),
+                new CustomTextProvider(ProviderDescription.ofLiteral("-")),
                 new DateCreatedProvider(ProviderDescription.ofDate("DD")),
-                new LiteralProvider(ProviderDescription.ofLiteral(".")),
+                new CustomTextProvider(ProviderDescription.ofLiteral(".")),
                 new FileExtensionProvider(null)
         );
         String actualResult = StatementUtils.build(statementsFromParser, file);

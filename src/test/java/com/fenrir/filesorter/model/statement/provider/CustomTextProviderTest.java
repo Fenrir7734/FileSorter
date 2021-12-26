@@ -10,14 +10,14 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LiteralProviderTest {
+class CustomTextProviderTest {
     @TempDir
     Path tempDir;
 
     @Test
     public void getShouldThrowUnsupportedOperationException() throws IOException {
         ProviderDescription description = ProviderDescription.ofLiteral("abc");
-        Provider<String> provider = new LiteralProvider(description);
+        Provider<String> provider = new CustomTextProvider(description);
         Path path = FileUtils.createFile(tempDir, "testfile.txt");
         FileData fileData = new FileData(path);
         assertThrows(
@@ -27,9 +27,9 @@ class LiteralProviderTest {
     }
 
     @Test
-    public void getAsStringShouldReturnLiteral() throws IOException {
+    public void getAsStringShouldReturnCustomText() throws IOException {
         ProviderDescription description = ProviderDescription.ofLiteral("abc");
-        Provider<String> provider = new LiteralProvider(description);
+        Provider<String> provider = new CustomTextProvider(description);
         String actualLiteral = provider.getAsString(null);
         assertEquals("abc", actualLiteral);
     }

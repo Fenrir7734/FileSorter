@@ -4,10 +4,10 @@ import com.fenrir.filesorter.model.file.FileData;
 
 import java.io.IOException;
 
-public class LiteralProvider implements Provider<String> {
+public class CustomTextProvider implements Provider<String> {
     private final ProviderDescription description;
 
-    public LiteralProvider(ProviderDescription description) {
+    public CustomTextProvider(ProviderDescription description) {
         this.description = description;
     }
 

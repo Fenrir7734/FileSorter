@@ -243,10 +243,10 @@ public enum ProviderType {
             throw new UnsupportedOperationException();
         }
     },
-    STRING("STR", "custom name", SINGLE, new Scope[]{SORT, RENAME}, ReturnType.STRING, Category.NONE) {
+    CUSTOM_TEXT("TXT", "custom text", SINGLE, new Scope[]{SORT, RENAME}, ReturnType.STRING, Category.NONE) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
-            return new LiteralProvider(ProviderDescription.ofLiteral(args.get(0)));
+            return new CustomTextProvider(ProviderDescription.ofLiteral(args.get(0)));
         }
 
         @Override

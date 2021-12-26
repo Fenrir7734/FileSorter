@@ -30,8 +30,8 @@ class StatementUtilsTest {
                 new FileNameProvider(null),
                 new FileSeparatorProvider(null),
                 new FileNameProvider(null),
-                new LiteralProvider(ProviderDescription.ofLiteral("ABC")),
-                new LiteralProvider(ProviderDescription.ofLiteral(".")),
+                new CustomTextProvider(ProviderDescription.ofLiteral("ABC")),
+                new CustomTextProvider(ProviderDescription.ofLiteral(".")),
                 new FileExtensionProvider(null)
         );
         String actualResult = StatementUtils.build(statements, file);
