@@ -1,12 +1,14 @@
 package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.file.FilePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -29,13 +31,13 @@ public class Sorter {
             if (file.getTargetPath() != null
                     && !file.isDirectory()
                     && file.isIncluded()) {
-                copyFile(file);
+                Path newPath = copyFile(file);
             }
         }
         logger.info("Sort complete");
     }
 
-    private void copyFile(FileData file) throws IOException {
+    private Path copyFile(FileData file) throws IOException {
         Path sourcePath = file.getSourcePath();
         Path targetPath = file.resolveTargetPath();
         Path dirPath = targetPath.getParent();
@@ -46,6 +48,6 @@ public class Sorter {
         }
 
         logger.info("Copying file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
-        Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
+        return Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
     }
 }

@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.controllers.main;
 
+import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.controllers.GUILogPrinter;
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.Processor;
@@ -7,6 +8,7 @@ import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
+import com.fenrir.filesorter.model.file.BackupManager;
 import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.log.LogAppender;
 import com.fenrir.filesorter.model.rule.Rule;
@@ -45,6 +47,7 @@ public class SortTabController {
 
     @FXML
     public void initialize() {
+        ControllerMediator.getInstance().registerSortTabController(this);
         LogAppender.setPrinter(new GUILogPrinter(progressLabel));
         setProgressIndicatorTo0();
     }
