@@ -55,4 +55,6 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.controllers.editor.sort to javafx.fxml;
     exports com.fenrir.filesorter.controllers.confirm;
     opens com.fenrir.filesorter.controllers.confirm to javafx.fxml;
+    exports com.fenrir.filesorter.controllers.editor.rename.input;
+    opens com.fenrir.filesorter.controllers.editor.rename.input to javafx.fxml;
 }

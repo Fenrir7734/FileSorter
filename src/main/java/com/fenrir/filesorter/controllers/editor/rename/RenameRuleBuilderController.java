@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.controllers.editor.rename;
 
+import com.fenrir.filesorter.controllers.editor.rename.input.StringArgumentInputController;
 import com.fenrir.filesorter.model.enums.Scope;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.Rule;
@@ -8,7 +9,9 @@ import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -16,10 +19,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Pair;
-import org.apache.tika.utils.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 
 public class RenameRuleBuilderController {
@@ -32,8 +36,11 @@ public class RenameRuleBuilderController {
     private final Callback<ListView<ProviderType>, ListCell<ProviderType>> providerCallback = createProviderCellFactory();
     private final Callback<ListView<ProviderArgPair>, ListCell<ProviderArgPair>> selectedProviderCallback = createSelectedProviderCellFactory();
 
+    private final InputControllerMediator inputControllerMediator = new InputControllerMediator();
+
     @FXML
     public void initialize() {
+        inputControllerMediator.registerRenameRuleBuilderController(this);
         initProviderListView();
         initSelectedProviderListView();
     }
@@ -70,11 +77,42 @@ public class RenameRuleBuilderController {
                     || type == ProviderType.DATE_MODIFIED
                     || type == ProviderType.DATE_CURRENT) {
 
+            } else if (type == ProviderType.CUSTOM_TEXT) {
+                openTextInput();
+            } else {
+                selectedProviderTypeItems.add(new ProviderArgPair(type, null));
             }
-            if (type == ProviderType.STRING) {
+        }
+    }
 
-            }
-            selectedProviderTypeItems.add(new ProviderArgPair(type, null));
+    private void openTextInput() {
+        try {
+            loadView("/com/fenrir/filesorter/controllers/editor/rename/input/TextInputView.fxml");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void loadView(String name) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                Objects.requireNonNull(getClass().getResource(name))
+        );
+        Parent parent = loader.load();
+        StringArgumentInputController controller = loader.getController();
+        controller.setInputControllerMediator(inputControllerMediator);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void receiveArgument(String arg, ProviderType type) {
+        if (arg != null && !arg.isBlank()) {
+            ProviderArgPair pair = new ProviderArgPair(type, arg);
+            selectedProviderTypeItems.add(pair);
         }
     }
 
@@ -195,7 +233,8 @@ public class RenameRuleBuilderController {
         }
 
         public String getArgs() {
-            return args.orElse("");
+            return args.map(v -> ":" + v)
+                    .orElse("");
         }
     }
 }

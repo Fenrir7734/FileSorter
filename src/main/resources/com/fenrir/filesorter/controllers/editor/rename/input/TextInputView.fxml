@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="textInputVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.rename.input.TextInputController">
+    <Label text="Enter text" />
+    <TextField fx:id="inputTextField" promptText="text" />
+    <fx:include fx:id="confirm" source="../../../confirm/EditorConfirmView.fxml" />
+    <padding>
+        <Insets left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>
