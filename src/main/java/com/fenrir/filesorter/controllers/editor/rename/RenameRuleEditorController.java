@@ -23,7 +23,7 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
     private final Logger logger = LoggerFactory.getLogger(FilterRuleEditorController.class);
 
     @FXML private ExpressionEditorController expressionEditorController;
-    @FXML private FilterRuleBuilderController filterRuleBuilderController;
+    @FXML private RenameRuleBuilderController renameRuleBuilderController;
     @FXML private ConfirmController confirmController;
 
     @FXML private TabPane ruleEditorTabPane;
@@ -39,8 +39,6 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
             ruleEditorTabPane.getSelectionModel()
                     .selectedItemProperty()
                     .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
-
-            ruleBuilderTab.setDisable(true);
         } catch (Exception e) {
             logger.error("Error during initializing RenameRuleEditor: {}", e.getMessage());
         }
@@ -61,7 +59,7 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
 
     @Override
     public String getExpression() {
-        return null;
+        return renameRuleBuilderController.buildExpression();
     }
 
     @Override
