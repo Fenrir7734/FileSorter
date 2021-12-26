@@ -1,6 +1,9 @@
 package com.fenrir.filesorter.controllers.editor.rename;
 
 import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.rule.Iterator;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.Token;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import org.apache.tika.utils.StringUtils;
 
 import java.util.*;
 
@@ -88,6 +92,17 @@ public class RenameRuleBuilderController {
             expressionBuilder.append(token);
         }
         return expressionBuilder.toString();
+    }
+
+    public void setRule(Rule rule) {
+        Iterator<Token> iterator = rule.getTokenIterator();
+        while (iterator.hasNext()) {
+            Token token = iterator.next();
+            ProviderType providerType = ProviderType.getType(token.symbol(), Scope.RENAME);
+            String args = token.args() != null ? String.join(",", token.args()) : null;
+            ProviderArgPair pair = new ProviderArgPair(providerType, args);
+            selectedProviderTypeItems.add(pair);
+        }
     }
 
     private Callback<ListView<ProviderType>, ListCell<ProviderType>> createProviderCellFactory() {

@@ -53,12 +53,15 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
 
     public void receiveRule(Rule rule) {
         if (rule != null) {
-            expressionEditorController.setExpression(rule.getExpression());
+            renameRuleBuilderController.setRule(rule);
         }
     }
 
     @Override
     public String getExpression() {
+        if (expressionEditorController.isEditEnabled()) {
+            return expressionEditorController.getExpression();
+        }
         return renameRuleBuilderController.buildExpression();
     }
 
@@ -72,10 +75,10 @@ public class RenameRuleEditorController implements EditorController, Confirmatio
         ruleBuilderTab.setDisable(false);
     }
 
-    @FXML
+    @Override
     public void confirm() {
         try {
-            String expression = expressionEditorController.getExpression();
+            String expression = getExpression();
             Rule rule = new Rule(expression);
             RenameRuleParser parser = new RenameRuleParser();
             parser.resolveRule(rule);
