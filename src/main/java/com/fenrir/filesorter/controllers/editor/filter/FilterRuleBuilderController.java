@@ -201,13 +201,9 @@ public class FilterRuleBuilderController {
                 .filter(arg -> arg != null && !arg.isEmpty())
                 .toList();
         String args = String.join(",", argumentList);
-        return String.format(
-                "%s(%s)%s(%s)%s(%s:%s)",
-                "%",
+        return String.format("%%(%s)%%(%s)%%(%s:%s)",
                 actionType.getToken(),
-                "%",
                 providerType.getToken(),
-                "%",
                 predicateType.getToken(),
                 args
         );

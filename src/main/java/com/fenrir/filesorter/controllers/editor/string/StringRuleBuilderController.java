@@ -34,7 +34,8 @@ public abstract class StringRuleBuilderController {
     private final ObservableList<ProviderArgPair> selectedProviderTypeItems = FXCollections.observableArrayList();
 
     private final Callback<ListView<ProviderType>, ListCell<ProviderType>> providerCallback = createProviderCellFactory();
-    private final Callback<ListView<ProviderArgPair>, ListCell<ProviderArgPair>> selectedProviderCallback = createSelectedProviderCellFactory();
+    private final Callback<ListView<ProviderArgPair>, ListCell<ProviderArgPair>> selectedProviderCallback =
+            createSelectedProviderCellFactory();
 
     private final InputControllerMediator inputControllerMediator = new InputControllerMediator();
 
@@ -61,7 +62,6 @@ public abstract class StringRuleBuilderController {
 
     private void onProviderClicked(MouseEvent event, ProviderType type) {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            String args = null;
             if (type == ProviderType.DATE_CREATED
                     || type == ProviderType.DATE_ACCESSED
                     || type == ProviderType.DATE_MODIFIED
@@ -115,7 +115,7 @@ public abstract class StringRuleBuilderController {
         for (ProviderArgPair providerArgPair: selectedProviderTypeItems) {
             String token = String.format("%%(%s%s)",
                     providerArgPair.providerType.getToken(),
-                    providerArgPair.getArgs()
+                    providerArgPair.getArgs().map(v ->":" + v).orElse("")
             );
             expressionBuilder.append(token);
         }
@@ -184,9 +184,9 @@ public abstract class StringRuleBuilderController {
         Button deleteButton = new Button("\u00D7");
         deleteButton.setStyle(
                 "-fx-background-color: transparent;" +
-                        "-fx-text-fill: red;" +
-                        "-fx-padding: 0 0 0 0;" +
-                        "-fx-cursor: hand"
+                "-fx-text-fill: red;" +
+                "-fx-padding: 0 0 0 0;" +
+                "-fx-cursor: hand"
         );
         return deleteButton;
     }
@@ -195,32 +195,31 @@ public abstract class StringRuleBuilderController {
         HBox container = new HBox();
         container.setStyle(
                 "-fx-max-height: 20px;" +
-                        "-fx-pref-height: 20px;" +
-                        "-fx-padding: 0 10px 0 10px;" +
-                        "-fx-background-radius: 20px;" +
-                        "-fx-background-color: #23c3cf;" +
-                        "-fx-border-radius: 20px;" +
-                        "-fx-spacing: 5px"
+                "-fx-pref-height: 20px;" +
+                "-fx-padding: 0 10px 0 10px;" +
+                "-fx-background-radius: 20px;" +
+                "-fx-background-color: #23c3cf;" +
+                "-fx-border-radius: 20px;" +
+                "-fx-spacing: 5px"
         );
         return container;
     }
 
-    protected static class ProviderArgPair {
+    public static class ProviderArgPair {
         private final ProviderType providerType;
-        private final Optional<String> args;
+        private final String args;
 
         public ProviderArgPair(ProviderType providerType, String args) {
             this.providerType = providerType;
-            this.args = Optional.ofNullable(args);
+            this.args = args;
         }
 
         public ProviderType getProviderType() {
             return providerType;
         }
 
-        public String getArgs() {
-            return args.map(v -> ":" + v)
-                    .orElse("");
+        public Optional<String> getArgs() {
+            return Optional.ofNullable(args);
         }
     }
 }

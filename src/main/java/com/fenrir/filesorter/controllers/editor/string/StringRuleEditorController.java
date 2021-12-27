@@ -35,7 +35,6 @@ public abstract class StringRuleEditorController implements EditorController, Co
                     .addListener(((observable, oldValue, newValue) -> onTabChange(newValue)));
         } catch (Exception e) {
             logger.error("Error during initializing StringRuleEditor: {}", e.getMessage());
-            e.printStackTrace();
         }
     }
 
