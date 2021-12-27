@@ -14,6 +14,7 @@ public class DateParser {
             List<String> resolvedPattern = transformToPattern(expressionAsList);
             resolvedPattern = removeSubsequentQuotes(resolvedPattern);
             resolvedPattern = handleSubsequentSamePatterns(resolvedPattern);
+            System.out.println(resolvedPattern);
             return  String.join("", resolvedPattern);
         } else {
             return "";
@@ -96,8 +97,9 @@ public class DateParser {
 
     private boolean isSubsequentSamePattern(List<String> list, int index) {
         return index + 1 < list.size()
-                && list.get(index).equals(list.get(index + 1))
-                && list.get(index).matches("^[a-zA-Z]+$");
+                && (list.get(index).contains(list.get(index + 1))
+                    || list.get(index + 1).contains(list.get(index))
+                ) && list.get(index).matches("^[a-zA-Z]+$");
     }
 
 }
