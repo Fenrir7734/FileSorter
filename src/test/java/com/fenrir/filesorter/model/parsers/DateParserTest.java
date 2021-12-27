@@ -125,4 +125,12 @@ class DateParserTest {
         String actualPattern = parser.resolveDatePattern(datePattern);
         assertEquals("[yyyy][yyyy]yyyy", actualPattern);
     }
+
+    @Test
+    public void resolveDatePatternShouldReturnValidDateTimeFormatterPatternForGivenPatternContainingSubsequentTokensResolvingIntoSameLetters() {
+        String datePattern = "%Q%q%R";
+        DateParser parser = new DateParser();
+        String actualPattern = parser.resolveDatePattern(datePattern);
+        assertEquals("[qqq][q]qqqq", actualPattern);
+    }
 }

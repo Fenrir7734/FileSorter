@@ -1,7 +1,5 @@
 package com.fenrir.filesorter.controllers.editor.string;
 
-import com.fenrir.filesorter.model.statement.types.ProviderType;
-
 public class InputControllerMediator {
     private StringRuleBuilderController renameRuleBuilderController;
 
@@ -9,7 +7,7 @@ public class InputControllerMediator {
         this.renameRuleBuilderController = controller;
     }
 
-    public void sendArgument(String arg, ProviderType type) {
-        renameRuleBuilderController.receiveArgument(arg, type);
+    public void sendArgument(String arg) {
+        renameRuleBuilderController.receiveArgument(arg);
     }
 }

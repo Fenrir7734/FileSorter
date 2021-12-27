@@ -107,7 +107,7 @@ public abstract class StringRuleBuilderController {
         stage.show();
     }
 
-    public void receiveArgument(String arg, ProviderType type) {
+    public void receiveArgument(String arg) {
         if (arg != null && !arg.isBlank()) {
             selectedProviderTypeItems.get(selectedProviderTypeItems.size() - 1)
                     .setArgs(arg);

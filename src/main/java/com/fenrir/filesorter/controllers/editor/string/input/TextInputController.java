@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.controllers.editor.string.input;
 
-import com.fenrir.filesorter.model.statement.types.ProviderType;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
