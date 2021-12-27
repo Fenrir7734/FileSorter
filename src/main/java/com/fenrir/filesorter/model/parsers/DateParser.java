@@ -3,51 +3,61 @@ package com.fenrir.filesorter.model.parsers;
 import com.fenrir.filesorter.model.enums.DatePatternType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DateParser {
 
-    public String resolveDatePattern(String datePatter) {
-        List<String> resolvedPattern = new ArrayList<>();
-        resolvedPattern.add("'");
-        String[] patternArray = datePatter.isEmpty() ? new String[0] : datePatter.split("");
+    public String resolveDatePattern(String expression) {
+        if (!expression.isEmpty()) {
+            List<String> expressionAsList = Arrays.stream(expression.split("")).toList();
+            List<String> resolvedPattern = transformToPattern(expressionAsList);
+            resolvedPattern = removeSubsequentQuotes(resolvedPattern);
+            resolvedPattern = handleSubsequentSamePatterns(resolvedPattern);
+            return  String.join("", resolvedPattern);
+        } else {
+            return "";
+        }
+    }
+
+    private List<String> transformToPattern(List<String> list) {
+        List<String> newList = new ArrayList<>();
+        newList.add("'");
 
         int i = 0;
-        while (i < patternArray.length) {
-            if (isToken(patternArray, i)) {
-                DatePatternType datePatternType = DatePatternType.getType(patternArray[i + 1]);
-                resolvedPattern.add("'");
-                resolvedPattern.add(datePatternType.getPattern());
-                resolvedPattern.add("'");
+        while (i < list.size()) {
+            if (isEscapeCharacter(list, i)) {
+                newList.add("%");
                 i++;
-            } else if (isEscapeCharacter(patternArray, i)) {
-                resolvedPattern.add("%");
+            } else if (isToken(list, i)) {
+                DatePatternType datePatternType = DatePatternType.getType(list.get(i + 1));
+                newList.add("'");
+                newList.add(datePatternType.getPattern());
+                newList.add("'");
                 i++;
-            } else if (patternArray[i].equals("'")) {
-                resolvedPattern.add("'");
-                resolvedPattern.add("''");
-                resolvedPattern.add("'");
+            } else if (list.get(i).equals("'")) {
+                newList.add("'");
+                newList.add("''");
+                newList.add("'");
             } else {
-                resolvedPattern.add(patternArray[i]);
+                newList.add(list.get(i));
             }
             i++;
         }
-
-        resolvedPattern.add("'");
-        resolvedPattern = removeSubsequentQuotes(resolvedPattern);
-        return  String.join("", resolvedPattern);
+        newList.add("'");
+        return newList;
     }
 
-    private boolean isToken(String[] patternArray, int index) {
-        return patternArray[index].equals("%")
-                && index + 1 < patternArray.length
-                && DatePatternType.getType(patternArray[index + 1]) != null;
+    private boolean isToken(List<String> list, int index) {
+        return list.get(index).equals("%")
+                && index + 1 < list.size()
+                && DatePatternType.getType(list.get(index + 1)) != null;
     }
 
-    private boolean isEscapeCharacter(String[] patternArray, int index) {
-        return patternArray[index].equals("%")
-                && index + 1 < patternArray.length
-                && patternArray[index + 1].equals("%");
+    private boolean isEscapeCharacter(List<String> list, int index) {
+        return list.get(index).equals("%")
+                && index + 1 < list.size()
+                && list.get(index + 1).equals("%");
     }
 
     public List<String> removeSubsequentQuotes(List<String> list) {
@@ -68,6 +78,26 @@ public class DateParser {
         return list.get(index).equals("'")
                 && index + 1 < list.size()
                 && list.get(index + 1).equals("'");
+    }
+
+    private List<String> handleSubsequentSamePatterns(List<String> list) {
+        List<String> newList = new ArrayList<>(list.size());
+        int i = 0;
+        while (i < list.size()) {
+            if (isSubsequentSamePattern(list, i)) {
+                newList.add(String.format("[%s]", list.get(i)));
+            } else {
+                newList.add(list.get(i));
+            }
+            i++;
+        }
+        return newList;
+    }
+
+    private boolean isSubsequentSamePattern(List<String> list, int index) {
+        return index + 1 < list.size()
+                && list.get(index).equals(list.get(index + 1))
+                && list.get(index).matches("^[a-zA-Z]+$");
     }
 
 }

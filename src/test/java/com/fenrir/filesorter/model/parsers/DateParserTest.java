@@ -2,8 +2,6 @@ package com.fenrir.filesorter.model.parsers;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -118,5 +116,13 @@ class DateParserTest {
         DateParser parser = new DateParser();
         String actualPattern = parser.resolveDatePattern(datePattern);
         assertEquals("''yyyy'-'MM'-'dd' 'HH''''':'mm':'ss''", actualPattern);
+    }
+
+    @Test
+    public void resolveDatePatternShouldReturnValidDateTimeFormatterPatternForGivenPatternContainingSubsequentSameTokens() {
+        String datePattern = "%Y%Y%Y";
+        DateParser parser = new DateParser();
+        String actualPattern = parser.resolveDatePattern(datePattern);
+        assertEquals("[yyyy][yyyy]yyyy", actualPattern);
     }
 }
