@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.fenrir.filesorter.controllers.editor.string.input.DateInputView"
-            prefHeight="400.0" prefWidth="600.0" >
-
-</AnchorPane>
+<VBox fx:id="textInputVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenrir.filesorter.controllers.editor.string.input.DateInputController">
+    <Label text="Date builder" />
+   <VBox fx:id="dateButtonContainer" prefWidth="100.0" spacing="20.0" />
+    <TextField fx:id="inputTextField" promptText="date" />
+   <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0">
+      <children>
+         <Label text="Preview: " />
+         <Label fx:id="previewLabel" />
+      </children>
+   </HBox>
+    <fx:include fx:id="confirm" source="../../../confirm/EditorConfirmView.fxml" />
+    <padding>
+        <Insets left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

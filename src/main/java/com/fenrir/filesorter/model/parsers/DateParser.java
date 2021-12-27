@@ -14,7 +14,6 @@ public class DateParser {
             List<String> resolvedPattern = transformToPattern(expressionAsList);
             resolvedPattern = removeSubsequentQuotes(resolvedPattern);
             resolvedPattern = handleSubsequentSamePatterns(resolvedPattern);
-            System.out.println(resolvedPattern);
             return  String.join("", resolvedPattern);
         } else {
             return "";

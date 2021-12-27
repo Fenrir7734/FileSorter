@@ -11,16 +11,22 @@ public abstract class StringArgumentInputController implements ConfirmationContr
 
     private InputControllerMediator inputControllerMediator;
 
+    private ProviderType providerType;
+
     @FXML
     public void initialize() {
         confirmController.setParent(this);
     }
 
-    public void sendArguments(String args, ProviderType type) {
-        inputControllerMediator.sendArgument(args, type);
+    public void sendArguments(String args) {
+        inputControllerMediator.sendArgument(args, providerType);
     }
 
     public void setInputControllerMediator(InputControllerMediator inputControllerMediator) {
         this.inputControllerMediator = inputControllerMediator;
+    }
+
+    public void setProviderType(ProviderType providerType) {
+        this.providerType = providerType;
     }
 }

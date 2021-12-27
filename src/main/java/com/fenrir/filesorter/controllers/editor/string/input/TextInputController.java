@@ -12,7 +12,7 @@ public class TextInputController extends StringArgumentInputController {
 
     @Override
     public void confirm() {
-        super.sendArguments(inputTextField.getText(), ProviderType.CUSTOM_TEXT);
+        super.sendArguments(inputTextField.getText());
         close();
     }
 
@@ -21,5 +21,4 @@ public class TextInputController extends StringArgumentInputController {
         Stage stage = (Stage) textInputVBox.getScene().getWindow();
         stage.close();
     }
-
 }

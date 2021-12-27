@@ -66,18 +66,26 @@ public abstract class StringRuleBuilderController {
                     || type == ProviderType.DATE_ACCESSED
                     || type == ProviderType.DATE_MODIFIED
                     || type == ProviderType.DATE_CURRENT) {
-
+                openDateInput();
             } else if (type == ProviderType.CUSTOM_TEXT) {
                 openTextInput();
-            } else {
-                selectedProviderTypeItems.add(new ProviderArgPair(type, null));
             }
+            selectedProviderTypeItems.add(new ProviderArgPair(type, null));
         }
     }
 
     private void openTextInput() {
         try {
             loadView("/com/fenrir/filesorter/controllers/editor/string/input/TextInputView.fxml");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void openDateInput() {
+        try {
+            loadView("/com/fenrir/filesorter/controllers/editor/string/input/DateInputView.fxml");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -101,8 +109,8 @@ public abstract class StringRuleBuilderController {
 
     public void receiveArgument(String arg, ProviderType type) {
         if (arg != null && !arg.isBlank()) {
-            ProviderArgPair pair = new ProviderArgPair(type, arg);
-            selectedProviderTypeItems.add(pair);
+            selectedProviderTypeItems.get(selectedProviderTypeItems.size() - 1)
+                    .setArgs(arg);
         }
     }
 
@@ -207,7 +215,7 @@ public abstract class StringRuleBuilderController {
 
     public static class ProviderArgPair {
         private final ProviderType providerType;
-        private final String args;
+        private String args;
 
         public ProviderArgPair(ProviderType providerType, String args) {
             this.providerType = providerType;
@@ -220,6 +228,10 @@ public abstract class StringRuleBuilderController {
 
         public Optional<String> getArgs() {
             return Optional.ofNullable(args);
+        }
+
+        public void setArgs(String args) {
+            this.args = args;
         }
     }
 }
