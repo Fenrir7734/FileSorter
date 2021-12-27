@@ -1,54 +1,54 @@
 package com.fenrir.filesorter.model.enums;
 
 public enum DatePatternType {
-    YEAR("YYYY"), YEAR_TWO_DIGIT("YY"),
+    YEAR("Y", "yyyy", "Year (1994)"),
+    YEAR_SHORT("y", "yy", "Year (00-99)"),
+    QUARTER_OF_YEAR("Q", "qqq", "Quarter of Year (Q1-Q4)"),
+    QUARTER_OF_YEAR_SHORT("q", "q", "Quarter of year (1-3)"),
+    QUARTER_OF_YEAR_NAME("R", "qqqq", "Quarter of year (3rd quarter)"),
+    MONTH("M", "MM", "Month (1-12)"),
+    MONTH_NAME("N", "mmmm", "Month (July)"),
+    MONT_NAME_SHORT("n", "mmm", "Month (Jul)"),
+    WEEK_OF_MONTH("W", "WW", "Week of month (01-05)"),
+    DAY_OF_YEAR("E", "DDD", "Day (001-366)"),
+    DAY_OF_MONTH("D", "dd", "Day (01-31)"),
+    DAY_OF_WEEK("F", "ee", "Day (01-07)"),
+    DAY_OF_WEEK_NAME("G", "EEEE", "Day (Friday)"),
+    DAY_OF_WEEK_NAME_SHORT("g", "EEE", "Day (Fri)"),
+    HOUR_OF_DAY("H", "HH", "Hour (00-23)"),
+    HOUR_OF_DAY_AM_PM("I", "hha", "Hour (0-12AM/PM)"),
+    MINUTE_OF_HOUR("m", "mm", "Minute (00-59)"),
+    SECOND_OF_MINUTE("s", "ss", "Second (00-59)");
 
-    MONTH_IN_YEAR("M"), MONTH_IN_YEAR_0("MM"), MONTH_NAME_ABBREVIATION("MMM"),
-    MONTH_NAME("MMMM"),
-
-    WEEK_IN_MONTH("W"), WEEK_IN_MONTH_0("WW"), WEEK_IN_YEAR("w"), WEEK_IN_YEAR_0("ww"),
-
-    DAY_IN_MONTH("d"), DAY_IN_MONTH_0("dd"), DAY_IN_YEAR("D"), DAY_IN_YEAR_0("DDD"),
-    DAY_NAME_ABBREVIATION("E"), DAY_NAME("EEEE"),
-
-    HOUR("H"), HOUR_0("HH"), MINUTE("m"), MINUTE_0("mm"), SECOND("s"),
-    SECOND_0("ss");
-
+    private final String token;
     private final String pattern;
+    private final String name;
 
-    DatePatternType(String pattern) {
+    DatePatternType(String token, String pattern, String name) {
+        this.token = token;
         this.pattern = pattern;
+        this.name = name;
     }
 
-    public static DatePatternType getType(String token) {
-        return switch (token) {
-            case "YYYY" -> YEAR;
-            case "YY" -> YEAR_TWO_DIGIT;
-            case "M" -> MONTH_IN_YEAR;
-            case "0M" -> MONTH_IN_YEAR_0;
-            case "MM" -> MONTH_NAME_ABBREVIATION;
-            case "MMM" -> MONTH_NAME;
-            case "W" -> WEEK_IN_MONTH;
-            case "0W" -> WEEK_IN_MONTH_0;
-            case "WW" -> WEEK_IN_YEAR;
-            case "0WW" -> WEEK_IN_YEAR_0;
-            case "D" -> DAY_IN_MONTH;
-            case "0D" -> DAY_IN_MONTH_0;
-            case "DD" -> DAY_IN_YEAR;
-            case "0DD" -> DAY_IN_YEAR_0;
-            case "DDD" -> DAY_NAME_ABBREVIATION;
-            case "DDDD" -> DAY_NAME;
-            case "HH" -> HOUR;
-            case "0HH" -> HOUR_0;
-            case "mm" -> MINUTE;
-            case "0mm" -> MINUTE_0;
-            case "ss" -> SECOND;
-            case "0ss" -> SECOND_0;
-            default -> null;
-        };
+    public String getToken() {
+        return token;
     }
 
     public String getPattern() {
         return pattern;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public static DatePatternType getType(String token) {
+        DatePatternType[] types = DatePatternType.values();
+        for (DatePatternType type: types) {
+            if (token.equals(type.getToken())) {
+                return type;
+            }
+        }
+        return null;
     }
 }

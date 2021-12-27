@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DateTokenTypeTest {
     @Test
     public void getTypeShouldReturnDatePatternType() {
-        DatePatternType patternType = DatePatternType.getType("YYYY");
+        DatePatternType patternType = DatePatternType.getType("Y");
         assertEquals(DatePatternType.YEAR, patternType);
     }
 
@@ -20,6 +20,6 @@ class DateTokenTypeTest {
     @Test
     public void getPatternShouldReturnPattern() {
         String pattern = DatePatternType.YEAR.getPattern();
-        assertEquals("YYYY", pattern);
+        assertEquals("yyyy", pattern);
     }
 }
