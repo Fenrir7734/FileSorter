@@ -103,7 +103,7 @@ class RenameRuleParserTest {
                 () -> parser.resolveRule(rule),
                 "Invalid date format"
         );
-        assertEquals("INVALID", exception.getArg());
+        assertEquals(" INVALID", exception.getArg());
         assertEquals("DAC", exception.getToken());
         assertEquals(rule, exception.getRule());
     }

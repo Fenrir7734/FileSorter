@@ -115,7 +115,7 @@ public class RuleTest {
 
         Token token = iterator.next();
         assertEquals("<", token.symbol());
-        assertEquals(List.of("12k", "54M"), token.args());
+        assertEquals(List.of("12k", " ", "54M"), token.args());
 
         assertFalse(iterator.hasNext());
     }

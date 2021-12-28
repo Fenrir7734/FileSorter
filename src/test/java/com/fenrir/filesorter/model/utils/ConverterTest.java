@@ -24,21 +24,13 @@ class ConverterTest {
     }
 
     @Test
-    public void convertToPositiveIntegerShouldReturnListOfIntegersForNumberWithSpaceAtTheBeginning()
-            throws ArgumentFormatException {
-        List<String> list = List.of("123 ", " 1920", "456");
-        List<Integer> actualResult = Converter.convertToPositiveInteger(list);
-        List<Integer> expectedResult = List.of(123, 1920, 456);
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
-    public void convertToPositiveIntegerShouldReturnListOfIntegersForNumberWithSpaceAtTheEnd()
-            throws ArgumentFormatException {
-        List<String> list = List.of("123 ", "1920 ", "456");
-        List<Integer> actualResult = Converter.convertToPositiveInteger(list);
-        List<Integer> expectedResult = List.of(123, 1920, 456);
-        assertEquals(expectedResult, actualResult);
+    public void convertToPositiveIntegerShouldThrowExceptionForGivenInputWithStringContainingWhiteSpace() {
+        List<String> list = List.of("123", " 1920", "456");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToPositiveInteger(list)
+        );
+        assertEquals(" 1920", exception.getArg());
     }
 
     @Test
@@ -49,7 +41,7 @@ class ConverterTest {
     }
 
     @Test
-    public void convertToPositiveIntegerShouldThrowArgumentFormatExceptionForNegativeNumber() throws ArgumentFormatException {
+    public void convertToPositiveIntegerShouldThrowArgumentFormatExceptionForNegativeNumber() {
         List<String> list = List.of("123", "-456", "789");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
@@ -127,7 +119,7 @@ class ConverterTest {
 
     @Test
     public void convertToPositiveIntegerShouldThrowArgumentFormatExceptionForNumberGreaterThanIntegerMaxValue() {
-        String greaterThanIntegerMax = String.valueOf(Integer.MAX_VALUE) + "99";
+        String greaterThanIntegerMax = Integer.MAX_VALUE + "99";
         List<String> list = List.of("123", greaterThanIntegerMax, "456");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
@@ -165,6 +157,30 @@ class ConverterTest {
                 "Incorrect date format."
         );
         String expectedArgument = "2020:04:15";
+        assertEquals(expectedArgument, exception.getArg());
+    }
+
+    @Test
+    public void convertToDateShouldThrowExceptionForInputWithStringContainingWhiteSpace() {
+        List<String> list = List.of("2019-02-09", "2020-04-15", "2021-05-25 ");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToDate(list),
+                "Incorrect date format."
+        );
+        String expectedArgument = "2021-05-25 ";
+        assertEquals(expectedArgument, exception.getArg());
+    }
+
+    @Test
+    public void convertToDateShouldThrowExceptionForInputWithStringContainingWhiteBlankString() {
+        List<String> list = List.of("2019-02-09", "2020-04-15", " ");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToDate(list),
+                "Incorrect date format."
+        );
+        String expectedArgument = " ";
         assertEquals(expectedArgument, exception.getArg());
     }
 
@@ -221,6 +237,34 @@ class ConverterTest {
     }
 
     @Test
+    public void convertToDimensionShouldThrowExceptionForInputWithStringContainingWhiteSpace() {
+        List<String> list = List.of("320x480", "640x720", " 1920x1080");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToDimension(list),
+                "Incorrect dimension format."
+        );
+        String expectedArgument = " 1920x1080";
+        String expectedToken = "DIM";
+        assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
+    }
+
+    @Test
+    public void convertToDimensionShouldThrowExceptionForInputWithBlankString() {
+        List<String> list = List.of("320x480", " ", "1920x1080");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToDimension(list),
+                "Incorrect dimension format."
+        );
+        String expectedArgument = " ";
+        String expectedToken = "DIM";
+        assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
+    }
+
+    @Test
     public void convertToBytesShouldReturnListOfLongForValidInput() throws ArgumentFormatException {
         List<String> list = List.of("30", "5M", "4G");
         List<Long> actualResult = Converter.convertToBytes(list);
@@ -254,13 +298,41 @@ class ConverterTest {
     }
     @Test
     public void convertToBytesShouldThrowExceptionForInvalidInputWithInvalidString() {
-        List<String> list = List.of("30", "8P", "abc");
+        List<String> list = List.of("30", "8G", "abc");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> Converter.convertToBytes(list),
                 "Incorrect size"
         );
         String expectedArgument = "abc";
+        String expectedToken = "FIS";
+        assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
+    }
+
+    @Test
+    public void convertToBytesShouldThrowExceptionForInputWithStringContainingWhiteSpace() {
+        List<String> list = List.of("30", " 8G", "5k");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToBytes(list),
+                "Incorrect size"
+        );
+        String expectedArgument = " 8G";
+        String expectedToken = "FIS";
+        assertEquals(expectedArgument, exception.getArg());
+        assertEquals(expectedToken, exception.getToken());
+    }
+
+    @Test
+    public void convertToBytesShouldThrowExceptionForInputWithBlankString() {
+        List<String> list = List.of("30", " ", "5k");
+        ArgumentFormatException exception = assertThrows(
+                ArgumentFormatException.class,
+                () -> Converter.convertToBytes(list),
+                "Incorrect size"
+        );
+        String expectedArgument = " ";
         String expectedToken = "FIS";
         assertEquals(expectedArgument, exception.getArg());
         assertEquals(expectedToken, exception.getToken());

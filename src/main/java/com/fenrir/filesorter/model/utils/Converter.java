@@ -36,13 +36,14 @@ public class Converter {
     }
 
     private static boolean isPositiveInteger(String str) {
-        if (str == null) {
+        if (str == null || str.isBlank()) {
             return false;
         }
-        str = str.trim();
+
         if (!str.matches("\\d+")) {
             return false;
         }
+
         String max = String.valueOf(Integer.MAX_VALUE);
         BigInteger integerMaxValue = new BigInteger(max);
         BigInteger convertedNumber = new BigInteger(str);
@@ -100,12 +101,20 @@ public class Converter {
         List<Long> sizes = new ArrayList<>();
 
         for (String arg : args) {
-            char postfix = getPostfix(arg);
-            arg = checkIfNumber(postfix) ? arg : arg.substring(0, arg.length() - 1);
-            long sizeInBytes = getSize(Long.parseLong(arg), postfix);
-            sizes.add(sizeInBytes);
+            if (isValidSizeFormat(arg)) {
+                char postfix = getPostfix(arg);
+                arg = checkIfNumber(postfix) ? arg : arg.substring(0, arg.length() - 1);
+                long sizeInBytes = getSize(Long.parseLong(arg), postfix);
+                sizes.add(sizeInBytes);
+            } else {
+                throw new ArgumentFormatException("Incorrect size format.", "FIS", arg);
+            }
         }
         return sizes;
+    }
+
+    private static boolean isValidSizeFormat(String arg) {
+        return arg.matches("^\\d+[kMGT]?$");
     }
 
     private static long getSize(long size, char postfix) {

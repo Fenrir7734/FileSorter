@@ -52,7 +52,6 @@ public class Rule {
         String args = token.substring(index);
         List<String> argsList = List.of(args.split(","));
         argsList = argsList.stream()
-                .map(String::trim)
                 .filter(arg -> arg.length() != 0)
                 .collect(Collectors.toList());
         return argsList.isEmpty() ? null : argsList;

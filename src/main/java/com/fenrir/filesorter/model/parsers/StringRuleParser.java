@@ -63,7 +63,7 @@ public abstract class StringRuleParser {
             throw new TokenFormatException("Expected zero arguments", token.symbol());
         }
         if (number == ArgumentNumber.SINGLE && !checkIfOnlyOneArg(args)) {
-            throw new TokenFormatException("Expected only one argument", token.symbol());
+            throw new TokenFormatException("Expected one argument", token.symbol());
         }
         if (number == ArgumentNumber.MULTIPLE && !checkIfAtLeastOne(args)) {
             throw new TokenFormatException("Expected at least one argument.", token.symbol());

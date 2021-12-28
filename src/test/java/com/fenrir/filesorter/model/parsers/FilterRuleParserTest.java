@@ -138,7 +138,7 @@ class FilterRuleParserTest {
 
     @Test
     public void shouldThrowTokenFormatExceptionWhenSingleArgumentOperatorContainsMoreThanOneArgument() throws ExpressionFormatException {
-        Rule rule = new Rule("%(INC)%(FIS)%(<:12k, 15M)");
+        Rule rule = new Rule("%(INC)%(FIS)%(<:12k,15M)");
         TokenFormatException exception = assertThrows(
                 TokenFormatException.class,
                 () -> parser.resolveRule(rule),
@@ -162,7 +162,7 @@ class FilterRuleParserTest {
 
     @Test
     public void shouldThrowArgumentFormatExceptionWhenGivenInvalidArguments() throws ExpressionFormatException {
-        Rule rule = new Rule("%(INC)%(FIS)%(==:12k, 54M, 23F)");
+        Rule rule = new Rule("%(INC)%(FIS)%(==:12k,54M,23F)");
         ArgumentFormatException exception = assertThrows(
                 ArgumentFormatException.class,
                 () -> parser.resolveRule(rule),

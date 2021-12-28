@@ -103,7 +103,7 @@ class SortRuleParserTest {
                 () -> parser.resolveRule(rule),
                 "Invalid date format"
         );
-        assertEquals("INVALID", exception.getArg());
+        assertEquals(" INVALID", exception.getArg());
         assertEquals(rule, exception.getRule());
     }
 
