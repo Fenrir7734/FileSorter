@@ -26,8 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public abstract class StringRuleBuilderController {
-    @FXML
-    private ListView<ProviderType> providerListView;
+    @FXML private ListView<ProviderType> providerListView;
     @FXML private ListView<ProviderArgPair> selectedProvidersListView;
 
     private final ObservableList<ProviderType> providerTypeItems = FXCollections.observableArrayList();
