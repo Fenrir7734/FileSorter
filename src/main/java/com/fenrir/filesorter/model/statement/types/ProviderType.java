@@ -108,7 +108,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    CATEGORY("CAT", "file inputType", NONE, new Scope[]{SORT, RENAME, FILTER}, ReturnType.EXACT_STRING, Category.FILE_INFO) {
+    CATEGORY("CAT", "file category", NONE, new Scope[]{SORT, RENAME, FILTER}, ReturnType.EXACT_STRING, Category.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             return new FileCategoryProvider(null);
