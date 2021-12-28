@@ -25,9 +25,7 @@ import java.nio.file.attribute.FileTime;
 public class FileData {
     private static final Logger logger = LoggerFactory.getLogger(FileData.class);
 
-    private final Path sourcePath;
-    private Path targetPath;
-    private long count;
+    private FilePath filePath;
 
     private final String fileName;
     private final String extension;
@@ -48,11 +46,10 @@ public class FileData {
 
     public FileData(Path path) throws IOException {
         this.isDirectory = Files.isDirectory(path);
-        this.sourcePath = path;
-        this.targetPath = null;
+        filePath = FilePath.of(path);
         this.extension = extractExtensionFromFileName();
         this.fileName = extractFileName();
-        this.fileSize = sourcePath.toFile().length();
+        this.fileSize = filePath.source().toFile().length();
 
         BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
         this.creationTime = attributes.creationTime();
@@ -67,7 +64,7 @@ public class FileData {
 
     private String extractExtensionFromFileName() {
         if (!isDirectory) {
-            String fileName = sourcePath.getFileName().toString();
+            String fileName = filePath.source().getFileName().toString();
             int i = fileName.lastIndexOf(".");
             if (i != -1) {
                 return fileName.substring(i + 1).trim();
@@ -77,7 +74,7 @@ public class FileData {
     }
 
     private String extractFileName() {
-        String fileName = sourcePath.getFileName().toString();
+        String fileName = filePath.source().getFileName().toString();
         if (hasExtension()) {
             int extensionIndex = fileName.lastIndexOf(extension);
             fileName = fileName.substring(0, extensionIndex - 1);
@@ -86,39 +83,37 @@ public class FileData {
     }
 
     public Path resolveTargetPath() {
-        if (count <= 0 || isDirectory) {
-            return targetPath;
+        if (isDirectory) {
+            return filePath.target();
         }
+        filePath.resolveTargetPath();
+        return filePath.resolvedTargetPath();
+    }
 
-        String pathStr = targetPath.getFileName().toString();
-        String toInsert = String.format(" (%d)", count);
-        int extensionIndex = pathStr.indexOf(".");
-
-        if (extensionIndex != -1) {
-            pathStr = new StringBuilder(pathStr).insert(extensionIndex, toInsert)
-                    .toString();
-        } else {
-            pathStr += toInsert;
-        }
-        return targetPath.getParent().resolve(Path.of(pathStr));
+    public Path getResolvedTargetPath() {
+        return filePath.resolvedTargetPath();
     }
 
     public Path getSourcePath() {
-        return sourcePath;
+        return filePath.source();
     }
 
     public Path getTargetPath() {
-        return targetPath;
+        return filePath.target();
+    }
+
+    public FilePath getFilePath() {
+        return filePath;
     }
 
     public String getSourceParentDirectoryName() {
-        return sourcePath.getParent()
+        return filePath.source().getParent()
                 .getFileName()
                 .toString();
     }
 
     public Path getSourceParentDirectoryPath() {
-        return sourcePath.getParent();
+        return filePath.source().getParent();
     }
 
     public String getFileName() {
@@ -206,7 +201,7 @@ public class FileData {
     }
 
     private String getMediaType() {
-        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(sourcePath.toFile()))) {
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(filePath.source().toFile()))) {
             Detector detector = new DefaultDetector();
             Metadata metadata = new Metadata();
 
@@ -246,7 +241,7 @@ public class FileData {
 
     public void readDimensionFromImage() {
         try {
-            ImageInfo info = Imaging.getImageInfo(sourcePath.toFile());
+            ImageInfo info = Imaging.getImageInfo(filePath.source().toFile());
             int width = info.getWidth();
             int height = info.getHeight();
             dimension = Dimension.of(width, height);
@@ -274,8 +269,7 @@ public class FileData {
     }
 
     public void setTargetPath(Path targetPath, long count) {
-        this.targetPath = targetPath;
-        this.count = count;
+        filePath.setTarget(targetPath, count);
     }
 
     public void setIncluded(boolean included) {
@@ -284,9 +278,6 @@ public class FileData {
 
     @Override
     public String toString() {
-        return "FileData{" +
-                "sourcePath=" + sourcePath +
-                ", targetPath=" + targetPath +
-                '}';
+        return filePath.toString();
     }
 }

@@ -5,17 +5,29 @@ import com.fenrir.filesorter.controllers.editor.string.rename.RenameRuleEditorCo
 import com.fenrir.filesorter.controllers.editor.string.sort.SortRuleEditorController;
 import com.fenrir.filesorter.controllers.editor.filter.FilterRuleEditorController;
 import com.fenrir.filesorter.controllers.main.RuleTabController;
+import com.fenrir.filesorter.controllers.main.SortTabController;
 import com.fenrir.filesorter.controllers.save.SaveRuleGroupController;
+import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
+import javafx.util.Pair;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public class ControllerMediator {
     private static ControllerMediator instance;
 
+    private SortTabController sortTabController;
     private RuleTabController ruleTabController;
     private StringRuleEditorController stringRuleEditorController;
     private FilterRuleEditorController filterRuleEditorController;
     private SaveRuleGroupController saveRuleGroupController;
+    private BackupHistoryController backupHistoryController;
+
+    public void registerSortTabController(SortTabController controller) {
+        this.sortTabController = controller;
+    }
 
     public void registerRuleTabController(RuleTabController controller) {
         this.ruleTabController = controller;
@@ -31,6 +43,10 @@ public class ControllerMediator {
 
     public void registerSaveRuleGroupController(SaveRuleGroupController controller) {
         this.saveRuleGroupController = controller;
+    }
+
+    public void registerBackupHistoryController(BackupHistoryController controller) {
+        this.backupHistoryController = controller;
     }
 
     public void sendReadyRenameRule(Rule rule) {
@@ -63,6 +79,10 @@ public class ControllerMediator {
 
     public void sendRuleGroupFromLoad(String name, RuleGroup ruleGroup) {
         ruleTabController.receiveRuleGroup(name, ruleGroup);
+    }
+
+    public void sendBackupPathList(List<FilePath> list) {
+        sortTabController.receiveBackup(list);
     }
 
     private ControllerMediator() { }

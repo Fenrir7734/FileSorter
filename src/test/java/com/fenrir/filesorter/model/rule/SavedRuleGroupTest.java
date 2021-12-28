@@ -33,18 +33,6 @@ class SavedRuleGroupTest {
     }
 
     @Test
-    public void getRuleGroupNamesShouldReturnEmptyListIfNoRulesHaveBeenWritten() throws IOException {
-        JSONObject root = new JSONObject();
-        filePath = tempDir.resolve("test.json");
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
-            writer.write(root.toString(4));
-        }
-
-        SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
-        assertTrue(savedRuleGroup.getRuleGroupNames().isEmpty());
-    }
-
-    @Test
     public void constructorShouldThrowJSONExceptionForInvalidFileContent() throws IOException {
         filePath = tempDir.resolve("test.json");
         File file = new File(filePath.toString());
@@ -54,6 +42,18 @@ class SavedRuleGroupTest {
                 JSONException.class,
                 () -> new SavedRuleGroup(filePath.toString())
         );
+    }
+
+    @Test
+    public void getRuleGroupNamesShouldReturnEmptyListIfNoRulesHaveBeenWritten() throws IOException {
+        JSONObject root = new JSONObject();
+        filePath = tempDir.resolve("test.json");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath.toString()))) {
+            writer.write(root.toString(4));
+        }
+
+        SavedRuleGroup savedRuleGroup = new SavedRuleGroup(filePath.toString());
+        assertTrue(savedRuleGroup.getRuleGroupNames().isEmpty());
     }
 
     @Test
