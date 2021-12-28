@@ -7,7 +7,7 @@ public class InputControllerMediator {
         this.renameRuleBuilderController = controller;
     }
 
-    public void sendArgument(String arg) {
-        renameRuleBuilderController.receiveArgument(arg);
+    public void sendProviderData(StringRuleBuilderController.ProviderArgPair pair) {
+        renameRuleBuilderController.receiveArgument(pair);
     }
 }

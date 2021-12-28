@@ -4,6 +4,7 @@ import com.fenrir.filesorter.model.enums.DatePatternType;
 import com.fenrir.filesorter.model.parsers.DateParser;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -94,9 +95,15 @@ public class DateInputController extends StringArgumentInputController {
 
     @Override
     public void confirm() {
-        String pattern = dateParser.resolveDatePattern(inputTextField.getText());
-        super.sendArguments(pattern);
-        close();
+        String expression = inputTextField.getText();
+        if (expression != null && !expression.isBlank()) {
+            String pattern = dateParser.resolveDatePattern(inputTextField.getText());
+            super.sendArguments(pattern);
+            close();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "You must enter expression before confirming");
+            alert.showAndWait();
+        }
     }
 
     @Override

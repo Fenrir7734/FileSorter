@@ -62,56 +62,63 @@ public abstract class StringRuleBuilderController {
 
     private void onProviderClicked(MouseEvent event, ProviderType type) {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            ProviderArgPair pair = new ProviderArgPair(type, null);
             if (type == ProviderType.DATE_CREATED
                     || type == ProviderType.DATE_ACCESSED
                     || type == ProviderType.DATE_MODIFIED
                     || type == ProviderType.DATE_CURRENT) {
-                openDateInput();
+                openDateInput(pair);
             } else if (type == ProviderType.CUSTOM_TEXT) {
-                openTextInput();
+                openTextInput(pair);
+            } else {
+                selectedProviderTypeItems.add(pair);
             }
-            selectedProviderTypeItems.add(new ProviderArgPair(type, null));
         }
     }
 
-    private void openTextInput() {
+    private void openTextInput(ProviderArgPair pair) {
         try {
-            loadView("/com/fenrir/filesorter/controllers/editor/string/input/TextInputView.fxml");
+            StringArgumentInputController controller = loadView(
+                    "/com/fenrir/filesorter/controllers/editor/string/input/TextInputView.fxml"
+            );
+            controller.setInputControllerMediator(inputControllerMediator);
+            controller.setProviderArgPair(pair);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void openDateInput() {
+    private void openDateInput(ProviderArgPair pair) {
         try {
-            loadView("/com/fenrir/filesorter/controllers/editor/string/input/DateInputView.fxml");
+            StringArgumentInputController controller = loadView(
+                    "/com/fenrir/filesorter/controllers/editor/string/input/DateInputView.fxml"
+            );
+            controller.setInputControllerMediator(inputControllerMediator);
+            controller.setProviderArgPair(pair);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void loadView(String name) throws IOException {
+    private StringArgumentInputController loadView(String name) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 Objects.requireNonNull(getClass().getResource(name))
         );
         Parent parent = loader.load();
         StringArgumentInputController controller = loader.getController();
-        controller.setInputControllerMediator(inputControllerMediator);
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+        return controller;
     }
 
-    public void receiveArgument(String arg) {
-        if (arg != null && !arg.isBlank()) {
-            selectedProviderTypeItems.get(selectedProviderTypeItems.size() - 1)
-                    .setArgs(arg);
-        }
+    public void receiveArgument(ProviderArgPair pair) {
+        selectedProviderTypeItems.add(pair);
     }
 
     private void onDeleteButtonClick(ProviderArgPair pair) {
