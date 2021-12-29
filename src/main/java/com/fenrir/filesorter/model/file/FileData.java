@@ -154,7 +154,9 @@ public class FileData {
     }
 
     private boolean isUnknownType(MimeType mimeType) {
-        return mimeType.toString().equals("application/octet-stream");
+        return mimeType.toString().equals("application/octet-stream")
+                || mimeType.getExtension() == null
+                || mimeType.getExtension().isBlank();
     }
 
     public boolean hasExtension() {
@@ -245,10 +247,8 @@ public class FileData {
             int width = info.getWidth();
             int height = info.getHeight();
             dimension = Dimension.of(width, height);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } catch (ImageReadException e) {
-            logger.warn(e.getMessage());
+        } catch (IOException | ImageReadException e) {
+            logger.warn(e.getMessage() + " " + getSourcePath());
         }
     }
 
