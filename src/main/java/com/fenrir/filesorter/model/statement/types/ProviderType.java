@@ -104,7 +104,7 @@ public enum ProviderType {
 
         @Override
         public PredicateOperands<? extends Comparable<?>> getAsOperands(List<String> args) {
-            Provider<String> operand = new FileNameProvider(null);
+            Provider<String> operand = new FileExtensionProvider(null);
             return new PredicateOperands<>(operand, args);
         }
     },
