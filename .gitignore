@@ -26,3 +26,9 @@ buildNumber.properties
 
 # Testing package
 src/main/java/com/fenrir/filesorter/test
+
+# Backup directory content
+src/main/resources/backup/*
+
+# Saved rule groups
+src/main/resources/rule_group.json
