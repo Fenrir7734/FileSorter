@@ -15,6 +15,7 @@ public class FileExtensionProvider implements Provider<String> {
 
     @Override
     public String getAsString(FileData fileData) throws IOException {
-        return get(fileData);
+        String extension = get(fileData);
+        return extension.isBlank() ? "Unknown" : extension;
     }
 }

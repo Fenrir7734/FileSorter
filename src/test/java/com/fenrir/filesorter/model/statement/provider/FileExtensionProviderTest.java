@@ -51,12 +51,12 @@ class FileExtensionProviderTest {
     }
 
     @Test
-    public void getAsStringShouldReturnEmptyStringForFileWithoutExtension() throws IOException {
+    public void getAsStringShouldReturnUnknownForFileWithoutExtension() throws IOException {
         Path path = FileUtils.createFile(tempDir, "testfile");
         FileData fileData = new FileData(path);
         Provider<String> provider = new FileExtensionProvider(null);
         String extension = provider.getAsString(fileData);
-        assertEquals("", extension);
+        assertEquals("Unknown", extension);
     }
 
     @Test
