@@ -10,33 +10,42 @@ import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.log.LogAppender;
+import com.fenrir.filesorter.model.rule.Rule;
+import com.fenrir.filesorter.model.rule.RuleGroup;
+import com.fenrir.filesorter.model.statement.types.ActionType;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class SortTabController {
     private static final Logger logger = LoggerFactory.getLogger(SortTabController.class);
 
+    @FXML private ComboBox<Sorter.Action> actionComboBox;
     @FXML private TextField targetPathTextField;
     @FXML private ProgressIndicator progressIndicator;
     @FXML private Label progressLabel;
+
+    private final ObservableList<Sorter.Action> actionTypeItems = FXCollections.observableArrayList();
+    private final Callback<ListView<Sorter.Action>, ListCell<Sorter.Action>> actionCallback = createActionCellFactory();
 
     private Configuration configuration;
 
@@ -44,7 +53,22 @@ public class SortTabController {
     public void initialize() {
         ControllerMediator.getInstance().registerSortTabController(this);
         LogAppender.setPrinter(new GUILogPrinter(progressLabel));
+        initActionChoiceBox();
         setProgressIndicatorTo0();
+    }
+
+    private void initActionChoiceBox() {
+        actionTypeItems.addAll(Sorter.Action.values());
+        actionComboBox.setItems(FXCollections.observableList(actionTypeItems));
+        actionComboBox.setButtonCell(actionCallback.call(null));
+        actionComboBox.setCellFactory(actionCallback);
+        actionComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(((observableValue, oldValue, newValue) -> onActionChanged(newValue)));
+    }
+
+    private void onActionChanged(Sorter.Action newValue) {
+        configuration.setSortAction(newValue);
     }
 
     private void setProgressIndicatorToIndeterminate() {
@@ -97,7 +121,7 @@ public class SortTabController {
                             configuration.getRuleGroups()
                     );
                     List<FilePath> filePaths = processor.process();
-                    Sorter sorter = new Sorter(filePaths);
+                    Sorter sorter = new Sorter(filePaths, configuration.getSortAction());
                     sorter.sort();
                     Platform.runLater(() -> setProgressIndicatorToDone());
                 } catch (TokenFormatException e) {
@@ -145,5 +169,25 @@ public class SortTabController {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    private Callback<ListView<Sorter.Action>, ListCell<Sorter.Action>> createActionCellFactory() {
+        return new Callback<>() {
+            @Override
+            public ListCell<Sorter.Action> call(ListView<Sorter.Action> o) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Sorter.Action type, boolean empty) {
+                        super.updateItem(type, empty);
+
+                        if (empty || type == null) {
+                            setText(null);
+                        } else {
+                            setText(type.getName());
+                        }
+                    }
+                };
+            }
+        };
     }
 }

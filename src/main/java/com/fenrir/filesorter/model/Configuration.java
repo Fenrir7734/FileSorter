@@ -18,6 +18,7 @@ public class Configuration {
     private Path targetRootDir;
     private final ObservableList<Path> sourcePaths = FXCollections.observableArrayList();
     private final ObservableList<Pair<String, RuleGroup>> namedRuleGroup = FXCollections.observableArrayList();
+    private Sorter.Action sortAction;
 
     public void setTargetRootDir(Path targetRootDir) {
         this.targetRootDir = targetRootDir;
@@ -55,6 +56,9 @@ public class Configuration {
         }
         if (!isAtLeastOneRuleSpecified()) {
             throw new SortConfigurationException("Not a single rule has been specified.");
+        }
+        if (sortAction == null) {
+            throw new SortConfigurationException("Sort action has not been specified");
         }
     }
 
@@ -106,5 +110,13 @@ public class Configuration {
                 .map(Pair::getValue)
                 .findFirst()
                 .get();
+    }
+
+    public Sorter.Action getSortAction() {
+        return sortAction;
+    }
+
+    public void setSortAction(Sorter.Action sortAction) {
+        this.sortAction = sortAction;
     }
 }

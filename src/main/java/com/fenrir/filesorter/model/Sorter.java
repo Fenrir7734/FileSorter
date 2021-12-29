@@ -83,7 +83,17 @@ public class Sorter {
     }
 
     public enum Action {
-        COPY,
-        MOVE
+        COPY("Copy"),
+        MOVE("Move");
+
+        private String name;
+
+        Action(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
