@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -15,30 +16,74 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 public class Sorter {
     private static final Logger logger = LoggerFactory.getLogger(Sorter.class);
 
-    private List<FilePath> filesToSort;
+    private final List<FilePath> filesToSort;
+    private final List<FilePath> sortedFiles;
+    private final Action action;
+
+    public Sorter(List<FilePath> filePaths, Action action) {
+        this.filesToSort = filePaths;;
+        this.sortedFiles = new ArrayList<>(filesToSort.size());
+        this.action = action;
+    }
 
     public Sorter(List<FilePath> filePaths) {
-        this.filesToSort = filePaths;
+        this(filePaths, Action.COPY);
     }
 
     public void sort() throws IOException {
-        for(FilePath paths: filesToSort) {
-            copyFile(paths);
+        if (action == Action.COPY) {
+            copyFiles();
+        } else {
+            moveFile();
         }
         logger.info("Sort complete");
     }
 
-    private Path copyFile(FilePath path) throws IOException {
-        Path sourcePath = path.source();
-        Path targetPath = path.resolvedTargetPath();
-        Path dirPath = targetPath.getParent();
+    private void copyFiles() throws IOException {
+        for(FilePath paths : filesToSort) {
+            Path sourcePath = paths.source();
+            Path targetPath = paths.resolvedTargetPath();
+            Path dirPath = targetPath.getParent();
+            createDirectoryIfNotExists(dirPath);
+            performCopyActionFor(sourcePath, targetPath);
+        }
+    }
 
+    private void moveFile() throws IOException {
+        for (FilePath paths: filesToSort) {
+            Path sourcePath = paths.source();
+            Path targetPath = paths.resolvedTargetPath();
+            Path dirPath = targetPath.getParent();
+            createDirectoryIfNotExists(dirPath);
+            performMoveActionFor(sourcePath, targetPath);
+        }
+    }
+
+    private void createDirectoryIfNotExists(Path dirPath) throws IOException {
         if (Files.notExists(dirPath)) {
             logger.info("Creating directory {}", dirPath.toAbsolutePath());
             Files.createDirectories(dirPath);
         }
+    }
 
+    private void performCopyActionFor(Path sourcePath, Path targetPath) throws IOException {
         logger.info("Copying file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
-        return Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
+        Path realTargetPath = Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
+        sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+    }
+
+    private void performMoveActionFor(Path sourcePath, Path targetPath) throws IOException {
+        logger.info("Moving file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
+        Path realTargetPath = Files.move(sourcePath, targetPath);
+        sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+    }
+
+    public List<FilePath> getSortedFiles() {
+        return sortedFiles;
+    }
+
+    public enum Action {
+        COPY,
+        MOVE
     }
 }
