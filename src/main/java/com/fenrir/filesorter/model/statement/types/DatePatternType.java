@@ -1,4 +1,4 @@
-package com.fenrir.filesorter.model.enums;
+package com.fenrir.filesorter.model.statement.types;
 
 public enum DatePatternType {
     YEAR("Y", "yyyy", "Year", "1994"),

@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.controllers.editor.string.sort;
 
 import com.fenrir.filesorter.controllers.editor.string.StringRuleBuilderController;
-import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.statement.types.enums.Scope;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.Token;

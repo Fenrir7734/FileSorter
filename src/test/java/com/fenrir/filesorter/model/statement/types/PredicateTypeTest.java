@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.model.statement.types;
 
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
-import com.fenrir.filesorter.model.enums.ReturnType;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.ReturnType;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.statement.predicate.*;
 import com.fenrir.filesorter.model.statement.provider.FileNameProvider;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.fenrir.filesorter.model.enums.ReturnType.*;
-import static com.fenrir.filesorter.model.enums.ReturnType.DATE;
+import static com.fenrir.filesorter.model.statement.types.enums.ReturnType.*;
+import static com.fenrir.filesorter.model.statement.types.enums.ReturnType.DATE;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PredicateTypeTest {

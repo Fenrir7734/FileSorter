@@ -2,9 +2,9 @@ package com.fenrir.filesorter.controllers.editor.filter;
 
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputController;
 import com.fenrir.filesorter.controllers.editor.filter.input.ArgumentInputFactory;
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
-import com.fenrir.filesorter.model.enums.ReturnType;
-import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.ReturnType;
+import com.fenrir.filesorter.model.statement.types.enums.Scope;
 import com.fenrir.filesorter.model.rule.Iterator;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.Token;

@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.model.parsers;
 
-import com.fenrir.filesorter.model.enums.DatePatternType;
+import com.fenrir.filesorter.model.statement.types.DatePatternType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

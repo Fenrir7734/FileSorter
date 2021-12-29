@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.model.parsers;
 
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
-import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.Scope;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.rule.Iterator;

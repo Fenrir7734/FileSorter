@@ -34,8 +34,8 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.model.utils to javafx.fxml;
     exports com.fenrir.filesorter.model.file;
     opens com.fenrir.filesorter.model.file to javafx.fxml;
-    exports com.fenrir.filesorter.model.enums;
-    opens com.fenrir.filesorter.model.enums to javafx.fxml;
+    exports com.fenrir.filesorter.model.statement.types.enums;
+    opens com.fenrir.filesorter.model.statement.types.enums to javafx.fxml;
     exports com.fenrir.filesorter.model.file.utils;
     opens com.fenrir.filesorter.model.file.utils to javafx.fxml;
     exports com.fenrir.filesorter.model.rule;
@@ -59,4 +59,6 @@ module com.fenrir.filesorter {
     opens com.fenrir.filesorter.controllers.editor.string to javafx.fxml;
     exports com.fenrir.filesorter.controllers.editor.string.input;
     opens com.fenrir.filesorter.controllers.editor.string.input to javafx.fxml;
+    exports com.fenrir.filesorter.model.statement.types;
+    opens com.fenrir.filesorter.model.statement.types to javafx.fxml;
 }

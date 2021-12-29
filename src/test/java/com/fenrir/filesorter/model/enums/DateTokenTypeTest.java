@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model.enums;
 
+import com.fenrir.filesorter.model.statement.types.DatePatternType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

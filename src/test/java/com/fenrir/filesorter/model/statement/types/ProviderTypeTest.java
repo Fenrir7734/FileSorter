@@ -1,9 +1,9 @@
 package com.fenrir.filesorter.model.statement.types;
 
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
-import com.fenrir.filesorter.model.enums.ReturnType;
-import com.fenrir.filesorter.model.enums.Category;
-import com.fenrir.filesorter.model.enums.Scope;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.ReturnType;
+import com.fenrir.filesorter.model.statement.types.enums.Category;
+import com.fenrir.filesorter.model.statement.types.enums.Scope;
 import com.fenrir.filesorter.model.exceptions.ArgumentFormatException;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.*;

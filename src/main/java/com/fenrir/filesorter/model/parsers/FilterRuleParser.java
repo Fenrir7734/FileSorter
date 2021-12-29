@@ -11,8 +11,8 @@ import com.fenrir.filesorter.model.statement.predicate.Predicate;
 import com.fenrir.filesorter.model.statement.types.ActionType;
 import com.fenrir.filesorter.model.statement.types.PredicateType;
 import com.fenrir.filesorter.model.statement.types.ProviderType;
-import com.fenrir.filesorter.model.enums.Scope;
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.Scope;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
 
 import java.util.List;
 

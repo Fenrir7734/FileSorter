@@ -1,6 +1,6 @@
 package com.fenrir.filesorter.controllers.editor.string.input;
 
-import com.fenrir.filesorter.model.enums.DatePatternType;
+import com.fenrir.filesorter.model.statement.types.DatePatternType;
 import com.fenrir.filesorter.model.parsers.DateParser;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;

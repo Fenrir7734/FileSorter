@@ -1,18 +1,18 @@
 package com.fenrir.filesorter.model.statement.types;
 
-import com.fenrir.filesorter.model.enums.ReturnType;
+import com.fenrir.filesorter.model.statement.types.enums.ReturnType;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.predicate.*;
-import com.fenrir.filesorter.model.enums.ArgumentNumber;
+import com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.fenrir.filesorter.model.enums.ArgumentNumber.MULTIPLE;
-import static com.fenrir.filesorter.model.enums.ArgumentNumber.SINGLE;
-import static com.fenrir.filesorter.model.enums.ReturnType.*;
+import static com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber.MULTIPLE;
+import static com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber.SINGLE;
+import static com.fenrir.filesorter.model.statement.types.enums.ReturnType.*;
 
 public enum PredicateType {
     EQUAL("==", "equal",  MULTIPLE, new ReturnType[]{NUMBER, STRING, EXACT_STRING, DATE}) {
