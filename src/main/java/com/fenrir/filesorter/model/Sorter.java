@@ -1,6 +1,5 @@
 package com.fenrir.filesorter.model;
 
-import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FilePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -17,29 +15,22 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 public class Sorter {
     private static final Logger logger = LoggerFactory.getLogger(Sorter.class);
 
-    private final Processor processor;
+    private List<FilePath> filesToSort;
 
-    public Sorter(Processor processor) {
-        this.processor = processor;
+    public Sorter(List<FilePath> filePaths) {
+        this.filesToSort = filePaths;
     }
 
     public void sort() throws IOException {
-        processor.process();
-        List<FileData> filesToSort = processor.getFileStructure();
-
-        for(FileData file: filesToSort) {
-            if (file.getTargetPath() != null
-                    && !file.isDirectory()
-                    && file.isIncluded()) {
-                Path newPath = copyFile(file);
-            }
+        for(FilePath paths: filesToSort) {
+            copyFile(paths);
         }
         logger.info("Sort complete");
     }
 
-    private Path copyFile(FileData file) throws IOException {
-        Path sourcePath = file.getSourcePath();
-        Path targetPath = file.resolveTargetPath();
+    private Path copyFile(FilePath path) throws IOException {
+        Path sourcePath = path.source();
+        Path targetPath = path.resolvedTargetPath();
         Path dirPath = targetPath.getParent();
 
         if (Files.notExists(dirPath)) {

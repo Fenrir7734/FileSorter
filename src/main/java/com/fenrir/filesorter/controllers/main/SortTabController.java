@@ -4,6 +4,7 @@ import com.fenrir.filesorter.controllers.ControllerMediator;
 import com.fenrir.filesorter.controllers.GUILogPrinter;
 import com.fenrir.filesorter.model.Configuration;
 import com.fenrir.filesorter.model.Processor;
+import com.fenrir.filesorter.model.Processor2;
 import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -76,22 +78,6 @@ public class SortTabController {
         progressIndicator.setStyle("-fx-padding: 0 0 -16 0");
     }
 
-    private void test() {
-        try {
-            configuration = new Configuration();
-            configuration.setTargetRootDir(Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test"));
-            configuration.addSourcePaths(List.of(Path.of("/home/fenrir/Documents/Test_environment/wallpapers")));
-            RuleGroup group = new RuleGroup();
-            group.setSortRule(new Rule("%(DIM)"));
-            group.setRenameRule(new Rule("%(FIX)"));
-            group.addFilterRule(new Rule("%(INC)%(FIN)%(NCO:HD)"));
-            //group.addFilterRule(new Rule("%(INC)%(DIN)%(==:test)"));
-            configuration.addNamedRuleGroup("aaa", group);
-        } catch (ExpressionFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     public void choiceTargetDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -106,33 +92,40 @@ public class SortTabController {
 
     @FXML
     public void sort() {
-        Task<Void> task = new Task<Void>() {
+        Task<Void> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
-
+            protected Void call() {
+                try {
+                    configuration.validate();
+                    Platform.runLater(() -> setProgressIndicatorToIndeterminate());
+                    Processor processor = new Processor(
+                            configuration.getSourcePaths(),
+                            configuration.getTargetRootDir(),
+                            configuration.getRuleGroups()
+                    );
+                    List<FilePath> filePaths = processor.process();
+                    Sorter sorter = new Sorter(filePaths);
+                    sorter.sort();
+                    Platform.runLater(() -> setProgressIndicatorToDone());
+                } catch (TokenFormatException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
+                    logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
+                } catch (ExpressionFormatException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
+                    logger.error("{} Rule: {}", e.getMessage(), e.getRule());
+                } catch (SortConfigurationException e) {
+                    Platform.runLater(() -> setProgressIndicatorTo0());
+                    logger.error("{}", e.getMessage());
+                } catch (IOException e) {
+                    logger.error("Failed IO operation: {}", e.getMessage());
+                } catch (Exception e) {
+                    logger.error("An unknown error has occurred: {}", e.getMessage());
+                    e.printStackTrace();
+                }
                 return null;
             }
         };
         new Thread(task).start();
-        try {
-            configuration.validate();
-            Platform.runLater(() -> setProgressIndicatorToIndeterminate());
-            Processor processor = new Processor(configuration);
-            Sorter sorter = new Sorter(processor);
-            sorter.sort();
-            Platform.runLater(() -> setProgressIndicatorToDone());
-        } catch (TokenFormatException e) {
-            Platform.runLater(() -> setProgressIndicatorTo0());
-            logger.error("{} Rule: {} Token: {}", e.getMessage(), e.getRule(), e.getToken());
-        } catch (ExpressionFormatException e) {
-            Platform.runLater(() -> setProgressIndicatorTo0());
-            logger.error("{} Rule: {}", e.getMessage(), e.getRule());
-        } catch (SortConfigurationException | IOException e) {
-            Platform.runLater(() -> setProgressIndicatorTo0());
-            logger.error("{}", e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

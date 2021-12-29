@@ -2,6 +2,7 @@ package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.file.FileData;
+import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
 import com.fenrir.filesorter.model.rule.RuleGroup;
@@ -13,70 +14,75 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Processor {
     private static final Logger logger = LoggerFactory.getLogger(Processor.class);
 
-    private final RuleGroupParser ruleParser;
-    private final Configuration configuration;
-    private List<StatementGroup> statementGroups;
-    private List<FileData> fileStructure;
+    private final Path targetPath;
+    private final List<StatementGroup> statementGroups;
+    private final List<FileData> fileToProcess;
+    private final List<FilePath> pathsOfProcessedFiles;
+    private final Map<Path, Long> targetPathCount;
 
-    public Processor(Configuration configuration) throws ExpressionFormatException, IOException {
-        this.ruleParser = new RuleGroupParser();
-        this.configuration = configuration;
-        this.fileStructure = new ArrayList<>();
-        parseRuleGroups();
-        mapFileStructure();
+    public Processor(List<Path> sourcePaths, Path targetPath, List<RuleGroup> ruleGroups)
+            throws ExpressionFormatException, IOException {
+        this.targetPath = targetPath;
+        this.statementGroups = new ArrayList<>();
+        this.fileToProcess = new LinkedList<>();
+        this.targetPathCount = new HashMap<>();
+        parseRuleGroup(ruleGroups);
+        mapFileStructure(sourcePaths);
+        this.pathsOfProcessedFiles = new ArrayList<>(this.fileToProcess.size());
     }
 
-    private void parseRuleGroups() throws ExpressionFormatException {
+    private void parseRuleGroup(List<RuleGroup> ruleGroups) throws ExpressionFormatException {
         logger.info("Parsing provided rule groups...");
-        List<RuleGroup> ruleGroups = configuration.getRuleGroups();
-        statementGroups = new ArrayList<>();
+        RuleGroupParser parser = new RuleGroupParser();
         for (RuleGroup ruleGroup: ruleGroups) {
-            StatementGroup statementGroup = ruleParser.parse(ruleGroup);
+            StatementGroup statementGroup = parser.parse(ruleGroup);
             statementGroups.add(statementGroup);
         }
     }
 
-    private void mapFileStructure() throws IOException {
+    private void mapFileStructure(List<Path> sourceRootPaths) throws IOException {
         logger.info("Mapping file structure...");
-        List<Path> sourceRootDir = configuration.getSourcePaths();
-        for (Path path: sourceRootDir) {
+        for (Path path: sourceRootPaths) {
             FileStructureMapper mapper = new FileStructureMapper(path);
-            fileStructure.addAll(mapper.map());
+            fileToProcess.addAll(mapper.map());
         }
+        fileToProcess.removeIf(FileData::isDirectory);
     }
 
-    public void process() throws IOException {
-        logger.info("Processing source files against provided rules...");
-        fileStructure.forEach(f -> f.setIncluded(false));
-        processStatementGroups();
-    }
-
-    private void processStatementGroups() throws IOException {
+    public List<FilePath> process() throws IOException {
         for (StatementGroup group: statementGroups) {
-            List<FileData> filteredFileStructure = filter(group.getFilterStatements());
-            createTargetPaths(filteredFileStructure, group.getSortStatement(), group.getRenameStatement());
+            List<FileData> includedFiles = filter(group.getFilterStatements());
+            createTargetPaths(includedFiles, group.getSortStatement(), group.getRenameStatement());
         }
+        return pathsOfProcessedFiles;
     }
 
     private List<FileData> filter(List<Predicate<? extends Comparable<?>>> filterStatements) {
-        List<FileData> filteredFileStructure = fileStructure.stream()
-                .filter(f -> !f.isIncluded())
-                .collect(Collectors.toList());
-        for (Predicate<?> predicate: filterStatements) {
-            filteredFileStructure = filteredFileStructure.stream()
-                    .filter(f -> test(predicate, f))
-                    .filter(f -> !f.isDirectory())
-                    .collect(Collectors.toList());
+        List<FileData> includedFiles = new LinkedList<>();
+        for (Iterator<FileData> iter = fileToProcess.iterator(); iter.hasNext(); ) {
+            FileData file = iter.next();
+            boolean included = shouldBeIncluded(file, filterStatements);
+            if (included) {
+                includedFiles.add(file);
+                iter.remove();
+                file.setIncluded(true);
+            }
         }
-        filteredFileStructure.forEach(f -> f.setIncluded(true));
-        return filteredFileStructure;
+        return includedFiles;
+    }
+
+    private boolean shouldBeIncluded(FileData fileData, List<Predicate<? extends Comparable<?>>> filterStatements) {
+        for (Predicate<?> predicate: filterStatements) {
+            if (!test(predicate, fileData)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean test(Predicate<?> predicate, FileData file) {
@@ -100,6 +106,8 @@ public class Processor {
             Path targetPath = path.resolve(name);
             long duplicatesCount = countDuplicate(targetPath);
             file.setTargetPath(targetPath, duplicatesCount);
+            file.resolveTargetPath();
+            pathsOfProcessedFiles.add(file.getFilePath());
         }
     }
 
@@ -110,7 +118,7 @@ public class Processor {
             builder.append(s);
         }
         Path path = Path.of(builder.toString());
-        return configuration.getTargetRootDir().resolve(path);
+        return targetPath.resolve(path);
     }
 
     private Path buildFileName(FileData file, List<Provider<?>> renameStatement) throws IOException {
@@ -123,16 +131,7 @@ public class Processor {
     }
 
     private long countDuplicate(Path targetPath) {
-        long count = 0;
-        for (FileData file: fileStructure) {
-            if (targetPath.equals(file.getTargetPath())) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public List<FileData> getFileStructure() {
-        return fileStructure;
+        targetPathCount.putIfAbsent(targetPath, -1L);
+        return targetPathCount.compute(targetPath, (k, v) -> v + 1);
     }
 }
