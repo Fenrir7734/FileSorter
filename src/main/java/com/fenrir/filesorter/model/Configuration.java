@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model;
 
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
+import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,8 +9,6 @@ import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +25,8 @@ public class Configuration {
 
     public void addSourcePaths(List<Path> paths) {
         paths.stream()
+                .map(FileData::normalizeFilePath)
+                .filter(Objects::nonNull)
                 .filter(p -> !sourcePaths.contains(p))
                 .forEach(sourcePaths::add);
     }

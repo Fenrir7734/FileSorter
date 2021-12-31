@@ -47,11 +47,17 @@ public class Processor {
 
     private void mapFileStructure(List<Path> sourceRootPaths) throws IOException {
         logger.info("Mapping file structure...");
+        Set<Path> paths = new HashSet<>();
         for (Path path: sourceRootPaths) {
             FileStructureMapper mapper = new FileStructureMapper(path);
-            fileToProcess.addAll(mapper.map());
+            paths.addAll(mapper.map());
         }
-        fileToProcess.removeIf(FileData::isDirectory);
+        for (Path path: paths) {
+            FileData fileData = new FileData(path);
+            if (!fileData.isDirectory()) {
+                fileToProcess.add(fileData);
+            }
+        }
     }
 
     public List<FilePath> process() throws IOException {

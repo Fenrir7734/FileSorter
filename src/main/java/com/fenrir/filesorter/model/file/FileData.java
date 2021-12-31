@@ -6,6 +6,7 @@ import com.fenrir.filesorter.model.file.utils.FilesCategory;
 import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.detect.DefaultDetector;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.metadata.Metadata;
@@ -279,5 +280,11 @@ public class FileData {
     @Override
     public String toString() {
         return filePath.toString();
+    }
+
+    public static Path normalizeFilePath(Path path) {
+        String pathStr = path.toAbsolutePath().toString();
+        pathStr = FilenameUtils.normalize(pathStr);
+        return pathStr != null ? Path.of(pathStr) : null;
     }
 }
