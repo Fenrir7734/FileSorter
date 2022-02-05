@@ -77,16 +77,16 @@ public class BackupManager {
         if (action == null) {
             throw new InvalidBackupException("The action type written to the read backup file could not be recognised");
         }
-        Deque<Path> dirPaths = mapJSONArrayToQueueOfPaths(dirPathsJSONArray);
+        Deque<Path> dirPaths = mapJSONArrayToStackOfPaths(dirPathsJSONArray);
         List<FilePath> filePaths = mapJSONArrayToListOfFilePaths(filePathsJSONArray);
         return new Backup(action, dirPaths, filePaths);
     }
 
-    private Deque<Path> mapJSONArrayToQueueOfPaths(JSONArray array) {
+    private Deque<Path> mapJSONArrayToStackOfPaths(JSONArray array) {
         Deque<Path> paths = new ArrayDeque<>();
         for (int i = 0; i < array.length(); i++) {
             Path dirPath = Path.of(array.getString(i));
-            paths.offerLast(dirPath);
+            paths.offerFirst(dirPath);
         }
         return paths;
     }

@@ -122,7 +122,7 @@ public class SortTabController {
                     );
                     List<FilePath> filePaths = processor.process();
                     Deque<Path> directoriesPaths = processor.getDirectoriesPaths();
-                    Sorter sorter = new Sorter(filePaths, configuration.getSortAction(), directoriesPaths);
+                    Sorter sorter = new Sorter(configuration.getSortAction(), directoriesPaths, filePaths);
                     sorter.sort();
                     Platform.runLater(() -> setProgressIndicatorToDone());
                 } catch (TokenFormatException e) {
@@ -165,7 +165,20 @@ public class SortTabController {
     }
 
     public void receiveBackup(Backup backup) {
-
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Sorter sorter = new Sorter(backup.action(), backup.dirTargetPaths(), backup.filePaths());
+                    sorter.restore();
+                } catch (IOException e) {
+                    logger.error("Failed IO operation: {}", e.getMessage());
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
     }
 
     public void setConfiguration(Configuration configuration) {
