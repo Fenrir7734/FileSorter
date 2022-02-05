@@ -1,5 +1,7 @@
 package com.fenrir.filesorter.model.file;
 
+import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.file.utils.Backup;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -154,16 +155,22 @@ class BackupManagerTest {
         }
 
         @Test
-        public void readBackupShouldReturnEmptyListIfNoPathHaveBeenWrittenToFile() throws IOException {
+        public void readBackupShouldReturnEmptyBackupObjectIfNoPathHaveBeenWrittenToFile() throws IOException {
             String backupFileName = "backupfile.json";
             Path backupFilePath = backupDirPath.resolve(backupFileName);
             new File(backupFilePath.toString()).createNewFile();
             try (PrintWriter writer = new PrintWriter(new FileWriter(backupFilePath.toString()))) {
-                writer.write("[]");
+                JSONObject object = new JSONObject()
+                        .put("action", "")
+                        .put("directories", new ArrayDeque<>())
+                        .put("files", new ArrayList<>());
+                writer.write(object.toString());
             }
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
-            List<FilePath> filePaths = backupManager.readBackup(backupFileName);
-            assertTrue(filePaths.isEmpty());
+            Backup backup = backupManager.readBackup(backupFileName);
+            assertNull(backup.action());
+            assertTrue(backup.dirTargetPaths().isEmpty());
+            assertTrue(backup.filePaths().isEmpty());
         }
 
         @Test
@@ -182,17 +189,22 @@ class BackupManagerTest {
         }
 
         @Test
-        public void makeBackupShouldCreateNewBackupFileForGivenEmptyListOfPaths() throws IOException {
+        public void makeBackupShouldCreateNewBackupFileForGivenEmptyCollections() throws IOException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
-            String backupFileName = backupManager.makeBackup(new ArrayList<>());
+            String backupFileName = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>());
             String backupFileContent = new String(Files.readAllBytes(backupDirPath.resolve(backupFileName)));
-            assertEquals("[]", backupFileContent);
+            JSONObject actualObject = new JSONObject(backupFileContent);
+            JSONObject expectedObject = new JSONObject()
+                    .put("action", Sorter.Action.COPY.getName())
+                    .put("directories", new ArrayDeque<>())
+                    .put("files", new ArrayList<>());
+            assertEquals(expectedObject.toString(), actualObject.toString());
         }
 
         @Test
         public void makeBackupShouldReturnNameOfCreatedFile() throws IOException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
-            String name = backupManager.makeBackup(new ArrayList<>());
+            String name = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>());
             assertNotNull(name);
             try (Stream<Path> stream = Files.list(Path.of(backupDirPath.toString()))) {
                 List<String> actualBackupFileNames = stream.filter(f -> !Files.isDirectory(f))
@@ -208,7 +220,7 @@ class BackupManagerTest {
         public void makeBackupShouldReturnNameOfCreatedFileInFormOfISOLocalDateTimeFormat() throws IOException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             LocalDateTime localDateTime = LocalDateTime.now();
-            String actualName = backupManager.makeBackup(new ArrayList<>(), localDateTime);
+            String actualName = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
             String expectedName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
             assertEquals(expectedName, actualName);
         }
@@ -217,14 +229,17 @@ class BackupManagerTest {
         public void makeBackupShouldReturnUniqueNameOfCreatedFile() throws IOException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             LocalDateTime localDateTime = LocalDateTime.now();
-            backupManager.makeBackup(new ArrayList<>(), localDateTime);
-            String actualName = backupManager.makeBackup(new ArrayList<>(), localDateTime);
+            backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
+            String actualName = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
             String expectedName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " (1).json";
             assertEquals(expectedName, actualName);
         }
 
         @Test
-        public void makeBackupShouldCreateNewBackupFileForGivenNonEmptyListOfPaths() throws IOException {
+        public void makeBackupShouldCreateNewBackupFileForGivenNonEmptyCollectionsOfPaths() throws IOException {
+            ArrayDeque<Path> dirPaths = new ArrayDeque<>();
+            dirPaths.offerLast(Path.of("/home/user/Documents"));
+            dirPaths.offerLast(Path.of("/home/user/Desktop"));
             List<FilePath> filePaths = List.of(
                     FilePath.of(
                             Path.of("/home/user/Documents/sourcefile1.txt"),
@@ -236,19 +251,26 @@ class BackupManagerTest {
                     )
             );
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
-            String newBackupFileName = backupManager.makeBackup(filePaths);
+            String newBackupFileName = backupManager.makeBackup(Sorter.Action.COPY, dirPaths.clone(), filePaths);
+            String backupFileContent = new String(Files.readAllBytes(backupDirPath.resolve(newBackupFileName)));
+            JSONObject actualBackupFileContent = new JSONObject(backupFileContent);
+            JSONArray dirArray = new JSONArray()
+                    .put(dirPaths.pollFirst())
+                    .put(dirPaths.pollFirst());
             JSONObject object1 = new JSONObject();
             object1.put("from", filePaths.get(0).source());
             object1.put("to", filePaths.get(0).target());
             JSONObject object2 = new JSONObject();
             object2.put("from", filePaths.get(1).source());
             object2.put("to", filePaths.get(1).target());
-            JSONArray expectedArray = new JSONArray();
-            expectedArray.put(object1);
-            expectedArray.put(object2);
-            String backupFileContent = new String(Files.readAllBytes(backupDirPath.resolve(newBackupFileName)));
-            JSONArray actualArray = new JSONArray(backupFileContent);
-            assertEquals(expectedArray.toString(), actualArray.toString());
+            JSONArray fileArray = new JSONArray();
+            fileArray.put(object1);
+            fileArray.put(object2);
+            JSONObject expectedBackupFileContent = new JSONObject()
+                    .put("action", Sorter.Action.COPY.getName())
+                    .put("directories", dirArray)
+                    .put("files", fileArray);
+            assertEquals(expectedBackupFileContent.toString(), actualBackupFileContent.toString());
         }
     }
 
@@ -256,12 +278,16 @@ class BackupManagerTest {
     class TestForCorrectDataInBackupFiles {
         String name1;
         String name1WithoutExtension;
+        Sorter.Action action1;
+        ArrayDeque<Path> dirPaths1;
         List<FilePath> filePaths1;
-        JSONArray backupFileContent1;
+        JSONObject backupFileContent1;
         String name2;
         String name2WithoutExtension;
+        Sorter.Action action2;
+        ArrayDeque<Path> dirPaths2;
         List<FilePath> filePaths2;
-        JSONArray backupFileContent2;
+        JSONObject backupFileContent2;
 
         @BeforeEach
         public void initFile() throws IOException {
@@ -270,15 +296,23 @@ class BackupManagerTest {
 
             name1WithoutExtension = "backup1";
             name1 = name1WithoutExtension + ".json";
+            action1 = Sorter.Action.COPY;
+            dirPaths1 = new ArrayDeque<>();
+            dirPaths1.offerLast(Path.of("/home/user/Documents"));
+            dirPaths1.offerLast(Path.of("/home/user/Desktop"));
             FilePath filePath1 = FilePath.of(Path.of("./file1.txt"), Path.of("./home/file1.txt"));
             filePaths1 = new ArrayList<>();
             filePaths1.add(filePath1);
-            backupFileContent1 = new JSONArray();
             JSONObject object1 = new JSONObject();
             object1.put("from", filePath1.source().toString());
             object1.put("to", filePath1.target().toString());
-            backupFileContent1 = new JSONArray();
-            backupFileContent1.put(object1);
+            ArrayDeque<Path> dirPathsCopy = dirPaths1.clone();
+            JSONArray dirArray1 = new JSONArray().put(dirPathsCopy.pollFirst()).put(dirPathsCopy.pollFirst());
+            JSONArray fileArray1 = new JSONArray().put(object1);
+            backupFileContent1 = new JSONObject()
+                    .put("action", action1.getName())
+                    .put("directories", dirArray1)
+                    .put("files", fileArray1);
             Path backup1FilePath = backupDirPath.resolve(name1);
             new File(backup1FilePath.toString()).createNewFile();
             try (PrintWriter writer = new PrintWriter(new FileWriter(backup1FilePath.toString()))) {
@@ -287,6 +321,9 @@ class BackupManagerTest {
 
             name2WithoutExtension = "backup2";
             name2 = name2WithoutExtension + ".json";
+            action2 = Sorter.Action.MOVE;
+            dirPaths2 = new ArrayDeque<>();
+            dirPaths2.offerLast(Path.of("/home/user/Downloads"));
             FilePath filePath2 = FilePath.of(Path.of("./home/file2.txt"), Path.of("./home/user/file2.txt"));
             FilePath filePath3 = FilePath.of(Path.of("./documents/file3.txt"), Path.of("./home/dir/file3.txt"));
             filePaths2 = new ArrayList<>();
@@ -298,9 +335,15 @@ class BackupManagerTest {
             JSONObject object3 = new JSONObject();
             object3.put("from", filePath3.source());
             object3.put("to", filePath3.target());
-            backupFileContent2 = new JSONArray();
-            backupFileContent2.put(object2);
-            backupFileContent2.put(object3);
+            dirPathsCopy = dirPaths2.clone();
+            JSONArray dirArray2 = new JSONArray().put(dirPathsCopy.pollFirst());
+            JSONArray fileArray2 = new JSONArray();
+            fileArray2.put(object2);
+            fileArray2.put(object3);
+            backupFileContent2 = new JSONObject()
+                    .put("action", action2.getName())
+                    .put("directories", dirArray2)
+                    .put("files", fileArray2);
             Path backup2FilePath = backupDirPath.resolve(name2);
             new File(backup2FilePath.toString()).createNewFile();
             try (PrintWriter writer = new PrintWriter(new FileWriter(backup2FilePath.toString()))) {
@@ -309,10 +352,12 @@ class BackupManagerTest {
         }
 
         @Test
-        public void readBackupShouldReturnListOfFilePathFromBackupFileWithGivenName() throws IOException, JSONException {
+        public void readBackupShouldCreateCorrectBackupObjectFromBackupFileWithGivenName() throws IOException, JSONException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
-            List<FilePath> expectedFilePaths = backupManager.readBackup(name2);
-            assertEquals(filePaths2, expectedFilePaths);
+            Backup expectedFilePaths = backupManager.readBackup(name2);
+            assertEquals(action2, expectedFilePaths.action());
+            assertEquals(filePaths2, expectedFilePaths.filePaths());
+            assertArrayEquals(dirPaths2.toArray(), expectedFilePaths.dirTargetPaths().toArray());
         }
 
         @Test
@@ -376,7 +421,9 @@ class BackupManagerTest {
         }
 
         @Test
-        public void makeBackupShouldCreateNewBackupFileAndKeepAllOtherBackupFile() throws IOException {
+        public void makeBackupShouldCreateNewBackupFileAndKeepAllOthersBackupFiles() throws IOException {
+            ArrayDeque<Path> dirPaths = new ArrayDeque<>();
+            dirPaths.offerFirst(Path.of("/home/user/Documents"));
             List<FilePath> filePaths = List.of(
                     FilePath.of(
                             Path.of("/home/user/Documents/sourcefile1.txt"),
@@ -385,7 +432,7 @@ class BackupManagerTest {
             );
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             LocalDateTime localDateTime = LocalDateTime.now();
-            backupManager.makeBackup(filePaths, localDateTime);
+            backupManager.makeBackup(Sorter.Action.COPY, dirPaths, filePaths, localDateTime);
             String expectedBackupFileName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
             List<String> expectedBackupFileNames = List.of(name2, expectedBackupFileName, name1);
             try (Stream<Path> stream = Files.list(Path.of(backupDirPath.toString()))) {
@@ -408,7 +455,7 @@ class BackupManagerTest {
             assertTrue(file.isFile());
             assertEquals(file.toPath(), backupDirPath.resolve(name1));
             String content = new String(Files.readAllBytes(file.toPath()));
-            assertEquals(backupFileContent1.toString(), new JSONArray(content).toString());
+            assertEquals(backupFileContent1.toString(), new JSONObject(content).toString());
         }
     }
 }

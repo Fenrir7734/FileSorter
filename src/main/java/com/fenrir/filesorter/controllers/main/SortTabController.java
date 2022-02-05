@@ -11,6 +11,7 @@ import com.fenrir.filesorter.model.exceptions.TokenFormatException;
 import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
+import com.fenrir.filesorter.model.file.utils.Backup;
 import com.fenrir.filesorter.model.log.LogAppender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -120,7 +121,8 @@ public class SortTabController {
                             configuration.getRuleGroups()
                     );
                     List<FilePath> filePaths = processor.process();
-                    Sorter sorter = new Sorter(filePaths, configuration.getSortAction());
+                    Deque<Path> directoriesPaths = processor.getDirectoriesPaths();
+                    Sorter sorter = new Sorter(filePaths, configuration.getSortAction(), directoriesPaths);
                     sorter.sort();
                     Platform.runLater(() -> setProgressIndicatorToDone());
                 } catch (TokenFormatException e) {
@@ -162,7 +164,7 @@ public class SortTabController {
         }
     }
 
-    public void receiveBackup(List<FilePath> backup) {
+    public void receiveBackup(Backup backup) {
 
     }
 

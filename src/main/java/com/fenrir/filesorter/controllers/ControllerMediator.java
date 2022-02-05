@@ -8,6 +8,7 @@ import com.fenrir.filesorter.controllers.main.RuleTabController;
 import com.fenrir.filesorter.controllers.main.SortTabController;
 import com.fenrir.filesorter.controllers.save.SaveRuleGroupController;
 import com.fenrir.filesorter.model.file.FilePath;
+import com.fenrir.filesorter.model.file.utils.Backup;
 import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import javafx.util.Pair;
@@ -81,8 +82,8 @@ public class ControllerMediator {
         ruleTabController.receiveRuleGroup(name, ruleGroup);
     }
 
-    public void sendBackupPathList(List<FilePath> list) {
-        sortTabController.receiveBackup(list);
+    public void sendBackupPathList(Backup backup) {
+        sortTabController.receiveBackup(backup);
     }
 
     private ControllerMediator() { }

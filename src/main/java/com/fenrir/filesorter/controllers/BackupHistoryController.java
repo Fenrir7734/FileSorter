@@ -2,6 +2,7 @@ package com.fenrir.filesorter.controllers;
 
 import com.fenrir.filesorter.model.file.BackupManager;
 import com.fenrir.filesorter.model.file.FilePath;
+import com.fenrir.filesorter.model.file.utils.Backup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -73,13 +74,13 @@ public class BackupHistoryController {
         alert.showAndWait();
 
         if (alert.getResult() != null && alert.getResult() == ButtonType.YES) {
-            List<FilePath> backup = getBackup(selectedBackupName);
+            Backup backup = getBackup(selectedBackupName);
             ControllerMediator.getInstance().sendBackupPathList(backup);
             close();
         }
     }
 
-    private List<FilePath> getBackup(String name) {
+    private Backup getBackup(String name) {
         try {
             return backupManager.readBackup(name + ".json");
         } catch (IOException | JSONException e) {

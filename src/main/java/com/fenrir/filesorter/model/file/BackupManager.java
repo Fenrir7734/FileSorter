@@ -1,5 +1,7 @@
 package com.fenrir.filesorter.model.file;
 
+import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.file.utils.Backup;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -22,6 +26,9 @@ public class BackupManager {
     private final Logger logger = LoggerFactory.getLogger(BackupManager.class);
 
     private final static String BACKUP_DIR_PATH = "src/main/resources/backup/";
+    private final static String ACTION_KEY = "action";
+    private final static String DIRECTORIES_KEY = "directories";
+    private final static String FILES_KEY = "files";
     private final static String SOURCE_KEY = "from";
     private final static String TARGET_KEY = "to";
     private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -49,16 +56,35 @@ public class BackupManager {
         }
     }
 
-    public List<FilePath> readBackup(String name) throws IOException, JSONException {
+    public Backup readBackup(String name) throws IOException, JSONException {
         try {
             Path backupFilePath = Path.of(pathToBackupDirectory).resolve(name);
             String content = new String(Files.readAllBytes(backupFilePath));
-            JSONArray backup = new JSONArray(content);
-            return mapJSONArrayToListOfFilePaths(backup);
+            JSONObject backup = new JSONObject(content);
+            return mapJSONToBackup(backup);
         } catch (IOException | JSONException e) {
             logger.error("Error during reading backup {} message: {}", name, e.getMessage());
             throw e;
         }
+    }
+
+    private Backup mapJSONToBackup(JSONObject object) {
+        String actionName = object.getString(ACTION_KEY);
+        JSONArray dirPathsJSONArray = object.getJSONArray(DIRECTORIES_KEY);
+        JSONArray filePathsJSONArray = object.getJSONArray(FILES_KEY);
+        Sorter.Action action = Sorter.Action.getAction(actionName);
+        Deque<Path> dirPaths = mapJSONArrayToQueueOfPaths(dirPathsJSONArray);
+        List<FilePath> filePaths = mapJSONArrayToListOfFilePaths(filePathsJSONArray);
+        return new Backup(action, dirPaths, filePaths);
+    }
+
+    private Deque<Path> mapJSONArrayToQueueOfPaths(JSONArray array) {
+        Deque<Path> paths = new ArrayDeque<>();
+        for (int i = 0; i < array.length(); i++) {
+            Path dirPath = Path.of(array.getString(i));
+            paths.offerLast(dirPath);
+        }
+        return paths;
     }
 
     private List<FilePath> mapJSONArrayToListOfFilePaths(JSONArray array) {
@@ -77,8 +103,19 @@ public class BackupManager {
         return FilePath.of(sourcePath, targetPath);
     }
 
-    String makeBackup(List<FilePath> paths, LocalDateTime localDateTime) throws IOException {
-        JSONArray backupAsJSON = parsePaths(paths);
+    String makeBackup(
+            Sorter.Action action,
+            Deque<Path> targetDirPaths,
+            List<FilePath> filePaths,
+            LocalDateTime localDateTime
+    ) throws IOException {
+
+        JSONArray dirPathsAsJSON = parseDirPaths(targetDirPaths);
+        JSONArray filePathsAsJSON = parseFilePaths(filePaths);
+        JSONObject backupAsJSON = new JSONObject();
+        backupAsJSON.put(ACTION_KEY, action.getName())
+                .put(DIRECTORIES_KEY, dirPathsAsJSON)
+                .put(FILES_KEY, filePathsAsJSON);
         String fileName = generateUniqueNameForBackup(localDateTime);
         String pathToBackupFile = createBackupFile(fileName);
         writeToFile(pathToBackupFile, backupAsJSON);
@@ -86,17 +123,31 @@ public class BackupManager {
                 .toString();
     }
 
-    public String makeBackup(List<FilePath> paths) throws IOException {
-        return makeBackup(paths, LocalDateTime.now());
+    public String makeBackup(
+            Sorter.Action action,
+            Deque<Path> targetDirPaths,
+            List<FilePath> filePaths
+    ) throws IOException {
+
+        return makeBackup(action, targetDirPaths, filePaths, LocalDateTime.now());
     }
 
-    private JSONArray parsePaths(List<FilePath> paths) {
-        JSONArray root = new JSONArray();
+    private JSONArray parseDirPaths(Deque<Path> paths) {
+        JSONArray array = new JSONArray();
+        while (!paths.isEmpty()) {
+            Path path = paths.pollFirst();
+            array.put(path);
+        }
+        return array;
+    }
+
+    private JSONArray parseFilePaths(List<FilePath> paths) {
+        JSONArray array = new JSONArray();
         for (FilePath filePath : paths) {
             JSONObject filePathsBackup = parsePair(filePath);
-            root.put(filePathsBackup);
+            array.put(filePathsBackup);
         }
-        return root;
+        return array;
     }
 
     private JSONObject parsePair(FilePath filePath) {
@@ -115,7 +166,7 @@ public class BackupManager {
         return pathToBackupFile;
     }
 
-    private void writeToFile(String path, JSONArray backup) throws IOException {
+    private void writeToFile(String path, JSONObject backup) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
             writer.write(backup.toString(4));
         } catch (IOException e) {
