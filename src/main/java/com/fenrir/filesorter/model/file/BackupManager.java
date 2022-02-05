@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -181,7 +182,8 @@ public class BackupManager {
 
     private String generateUniqueNameForBackup(LocalDateTime localDateTime) throws IOException {
         List<String> backupNames = getAllBackupsNamesWithoutExtension();
-        String date = localDateTime.format(FORMATTER);
+        String date = localDateTime.truncatedTo(ChronoUnit.SECONDS)
+                .format(FORMATTER);
         String name = date;
 
         int i = 1;
