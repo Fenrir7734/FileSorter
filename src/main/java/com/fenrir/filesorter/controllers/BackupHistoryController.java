@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 
 public class BackupHistoryController {
     @FXML private VBox backupHistoryVBox;
@@ -34,7 +36,11 @@ public class BackupHistoryController {
     }
 
     private void initBackupListView() throws IOException {
-        backupNameItems.addAll(backupManager.getAllBackupsNamesWithoutExtension());
+        List<String> backupFileNames = backupManager.getAllBackupsNamesWithoutExtension()
+                .stream()
+                .sorted(Comparator.reverseOrder())
+                .toList();
+        backupNameItems.addAll(backupFileNames);
         backupListView.setItems(backupNameItems);
         backupListView.getSelectionModel()
                 .selectedItemProperty()
