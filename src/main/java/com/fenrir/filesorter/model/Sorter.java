@@ -21,7 +21,7 @@ public class Sorter {
     private final Action action;
 
     public Sorter(List<FilePath> filePaths, Action action) {
-        this.filesToSort = filePaths;;
+        this.filesToSort = filePaths;
         this.sortedFiles = new ArrayList<>(filesToSort.size());
         this.action = action;
     }

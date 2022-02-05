@@ -22,6 +22,7 @@ public class Processor {
     private final Path targetPath;
     private final List<StatementGroup> statementGroups;
     private final List<FileData> fileToProcess;
+    private final Deque<Path> directoriesPaths;
     private final List<FilePath> pathsOfProcessedFiles;
     private final Map<Path, Long> targetPathCount;
 
@@ -30,6 +31,7 @@ public class Processor {
         this.targetPath = targetPath;
         this.statementGroups = new ArrayList<>();
         this.fileToProcess = new LinkedList<>();
+        this.directoriesPaths = new ArrayDeque<>();
         this.targetPathCount = new HashMap<>();
         parseRuleGroup(ruleGroups);
         mapFileStructure(sourcePaths);
@@ -49,8 +51,8 @@ public class Processor {
         logger.info("Mapping file structure...");
         Set<Path> paths = new HashSet<>();
         for (Path path: sourceRootPaths) {
-            FileStructureMapper mapper = new FileStructureMapper(path);
-            paths.addAll(mapper.map());
+            Deque<Path> mappedPaths = FileStructureMapper.map(path);
+            paths.addAll(mappedPaths);
         }
         for (Path path: paths) {
             FileData fileData = new FileData(path);

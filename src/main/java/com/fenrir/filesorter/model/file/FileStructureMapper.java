@@ -3,21 +3,27 @@ package com.fenrir.filesorter.model.file;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FileStructureMapper {
-    private Path source;
-
-    public FileStructureMapper(Path source) {
-        this.source = source;
+    private FileStructureMapper() {
+        throw new UnsupportedOperationException();
     }
 
-    public List<Path> map() throws IOException {
-        return Files.walk(source)
+    public static Deque<Path> map(Path source) throws IOException {
+        Deque<Path> fileHierarchy = new ArrayDeque<>();
+        Files.walk(source)
                 .map(FileData::normalizeFilePath)
                 .filter(Objects::nonNull)
-                .toList();
+                .forEach(fileHierarchy::push);
+        return fileHierarchy;
+    }
+
+    public static Deque<Path> mapDirectoriesHierarchy(Path source) throws IOException {
+        Deque<Path> directoriesHierarchy = new ArrayDeque<>();
+        Files.walk(source)
+                .filter(Files::isDirectory)
+                .forEach(directoriesHierarchy::push);
+        return directoriesHierarchy;
     }
 }
