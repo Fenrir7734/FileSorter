@@ -1,5 +1,6 @@
 package com.fenrir.filesorter.model;
 
+import com.fenrir.filesorter.model.file.BackupManager;
 import com.fenrir.filesorter.model.file.FilePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,27 +17,33 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 public class Sorter {
     private static final Logger logger = LoggerFactory.getLogger(Sorter.class);
 
+    private final BackupManager backupManager;
     private final List<FilePath> filesToSort;
     private final List<FilePath> sortedFiles;
     private final Action action;
 
-    public Sorter(List<FilePath> filePaths, Action action) {
+    public Sorter(List<FilePath> filePaths, Action action) throws IOException {
+        this.backupManager = new BackupManager();
         this.filesToSort = filePaths;
         this.sortedFiles = new ArrayList<>(filesToSort.size());
         this.action = action;
     }
 
-    public Sorter(List<FilePath> filePaths) {
+    public Sorter(List<FilePath> filePaths) throws IOException {
         this(filePaths, Action.COPY);
     }
 
     public void sort() throws IOException {
-        if (action == Action.COPY) {
-            copyFiles();
-        } else {
-            moveFile();
+        try {
+            if (action == Action.COPY) {
+                copyFiles();
+            } else {
+                moveFile();
+            }
+            logger.info("Sort complete");
+        } finally {
+            backupManager.makeBackup(sortedFiles);
         }
-        logger.info("Sort complete");
     }
 
     private void copyFiles() throws IOException {

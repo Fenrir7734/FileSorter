@@ -49,16 +49,23 @@ public class Processor {
 
     private void mapFileStructure(List<Path> sourceRootPaths) throws IOException {
         logger.info("Mapping file structure...");
-        Set<Path> paths = new HashSet<>();
-        for (Path path: sourceRootPaths) {
-            Deque<Path> mappedPaths = FileStructureMapper.map(path);
-            paths.addAll(mappedPaths);
-        }
-        for (Path path: paths) {
-            FileData fileData = new FileData(path);
-            if (!fileData.isDirectory()) {
-                fileToProcess.add(fileData);
+        Set<Path> filePaths = new HashSet<>();
+
+        for (Path rootPath: sourceRootPaths) {
+            Deque<Path> mappedPaths = FileStructureMapper.map(rootPath);
+            while (!mappedPaths.isEmpty()) {
+                Path path = mappedPaths.pollFirst();
+                if (path.toFile().isDirectory()) {
+                    directoriesPaths.offerLast(path);
+                } else {
+                    filePaths.add(path);
+                }
             }
+        }
+
+        for (Path path: filePaths) {
+            FileData fileData = new FileData(path);
+            fileToProcess.add(fileData);
         }
     }
 
@@ -141,5 +148,13 @@ public class Processor {
     private long countDuplicate(Path targetPath) {
         targetPathCount.putIfAbsent(targetPath, -1L);
         return targetPathCount.compute(targetPath, (k, v) -> v + 1);
+    }
+
+    public Deque<Path> getDirectoriesPaths() {
+        return directoriesPaths;
+    }
+
+    public List<FilePath> getFileData() {
+        return pathsOfProcessedFiles;
     }
 }
