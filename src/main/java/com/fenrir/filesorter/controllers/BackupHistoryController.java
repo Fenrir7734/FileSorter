@@ -1,7 +1,7 @@
 package com.fenrir.filesorter.controllers;
 
+import com.fenrir.filesorter.model.exceptions.InvalidBackupException;
 import com.fenrir.filesorter.model.file.BackupManager;
-import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.file.utils.Backup;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.List;
 
 public class BackupHistoryController {
     @FXML private VBox backupHistoryVBox;
@@ -85,6 +84,9 @@ public class BackupHistoryController {
             return backupManager.readBackup(name + ".json");
         } catch (IOException | JSONException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not load backup file. " + e.getMessage());
+            alert.showAndWait();
+        } catch (InvalidBackupException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
         }
         return null;

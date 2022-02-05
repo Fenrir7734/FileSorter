@@ -1,6 +1,8 @@
 package com.fenrir.filesorter.model.file;
 
 import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.exceptions.InvalidBackupException;
+import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.file.utils.Backup;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,22 +157,42 @@ class BackupManagerTest {
         }
 
         @Test
-        public void readBackupShouldReturnEmptyBackupObjectIfNoPathHaveBeenWrittenToFile() throws IOException {
+        public void readBackupShouldReturnBackupObjectIfNoPathHaveBeenWrittenToFile()
+                throws IOException, InvalidBackupException {
             String backupFileName = "backupfile.json";
             Path backupFilePath = backupDirPath.resolve(backupFileName);
             new File(backupFilePath.toString()).createNewFile();
             try (PrintWriter writer = new PrintWriter(new FileWriter(backupFilePath.toString()))) {
                 JSONObject object = new JSONObject()
-                        .put("action", "")
+                        .put("action", Sorter.Action.COPY.getName())
                         .put("directories", new ArrayDeque<>())
                         .put("files", new ArrayList<>());
                 writer.write(object.toString());
             }
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             Backup backup = backupManager.readBackup(backupFileName);
-            assertNull(backup.action());
+            assertEquals(Sorter.Action.COPY, backup.action());
             assertTrue(backup.dirTargetPaths().isEmpty());
             assertTrue(backup.filePaths().isEmpty());
+        }
+
+        @Test
+        public void readBackupShouldThrowInvalidBackupExceptionForUnrecognisedActionType() throws IOException {
+            String backupFileName = "backupfile.json";
+            Path backupFilePath = backupDirPath.resolve(backupFileName);
+            new File(backupFilePath.toString()).createNewFile();
+            try (PrintWriter writer = new PrintWriter(new FileWriter(backupFilePath.toString()))) {
+                JSONObject object = new JSONObject()
+                        .put("action", "Invalid")
+                        .put("directories", new ArrayDeque<>())
+                        .put("files", new ArrayList<>());
+                writer.write(object.toString());
+            }
+            BackupManager backupManager = new BackupManager(backupDirPath.toString());
+            assertThrows(
+                    InvalidBackupException.class,
+                    () -> backupManager.readBackup(backupFileName)
+            );
         }
 
         @Test
@@ -352,7 +374,8 @@ class BackupManagerTest {
         }
 
         @Test
-        public void readBackupShouldCreateCorrectBackupObjectFromBackupFileWithGivenName() throws IOException, JSONException {
+        public void readBackupShouldCreateCorrectBackupObjectFromBackupFileWithGivenName()
+                throws IOException, JSONException, InvalidBackupException {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             Backup expectedFilePaths = backupManager.readBackup(name2);
             assertEquals(action2, expectedFilePaths.action());

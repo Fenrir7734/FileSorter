@@ -1,6 +1,7 @@
 package com.fenrir.filesorter.model.file;
 
 import com.fenrir.filesorter.model.Sorter;
+import com.fenrir.filesorter.model.exceptions.InvalidBackupException;
 import com.fenrir.filesorter.model.file.utils.Backup;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +57,7 @@ public class BackupManager {
         }
     }
 
-    public Backup readBackup(String name) throws IOException, JSONException {
+    public Backup readBackup(String name) throws IOException, JSONException, InvalidBackupException {
         try {
             Path backupFilePath = Path.of(pathToBackupDirectory).resolve(name);
             String content = new String(Files.readAllBytes(backupFilePath));
@@ -68,11 +69,14 @@ public class BackupManager {
         }
     }
 
-    private Backup mapJSONToBackup(JSONObject object) {
+    private Backup mapJSONToBackup(JSONObject object) throws InvalidBackupException {
         String actionName = object.getString(ACTION_KEY);
         JSONArray dirPathsJSONArray = object.getJSONArray(DIRECTORIES_KEY);
         JSONArray filePathsJSONArray = object.getJSONArray(FILES_KEY);
         Sorter.Action action = Sorter.Action.getAction(actionName);
+        if (action == null) {
+            throw new InvalidBackupException("The action type written to the read backup file could not be recognised");
+        }
         Deque<Path> dirPaths = mapJSONArrayToQueueOfPaths(dirPathsJSONArray);
         List<FilePath> filePaths = mapJSONArrayToListOfFilePaths(filePathsJSONArray);
         return new Backup(action, dirPaths, filePaths);
