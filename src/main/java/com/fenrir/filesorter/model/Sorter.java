@@ -77,7 +77,7 @@ public class Sorter {
 
     private void createDirectoryIfNotExistsAndStoreIt(Path dirPath) throws IOException {
         Deque<Path> directoriesToCreate = new ArrayDeque<>();
-        while (Files.notExists(dirPath)) {
+        while (Files.notExists(dirPath) && dirPath.getParent() != null) {
             directoriesToCreate.offerFirst(dirPath);
             dirPath = dirPath.getParent();
         }
@@ -91,15 +91,31 @@ public class Sorter {
     }
 
     private void performCopyActionFor(Path sourcePath, Path targetPath) throws IOException {
-        logger.info("Copying file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
-        Path realTargetPath = Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
-        sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+        if (sourcePath.toFile().exists()) {
+            if (!targetPath.toFile().exists()) {
+                logger.info("Copying file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
+                Path realTargetPath = Files.copy(sourcePath, targetPath, COPY_ATTRIBUTES, NOFOLLOW_LINKS);
+                sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+            } else {
+                logger.info("Target file already exists: {}", sourcePath.toAbsolutePath());
+            }
+        } else {
+            logger.info("Source file not exists: {}", sourcePath.toAbsolutePath());
+        }
     }
 
     private void performMoveActionFor(Path sourcePath, Path targetPath) throws IOException {
-        logger.info("Moving file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
-        Path realTargetPath = Files.move(sourcePath, targetPath);
-        sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+        if (sourcePath.toFile().exists()) {
+            if (!targetPath.toFile().exists()) {
+                logger.info("Moving file from: {} to: {}", sourcePath.toAbsolutePath(), targetPath.toFile());
+                Path realTargetPath = Files.move(sourcePath, targetPath);
+                sortedFiles.add(FilePath.of(sourcePath, realTargetPath));
+            } else {
+                logger.info("Target file already exists: {}", sourcePath.toAbsolutePath());
+            }
+        } else {
+            logger.info("Source file not exists: {}", sourcePath.toAbsolutePath());
+        }
     }
 
     public void restore() throws IOException {
