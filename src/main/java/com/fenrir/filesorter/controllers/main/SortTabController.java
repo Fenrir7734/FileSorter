@@ -43,6 +43,7 @@ public class SortTabController {
     @FXML private TextField targetPathTextField;
     @FXML private ProgressIndicator progressIndicator;
     @FXML private Label progressLabel;
+    @FXML private CheckBox removeDirectories;
 
     private final ObservableList<Sorter.Action> actionTypeItems = FXCollections.observableArrayList();
     private final Callback<ListView<Sorter.Action>, ListCell<Sorter.Action>> actionCallback = createActionCellFactory();
@@ -122,7 +123,9 @@ public class SortTabController {
                     );
                     List<FilePath> filePaths = processor.process();
                     Deque<Path> directoriesPaths = processor.getDirectoriesPaths();
-                    Sorter sorter = new Sorter(configuration.getSortAction(), directoriesPaths, filePaths);
+                    Sorter sorter = removeDirectories.isSelected() ?
+                            new Sorter(configuration.getSortAction(), directoriesPaths, filePaths) :
+                            new Sorter(configuration.getSortAction(), filePaths);
                     sorter.sort();
                     Platform.runLater(() -> setProgressIndicatorToDone());
                 } catch (TokenFormatException e) {
