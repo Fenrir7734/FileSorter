@@ -22,7 +22,7 @@ public class Processor {
     private final Path targetPath;
     private final List<StatementGroup> statementGroups;
     private final List<FileData> fileToProcess;
-    private final Deque<Path> directoriesPaths;
+    private final ArrayDeque<Path> directoriesPaths;
     private final List<FilePath> pathsOfProcessedFiles;
     private final Map<Path, Long> targetPathCount;
 
@@ -36,6 +36,7 @@ public class Processor {
         parseRuleGroup(ruleGroups);
         mapFileStructure(sourcePaths);
         this.pathsOfProcessedFiles = new ArrayList<>(this.fileToProcess.size());
+        process();
     }
 
     private void parseRuleGroup(List<RuleGroup> ruleGroups) throws ExpressionFormatException {
@@ -69,12 +70,11 @@ public class Processor {
         }
     }
 
-    public List<FilePath> process() throws IOException {
+    private void process() throws IOException {
         for (StatementGroup group: statementGroups) {
             List<FileData> includedFiles = filter(group.getFilterStatements());
             createTargetPaths(includedFiles, group.getSortStatement(), group.getRenameStatement());
         }
-        return pathsOfProcessedFiles;
     }
 
     private List<FileData> filter(List<Predicate<? extends Comparable<?>>> filterStatements) {
@@ -151,10 +151,10 @@ public class Processor {
     }
 
     public Deque<Path> getDirectoriesPaths() {
-        return directoriesPaths;
+        return directoriesPaths.clone();
     }
 
-    public List<FilePath> getFileData() {
+    public List<FilePath> getFilePaths() {
         return pathsOfProcessedFiles;
     }
 }

@@ -121,7 +121,7 @@ public class SortTabController {
                             configuration.getTargetRootDir(),
                             configuration.getRuleGroups()
                     );
-                    List<FilePath> filePaths = processor.process();
+                    List<FilePath> filePaths = processor.getFilePaths();
                     Deque<Path> directoriesPaths = processor.getDirectoriesPaths();
                     Sorter sorter = removeDirectories.isSelected() ?
                             new Sorter(configuration.getSortAction(), directoriesPaths, filePaths) :
