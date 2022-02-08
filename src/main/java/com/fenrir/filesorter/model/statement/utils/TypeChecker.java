@@ -3,6 +3,7 @@ package com.fenrir.filesorter.model.statement.utils;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class TypeChecker {
@@ -12,6 +13,9 @@ public class TypeChecker {
     }
 
     public static <T extends Comparable<T>> boolean isInstanceOfString(PredicateOperands<T> operands) {
+        System.out.println(checkProvider(operands.operand()));
+        System.out.println(checkArguments(operands.args()));
+        System.out.println(operands.args().get(0).getClass());
         return checkProvider(operands.operand()) && checkArguments(operands.args());
     }
 
@@ -19,6 +23,8 @@ public class TypeChecker {
         return provider instanceof FileCategoryProvider
                 || provider instanceof FileExtensionProvider
                 || provider instanceof FileNameProvider
+                || provider instanceof FileNameWithExtensionProvider
+                || provider instanceof DirectoryNameProvider
                 || provider instanceof FileSeparatorProvider
                 || provider instanceof CustomTextProvider;
     }

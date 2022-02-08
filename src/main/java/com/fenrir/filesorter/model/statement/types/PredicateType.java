@@ -15,14 +15,14 @@ import static com.fenrir.filesorter.model.statement.types.enums.ArgumentNumber.S
 import static com.fenrir.filesorter.model.statement.types.enums.ReturnType.*;
 
 public enum PredicateType {
-    EQUAL("==", "equal",  MULTIPLE, new ReturnType[]{NUMBER, STRING, EXACT_STRING, DATE}) {
+    EQUAL("==", "equal",  MULTIPLE, new ReturnType[]{NUMBER, PATH, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
                 PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {
             return new EqualPredicate<>(operands, isInverted);
         }
     },
-    NOT_EQUAL("!=", "not equal", MULTIPLE, new ReturnType[]{NUMBER, STRING, EXACT_STRING, DATE}) {
+    NOT_EQUAL("!=", "not equal", MULTIPLE, new ReturnType[]{NUMBER, PATH, STRING, EXACT_STRING, DATE}) {
         @Override
         public Predicate<? extends Comparable<?>> getPredicate(
                 PredicateOperands<? extends Comparable<?>> operands, boolean isInverted) {

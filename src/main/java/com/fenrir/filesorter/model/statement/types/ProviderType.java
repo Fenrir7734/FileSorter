@@ -59,7 +59,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, args);
         }
     },
-    FILE_PATH("FIP", "file path", NONE, new Scope[]{FILTER}, ReturnType.STRING, Category.FILE_INFO) {
+    FILE_PATH("FIP", "file path", NONE, new Scope[]{FILTER}, ReturnType.PATH, Category.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             throw new UnsupportedOperationException();
@@ -72,7 +72,7 @@ public enum ProviderType {
             return new PredicateOperands<>(operand, paths);
         }
     },
-    DIRECTORY_PATH("DIP", "directory path", NONE, new Scope[]{FILTER}, ReturnType.STRING, Category.FILE_INFO) {
+    DIRECTORY_PATH("DIP", "directory path", NONE, new Scope[]{FILTER}, ReturnType.PATH, Category.FILE_INFO) {
         @Override
         public Provider<?> getAsProvider(List<String> args) {
             throw new UnsupportedOperationException();

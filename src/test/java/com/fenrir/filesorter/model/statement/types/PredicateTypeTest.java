@@ -59,7 +59,7 @@ class PredicateTypeTest {
     @Test
     public void getTypesShouldReturnReturnTypes() {
         ReturnType[] returnTypes = PredicateType.EQUAL.getTypes();
-        assertArrayEquals(new ReturnType[]{NUMBER, STRING, EXACT_STRING, DATE}, returnTypes);
+        assertArrayEquals(new ReturnType[]{NUMBER, PATH, STRING, EXACT_STRING, DATE}, returnTypes);
     }
 
     @Test
