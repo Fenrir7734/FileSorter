@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -243,7 +244,8 @@ class BackupManagerTest {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             LocalDateTime localDateTime = LocalDateTime.now();
             String actualName = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
-            String expectedName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
+            String expectedName = localDateTime.truncatedTo(ChronoUnit.SECONDS)
+                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
             assertEquals(expectedName, actualName);
         }
 
@@ -253,7 +255,8 @@ class BackupManagerTest {
             LocalDateTime localDateTime = LocalDateTime.now();
             backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
             String actualName = backupManager.makeBackup(Sorter.Action.COPY, new ArrayDeque<>(), new ArrayList<>(), localDateTime);
-            String expectedName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " (1).json";
+            String expectedName = localDateTime.truncatedTo(ChronoUnit.SECONDS)
+                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + " (1).json";
             assertEquals(expectedName, actualName);
         }
 
@@ -456,7 +459,8 @@ class BackupManagerTest {
             BackupManager backupManager = new BackupManager(backupDirPath.toString());
             LocalDateTime localDateTime = LocalDateTime.now();
             backupManager.makeBackup(Sorter.Action.COPY, dirPaths, filePaths, localDateTime);
-            String expectedBackupFileName = localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
+            String expectedBackupFileName = localDateTime.truncatedTo(ChronoUnit.SECONDS)
+                    .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ".json";
             List<String> expectedBackupFileNames = List.of(name2, expectedBackupFileName, name1);
             try (Stream<Path> stream = Files.list(Path.of(backupDirPath.toString()))) {
                 List<String> actualBackupFileNames = stream.filter(f -> !Files.isDirectory(f))
