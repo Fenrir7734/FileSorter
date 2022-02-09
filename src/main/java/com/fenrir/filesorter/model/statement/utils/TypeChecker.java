@@ -13,9 +13,6 @@ public class TypeChecker {
     }
 
     public static <T extends Comparable<T>> boolean isInstanceOfString(PredicateOperands<T> operands) {
-        System.out.println(checkProvider(operands.operand()));
-        System.out.println(checkArguments(operands.args()));
-        System.out.println(operands.args().get(0).getClass());
         return checkProvider(operands.operand()) && checkArguments(operands.args());
     }
 
