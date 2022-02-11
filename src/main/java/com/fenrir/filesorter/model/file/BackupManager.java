@@ -27,7 +27,8 @@ import java.util.stream.Stream;
 public class BackupManager {
     private final Logger logger = LoggerFactory.getLogger(BackupManager.class);
 
-    private final static String BACKUP_DIR_PATH = "src/main/resources/backup/";
+    public final static String DEFAULT_BACKUP_DIR_PATH = "src/main/resources/backup/";
+
     private final static String ACTION_KEY = "action";
     private final static String DIRECTORIES_KEY = "directories";
     private final static String FILES_KEY = "files";
@@ -38,10 +39,10 @@ public class BackupManager {
     private final String pathToBackupDirectory;
 
     public BackupManager() throws IOException {
-        this(BACKUP_DIR_PATH);
+        this(DEFAULT_BACKUP_DIR_PATH);
     }
 
-    BackupManager(String pathToBackupDirectory) throws IOException {
+    public BackupManager(String pathToBackupDirectory) throws IOException {
         this.pathToBackupDirectory = pathToBackupDirectory;
         checkForBackupDirectory();
     }
@@ -227,5 +228,9 @@ public class BackupManager {
         } else {
             throw new IOException("File " + backupFilePath + " does not exists.");
         }
+    }
+
+    public Path getPathToBackupDirectory() {
+        return Path.of(pathToBackupDirectory);
     }
 }
