@@ -33,7 +33,11 @@ public class FileStructureMapper {
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            storePath(file);
+            if (file.toFile().canRead()) {
+                storePath(file);
+            } else {
+                logger.warn("File without read permission: {}", file);
+            }
             return FileVisitResult.CONTINUE;
         }
 
