@@ -5,6 +5,7 @@ import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
+import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;
@@ -19,16 +20,16 @@ import java.util.*;
 public class Processor {
     private static final Logger logger = LoggerFactory.getLogger(Processor.class);
 
-    private final Path targetPath;
+    private final Path rootTargetPath;
     private final List<StatementGroup> statementGroups;
     private final List<FileData> fileToProcess;
     private final ArrayDeque<Path> directoriesPaths;
     private final List<FilePath> pathsOfProcessedFiles;
     private final Map<Path, Long> targetPathCount;
 
-    public Processor(List<Path> sourcePaths, Path targetPath, List<RuleGroup> ruleGroups)
+    public Processor(List<Path> sourcePaths, Path rootTargetPath, List<RuleGroup> ruleGroups)
             throws ExpressionFormatException, IOException {
-        this.targetPath = targetPath;
+        this.rootTargetPath = rootTargetPath;
         this.statementGroups = new ArrayList<>();
         this.fileToProcess = new LinkedList<>();
         this.directoriesPaths = new ArrayDeque<>();
@@ -51,13 +52,14 @@ public class Processor {
     private void mapFileStructure(List<Path> sourceRootPaths) throws IOException {
         logger.info("Mapping file structure...");
         Set<Path> filePaths = new HashSet<>();
+        HashSet<Path> dirPaths = new LinkedHashSet<>();
 
         for (Path rootPath: sourceRootPaths) {
             Deque<Path> mappedPaths = FileStructureMapper.map(rootPath);
             while (!mappedPaths.isEmpty()) {
                 Path path = mappedPaths.pollFirst();
                 if (path.toFile().isDirectory()) {
-                    directoriesPaths.offerLast(path);
+                    dirPaths.add(path);
                 } else {
                     filePaths.add(path);
                 }
@@ -68,13 +70,22 @@ public class Processor {
             FileData fileData = new FileData(path);
             fileToProcess.add(fileData);
         }
+        directoriesPaths.addAll(dirPaths);
     }
 
     private void process() throws IOException {
         for (StatementGroup group: statementGroups) {
-            List<FileData> includedFiles = filter(group.getFilterStatements());
-            createTargetPaths(includedFiles, group.getSortStatement(), group.getRenameStatement());
+            if (isStatementGroupNotEmpty(group)) {
+                List<FileData> includedFiles = filter(group.getFilterStatements());
+                createTargetPaths(includedFiles, group.getSortStatement(), group.getRenameStatement());
+            }
         }
+    }
+
+    private boolean isStatementGroupNotEmpty(StatementGroup group) {
+        return (group.getRenameStatement() != null && !group.getRenameStatement().isEmpty()) ||
+                (group.getSortStatement() != null && !group.getSortStatement().isEmpty()) ||
+                (group.getFilterStatements() != null && !group.getFilterStatements().isEmpty());
     }
 
     private List<FileData> filter(List<Predicate<? extends Comparable<?>>> filterStatements) {
@@ -104,7 +115,7 @@ public class Processor {
         try {
             return predicate.test(file);
         } catch (IOException e) {
-            logger.error("File could not be accessed: {}", e.getMessage());
+            logger.warn("File could not be accessed: {}", e.getMessage());
         }
         return false;
     }
@@ -133,7 +144,7 @@ public class Processor {
             builder.append(s);
         }
         Path path = Path.of(builder.toString());
-        return targetPath.resolve(path);
+        return rootTargetPath.resolve(path);
     }
 
     private Path buildFileName(FileData file, List<Provider<?>> renameStatement) throws IOException {
@@ -145,9 +156,9 @@ public class Processor {
         return Path.of(builder.toString());
     }
 
-    private long countDuplicate(Path targetPath) {
-        targetPathCount.putIfAbsent(targetPath, -1L);
-        return targetPathCount.compute(targetPath, (k, v) -> v + 1);
+    private long countDuplicate(Path fileTargetPath) {
+        targetPathCount.putIfAbsent(fileTargetPath, -1L);
+        return targetPathCount.compute(fileTargetPath, (k, v) -> v + 1);
     }
 
     public Deque<Path> getDirectoriesPaths() {
@@ -156,5 +167,20 @@ public class Processor {
 
     public List<FilePath> getFilePaths() {
         return pathsOfProcessedFiles;
+    }
+
+    public static void main(String[] args) throws ExpressionFormatException, IOException {
+        RuleGroup ruleGroup = new RuleGroup();
+        ruleGroup.setRenameRule(new Rule("%(TXT:jpg)"));
+        ruleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:png)"));
+        RuleGroup ruleGroup1 = new RuleGroup();
+        ruleGroup1.setSortRule(new Rule("%(EXT)"));
+        ruleGroup1.setRenameRule(new Rule("%(FIX)"));
+        List<RuleGroup> ruleGroups = List.of(ruleGroup, ruleGroup1);
+        Path source = Path.of("/home/fenrir/Documents/Test_environment/wallpapers (another copy)");
+        Path target = Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test");
+        Processor processor = new Processor(List.of(source), target, ruleGroups);
+
+        processor.getFilePaths().forEach(f -> System.out.println(f.resolvedTargetPath()));
     }
 }
