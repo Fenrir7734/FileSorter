@@ -9,6 +9,7 @@ import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +49,9 @@ public class Configuration {
     public void validate() throws SortConfigurationException, IOException {
         if (targetRootDir == null) {
             throw new SortConfigurationException("Target directory has not been specified.");
+        }
+        if (!Files.exists(targetRootDir) || !Files.isDirectory(targetRootDir)) {
+            throw new SortConfigurationException("Target path should point to directory.");
         }
         if (!FileUtils.isEmptyDirectory(targetRootDir.toFile())) {
             throw new SortConfigurationException("Target directory should be empty.");
@@ -105,12 +109,11 @@ public class Configuration {
                 .collect(Collectors.toList());
     }
 
-    public RuleGroup getRuleGroup(String name) {
+    public Optional<RuleGroup> getRuleGroup(String name) {
         return namedRuleGroup.stream()
                 .filter(v -> v.getKey().equals(name))
                 .map(Pair::getValue)
-                .findFirst()
-                .get();
+                .findFirst();
     }
 
     public Sorter.Action getSortAction() {
