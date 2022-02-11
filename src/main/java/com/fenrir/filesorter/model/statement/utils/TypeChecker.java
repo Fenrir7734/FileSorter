@@ -3,7 +3,6 @@ package com.fenrir.filesorter.model.statement.utils;
 import com.fenrir.filesorter.model.statement.predicate.PredicateOperands;
 import com.fenrir.filesorter.model.statement.provider.*;
 
-import java.nio.file.Path;
 import java.util.List;
 
 public class TypeChecker {
