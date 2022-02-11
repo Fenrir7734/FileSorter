@@ -10,10 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -27,14 +24,21 @@ public class Sorter {
     private final List<FilePath> sortedFiles;
     private final Deque<Path> createdTargetDirectories;
     private final Action action;
+    private final String backupDirectoryPath;
+    private String backupFileName;
 
-    public Sorter(Action action, Deque<Path> directoriesPaths, List<FilePath> filePaths) throws IOException {
-        this.backupManager = new BackupManager();
+    public Sorter(Action action, Deque<Path> directoriesPaths, List<FilePath> filePaths, String backupDirectoryPath) throws IOException {
         this.filesToSort = filePaths;
         this.sourceDirectoriesPaths = directoriesPaths;
         this.sortedFiles = new ArrayList<>(filesToSort.size());
         this.createdTargetDirectories = new ArrayDeque<>();
         this.action = action;
+        this.backupDirectoryPath = backupDirectoryPath;
+        this.backupManager = new BackupManager(backupDirectoryPath);
+    }
+
+    public Sorter(Action action, Deque<Path> directoriesPaths, List<FilePath> filePaths) throws IOException {
+        this(action, directoriesPaths, filePaths, BackupManager.DEFAULT_BACKUP_DIR_PATH);
     }
 
     public Sorter(Action action, List<FilePath> filePaths) throws IOException {
@@ -51,7 +55,7 @@ public class Sorter {
             }
             logger.info("Sorting completed");
         } finally {
-            backupManager.makeBackup(action, createdTargetDirectories, sortedFiles);
+            backupFileName = backupManager.makeBackup(action, createdTargetDirectories, sortedFiles);
         }
     }
 
@@ -160,6 +164,15 @@ public class Sorter {
                 dir.delete();
             }
         }
+    }
+
+    public Optional<Path> getBackupFilePath() {
+        if (backupFileName == null) {
+            return Optional.empty();
+        }
+        Path backupFilePath = backupManager.getPathToBackupDirectory()
+                .resolve(backupFileName);
+        return Optional.of(backupFilePath);
     }
 
     public enum Action {
