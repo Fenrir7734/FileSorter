@@ -8,9 +8,7 @@ import com.fenrir.filesorter.model.Sorter;
 import com.fenrir.filesorter.model.exceptions.ExpressionFormatException;
 import com.fenrir.filesorter.model.exceptions.SortConfigurationException;
 import com.fenrir.filesorter.model.exceptions.TokenFormatException;
-import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FilePath;
-import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.file.utils.Backup;
 import com.fenrir.filesorter.model.log.LogAppender;
 import javafx.application.Platform;
@@ -122,7 +120,7 @@ public class SortTabController {
                             configuration.getRuleGroups()
                     );
                     List<FilePath> filePaths = processor.getFilePaths();
-                    Deque<Path> directoriesPaths = processor.getDirectoriesPaths();
+                    Deque<Path> directoriesPaths = processor.getSourceDirectoriesPaths();
                     Sorter sorter = removeDirectories.isSelected() ?
                             new Sorter(configuration.getSortAction(), directoriesPaths, filePaths) :
                             new Sorter(configuration.getSortAction(), filePaths);

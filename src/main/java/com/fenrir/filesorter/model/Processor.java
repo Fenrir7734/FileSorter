@@ -22,7 +22,8 @@ public class Processor {
     private final Path rootTargetPath;
     private final List<StatementGroup> statementGroups;
     private final List<FileData> fileToProcess;
-    private final ArrayDeque<Path> directoriesPaths;
+    private final ArrayDeque<Path> sourceDirectoriesPaths;
+    private final Set<Path> targetDirectoriesPaths;
     private final List<FilePath> pathsOfProcessedFiles;
     private final Map<Path, Long> targetPathCount;
 
@@ -31,7 +32,8 @@ public class Processor {
         this.rootTargetPath = rootTargetPath;
         this.statementGroups = new ArrayList<>();
         this.fileToProcess = new LinkedList<>();
-        this.directoriesPaths = new ArrayDeque<>();
+        this.sourceDirectoriesPaths = new ArrayDeque<>();
+        this.targetDirectoriesPaths = new HashSet<>();
         this.targetPathCount = new HashMap<>();
         parseRuleGroup(ruleGroups);
         mapFileStructure(sourcePaths);
@@ -69,7 +71,7 @@ public class Processor {
             FileData fileData = new FileData(path);
             fileToProcess.add(fileData);
         }
-        directoriesPaths.addAll(dirPaths);
+        sourceDirectoriesPaths.addAll(dirPaths);
     }
 
     private void process() throws IOException {
@@ -79,6 +81,7 @@ public class Processor {
                 createTargetPaths(includedFiles, group.getSortStatement(), group.getRenameStatement());
             }
         }
+        resolveClashesBetweenFileAndDirectoryPaths();
     }
 
     private boolean isStatementGroupNotEmpty(StatementGroup group) {
@@ -156,15 +159,40 @@ public class Processor {
     }
 
     private long countDuplicate(Path fileTargetPath) {
+        Path dirPath = fileTargetPath.getParent();
+        while (dirPath != null && !dirPath.equals(rootTargetPath)) {
+            targetDirectoriesPaths.add(dirPath);
+            dirPath = dirPath.getParent();
+        }
         targetPathCount.putIfAbsent(fileTargetPath, -1L);
         return targetPathCount.compute(fileTargetPath, (k, v) -> v + 1);
     }
 
-    public Deque<Path> getDirectoriesPaths() {
-        return directoriesPaths.clone();
+    private void resolveClashesBetweenFileAndDirectoryPaths() {
+        Map<Path, FilePath> targetPaths = new HashMap<>();
+        for (FilePath filePath: pathsOfProcessedFiles) {
+            targetPaths.put(filePath.resolvedTargetPath(), filePath);
+        }
+
+        for (Path dirPath: targetDirectoriesPaths) {
+            if (targetPaths.containsKey(dirPath)) {
+                FilePath filePath = targetPaths.get(dirPath);
+                long count = targetPathCount.getOrDefault(filePath.target(), 0L);
+                filePath.setTarget(filePath.target(), count + 1);
+                filePath.resolveTargetPath();
+            }
+        }
+    }
+
+    public Deque<Path> getSourceDirectoriesPaths() {
+        return sourceDirectoriesPaths.clone();
     }
 
     public List<FilePath> getFilePaths() {
         return pathsOfProcessedFiles;
+    }
+
+    public Set<Path> getTargetDirectoriesPaths() {
+        return targetDirectoriesPaths;
     }
 }

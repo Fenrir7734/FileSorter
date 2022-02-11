@@ -101,7 +101,8 @@ class ProcessorTest {
     }
 
     @Test
-    public void constructorShouldThrowExpressionFormatExceptionIfInvalidRuleHasBeenGiven() throws ExpressionFormatException, IOException {
+    public void constructorShouldThrowExpressionFormatExceptionIfInvalidRuleHasBeenGiven()
+            throws ExpressionFormatException {
         RuleGroup ruleGroup = new RuleGroup();
         ruleGroup.setSortRule(new Rule("%(Incorrect)"));
         assertThrows(
@@ -113,7 +114,7 @@ class ProcessorTest {
     @Test
     public void getDirectoriesPathsShouldReturnDirectoryStructure() throws ExpressionFormatException, IOException {
         Processor processor = new Processor(sourcePaths, targetPath, ruleGroups);
-        Deque<Path> actualDirectoriesPaths = processor.getDirectoriesPaths();
+        Deque<Path> actualDirectoriesPaths = processor.getSourceDirectoriesPaths();
         assertEquals(dirStructure.size(), actualDirectoriesPaths.size());
         assertTrue(dirStructure.containsAll(actualDirectoriesPaths));
         assertTrue(actualDirectoriesPaths.containsAll(dirStructure));
@@ -121,22 +122,23 @@ class ProcessorTest {
     }
 
     @Test
-    public void getDirectoriesPathsShouldReturnDirectoryStructureWithoutDuplicates() throws ExpressionFormatException, IOException {
+    public void getDirectoriesPathsShouldReturnDirectoryStructureWithoutDuplicates()
+            throws ExpressionFormatException, IOException {
         sourcePaths.add(sourcePaths.get(0));
         sourcePaths.add(sourcePaths.get(0));
         sourcePaths.add(sourcePaths.get(1).resolve("dir1"));
 
         Processor processor = new Processor(sourcePaths, targetPath, ruleGroups);
-        Deque<Path> actualDirectoriesPaths = processor.getDirectoriesPaths();
+        Deque<Path> actualDirectoriesPaths = processor.getSourceDirectoriesPaths();
         assertEquals(dirStructure.size(), actualDirectoriesPaths.size());
         assertTrue(dirStructure.containsAll(actualDirectoriesPaths));
         assertTrue(actualDirectoriesPaths.containsAll(dirStructure));
         assertArrayEquals(dirStructure.toArray(), actualDirectoriesPaths.toArray());
     }
 
-
     @Test
-    public void getDirectoriesPathsShouldReturnDirectoryStructureWithoutDirectoriesThatCouldNotBeAccessed() throws ExpressionFormatException, IOException {
+    public void getDirectoriesPathsShouldReturnDirectoryStructureWithoutDirectoriesThatCouldNotBeAccessed()
+            throws ExpressionFormatException, IOException {
         Path path = FileUtils.createDirectory(sourcePaths.get(0), "testDir");
         FileUtils.createFile(path, "testFile");
         File dir = path.toFile();
@@ -145,7 +147,7 @@ class ProcessorTest {
         assertTrue(dir.setReadable(false));
 
         Processor processor = new Processor(sourcePaths, targetPath, ruleGroups);
-        Deque<Path> actualDirectoriesPaths = processor.getDirectoriesPaths();
+        Deque<Path> actualDirectoriesPaths = processor.getSourceDirectoriesPaths();
         assertEquals(dirStructure.size(), actualDirectoriesPaths.size());
         assertTrue(dirStructure.containsAll(actualDirectoriesPaths));
         assertTrue(actualDirectoriesPaths.containsAll(dirStructure));
@@ -153,16 +155,18 @@ class ProcessorTest {
     }
 
     @Test
-    public void getDirectoriesPathsShouldReturnEmptyDequeIfEmptyListOfSourcePathHasBeenGiven() throws ExpressionFormatException, IOException {
+    public void getDirectoriesPathsShouldReturnEmptyDequeIfEmptyListOfSourcePathHasBeenGiven()
+            throws ExpressionFormatException, IOException {
         Processor processor = new Processor(new ArrayList<>(), targetPath, ruleGroups);
-        assertTrue(processor.getDirectoriesPaths().isEmpty());
+        assertTrue(processor.getSourceDirectoriesPaths().isEmpty());
     }
 
     @Test
-    public void getDirectoriesPathsShouldReturnEmptyDequeIfSourcePathDoesNotExists() throws ExpressionFormatException, IOException {
+    public void getDirectoriesPathsShouldReturnEmptyDequeIfSourcePathDoesNotExists()
+            throws ExpressionFormatException, IOException {
         List<Path> incorrectSourcePaths = List.of(Path.of("incorrect/path"));
         Processor processor = new Processor(incorrectSourcePaths, targetPath, ruleGroups);
-        assertTrue(processor.getDirectoriesPaths().isEmpty());
+        assertTrue(processor.getSourceDirectoriesPaths().isEmpty());
     }
 
     @Test
@@ -175,7 +179,8 @@ class ProcessorTest {
     }
 
     @Test
-    public void getFilePathsShouldReturnFilePathsOfProcessedFilesWithoutDuplicateTargetPaths() throws ExpressionFormatException, IOException {
+    public void getFilePathsShouldReturnFilePathsOfProcessedFilesWithoutDuplicateTargetPaths()
+            throws ExpressionFormatException, IOException {
         Path file1 = FileUtils.createFile(sourcePaths.get(0), "newFile.mp3");
         Path file2 = FileUtils.createFile(sourcePaths.get(1), "newFile.mp3");
         expectedFilePaths.add(FilePath.of(file2, targetPath.resolve("mp3/newFile")));
@@ -221,9 +226,9 @@ class ProcessorTest {
         assertTrue(actualFilePaths.containsAll(expectedFilePaths));
     }
 
-
     @Test
-    public void getFileShouldReturnListOfFilePathsWithoutFileThatCouldNotBeAccessed() throws ExpressionFormatException, IOException {
+    public void getFilePathsShouldReturnListOfFilePathsWithoutFileThatCouldNotBeAccessed()
+            throws ExpressionFormatException, IOException {
         Path path = FileUtils.createFile(sourcePaths.get(0), "testFile");
         File file = path.toFile();
         assertNotNull(file);
@@ -237,7 +242,8 @@ class ProcessorTest {
     }
 
     @Test
-    public void getFileShouldReturnListOfFilePathsWithoutFilesInsideDirectoryThatCouldNotBeAccessed() throws ExpressionFormatException, IOException {
+    public void getFilePathsShouldReturnListOfFilePathsWithoutFilesInsideDirectoryThatCouldNotBeAccessed()
+            throws ExpressionFormatException, IOException {
         Path dirPath = FileUtils.createDirectory(sourcePaths.get(0), "testDir");
         FileUtils.createFile(dirPath, "testFile");
         File dir = dirPath.toFile();
@@ -250,15 +256,57 @@ class ProcessorTest {
         assertTrue(expectedFilePaths.containsAll(actualFilePaths));
     }
 
+
     @Test
-    public void getFilePathsShouldReturnEmptyListOfFilePathsIfEmptyListOfSourcePathsHasBeenGiven() throws ExpressionFormatException, IOException {
+    public void getFilePathsShouldReturnListOfFilePathsWithoutConflictsBetweenFileAndDirectoryPaths() throws ExpressionFormatException, IOException {
+        RuleGroup ruleGroup1 = new RuleGroup();
+        ruleGroup1.setRenameRule(new Rule("%(TXT:txt)"));
+        ruleGroup1.addFilterRule(new Rule("%(EXC)%(EXT)%(==:txt)"));
+        RuleGroup ruleGroup2 = new RuleGroup();
+        ruleGroup2.setRenameRule(new Rule("%(FIX)"));
+        ruleGroup2.setSortRule(new Rule("%(EXT)"));
+
+        Processor processor = new Processor(sourcePaths, targetPath, List.of(ruleGroup1, ruleGroup2));
+        List<FilePath> actualFilePaths = processor.getFilePaths();
+
+        List<Path> actualSourceFilePaths = actualFilePaths.stream()
+                .map(FilePath::source)
+                .toList();
+        List<Path> expectedSourceFilePaths = expectedFilePaths.stream()
+                .map(FilePath::source)
+                .toList();
+        assertEquals(expectedSourceFilePaths.size(), actualSourceFilePaths.size());
+        assertTrue(expectedSourceFilePaths.containsAll(actualSourceFilePaths));
+        assertTrue(actualSourceFilePaths.containsAll(expectedSourceFilePaths));
+
+        List<Path> actualTargetFilePaths = actualFilePaths.stream()
+                .map(FilePath::resolvedTargetPath)
+                .toList();
+        List<Path> expectedTargetFilePaths = List.of(
+                targetPath.resolve("txt (1)"),
+                targetPath.resolve("txt (2)"),
+                targetPath.resolve("txt (3)"),
+                targetPath.resolve("txt (4)"),
+                targetPath.resolve("txt/file1.txt"),
+                targetPath.resolve("txt/file2.txt"),
+                targetPath.resolve("txt/file6.txt")
+        );
+        assertEquals(expectedTargetFilePaths.size(), actualTargetFilePaths.size());
+        assertTrue(expectedTargetFilePaths.containsAll(actualTargetFilePaths));
+        assertTrue(actualTargetFilePaths.containsAll(expectedTargetFilePaths));
+    }
+
+    @Test
+    public void getFilePathsShouldReturnEmptyListOfFilePathsIfEmptyListOfSourcePathsHasBeenGiven()
+            throws ExpressionFormatException, IOException {
         Processor processor = new Processor(new ArrayList<>(), targetPath, ruleGroups);
         List<FilePath> actualFilePaths = processor.getFilePaths();
         assertTrue(actualFilePaths.isEmpty());
     }
 
     @Test
-    public void getFilePathsShouldReturnEmptyListOfFilePathsIfGivenSourcePathDoesNotExists() throws ExpressionFormatException, IOException {
+    public void getFilePathsShouldReturnEmptyListOfFilePathsIfGivenSourcePathDoesNotExists()
+            throws ExpressionFormatException, IOException {
         Path sourcePath = Path.of("Incorrect/path");
         Processor processor = new Processor(List.of(sourcePath), targetPath, ruleGroups);
         List<FilePath> actualFilePaths = processor.getFilePaths();
