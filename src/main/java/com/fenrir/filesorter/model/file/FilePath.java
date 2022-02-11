@@ -41,7 +41,13 @@ public class FilePath {
             } else {
                 pathStr += toInsert;
             }
-            resolvedTargetPath = target.getParent().resolve(Path.of(pathStr));
+
+            Path parentPath = target.getParent();
+            if (parentPath != null) {
+                resolvedTargetPath = target.getParent().resolve(Path.of(pathStr));
+            } else {
+                resolvedTargetPath = Path.of(pathStr);
+            }
         } else {
             resolvedTargetPath = target;
         }
