@@ -5,7 +5,6 @@ import com.fenrir.filesorter.model.file.FileData;
 import com.fenrir.filesorter.model.file.FilePath;
 import com.fenrir.filesorter.model.file.FileStructureMapper;
 import com.fenrir.filesorter.model.parsers.RuleGroupParser;
-import com.fenrir.filesorter.model.rule.Rule;
 import com.fenrir.filesorter.model.rule.RuleGroup;
 import com.fenrir.filesorter.model.statement.StatementGroup;
 import com.fenrir.filesorter.model.statement.predicate.Predicate;
@@ -167,20 +166,5 @@ public class Processor {
 
     public List<FilePath> getFilePaths() {
         return pathsOfProcessedFiles;
-    }
-
-    public static void main(String[] args) throws ExpressionFormatException, IOException {
-        RuleGroup ruleGroup = new RuleGroup();
-        ruleGroup.setRenameRule(new Rule("%(TXT:jpg)"));
-        ruleGroup.addFilterRule(new Rule("%(INC)%(EXT)%(==:png)"));
-        RuleGroup ruleGroup1 = new RuleGroup();
-        ruleGroup1.setSortRule(new Rule("%(EXT)"));
-        ruleGroup1.setRenameRule(new Rule("%(FIX)"));
-        List<RuleGroup> ruleGroups = List.of(ruleGroup, ruleGroup1);
-        Path source = Path.of("/home/fenrir/Documents/Test_environment/wallpapers (another copy)");
-        Path target = Path.of("/home/fenrir/Documents/Test_environment/wall_sorted_test");
-        Processor processor = new Processor(List.of(source), target, ruleGroups);
-
-        processor.getFilePaths().forEach(f -> System.out.println(f.resolvedTargetPath()));
     }
 }
